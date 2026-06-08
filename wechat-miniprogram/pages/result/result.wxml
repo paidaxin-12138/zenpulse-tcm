@@ -1,0 +1,92 @@
+<view class="zp-page">
+  <view class="zp-result-banner">
+    <image class="zp-result-banner-img" src="/images/zenpulse/card-danggui.jpg" mode="aspectFill"></image>
+    <view class="zp-result-banner-mask"></view>
+  </view>
+  <view style="text-align:center;padding:32rpx 0">
+    <view class="zp-score-ring">
+      <text class="zp-label">辨证结果</text>
+      <text class="zp-score-value">{{diagnosisResult.syndrome || diagnosisResult.diagnosis ? '完成' : '--'}}</text>
+    </view>
+    <text class="zp-label zp-label-primary">核心辨证结果</text>
+    <text class="zp-display zp-display-primary" style="margin:16rpx 0">{{diagnosisResult.syndrome || diagnosisResult.diagnosis || (fromHistory ? '暂无详情' : '分析中')}}</text>
+    <view class="zp-chip-row" wx:if="{{diagnosisResult.diagnosis_mode}}">
+      <text class="zp-chip">{{diagnosisResult.diagnosis_mode === 'rule' ? '规则引擎' : diagnosisResult.diagnosis_mode === 'llm' ? 'AI 辨证' : '体征评估'}}</text>
+    </view>
+  </view>
+
+  <view class="zp-card zp-glass zp-report-card" wx:if="{{diagnosisResult.analysis}}">
+    <view class="zp-report-header">
+      <text class="zp-report-icon">析</text>
+      <text class="zp-headline" style="font-size:36rpx">症候深度分析</text>
+    </view>
+    <text class="zp-body-sm" style="font-size:32rpx;line-height:1.6;color:#54433a">{{diagnosisResult.analysis}}</text>
+  </view>
+
+  <view class="zp-card zp-glass zp-report-card" wx:if="{{diagnosisResult.suggestions && diagnosisResult.suggestions.length}}">
+    <view class="zp-report-header">
+      <text class="zp-report-icon">膳</text>
+      <text class="zp-headline" style="font-size:36rpx">调理建议</text>
+    </view>
+    <view wx:for="{{diagnosisResult.suggestions}}" wx:key="*this" class="zp-link-row">
+      <text class="zp-body-sm" style="flex:1">· {{item}}</text>
+    </view>
+  </view>
+
+  <view class="zp-card zp-glass zp-report-card">
+    <view class="zp-report-header">
+      <text class="zp-report-icon">论</text>
+      <text class="zp-headline" style="font-size:36rpx">诊断结论</text>
+    </view>
+    <text class="zp-body-sm" style="font-size:32rpx;line-height:1.6;color:#54433a;white-space:pre-wrap">{{diagnosisResult.diagnosis}}</text>
+  </view>
+
+  <view class="zp-card zp-glass zp-report-card" wx:if="{{diagnosisResult.pulse_characteristics}}">
+    <view class="zp-report-header">
+      <text class="zp-report-icon">脉</text>
+      <text class="zp-headline" style="font-size:36rpx">脉象分析</text>
+    </view>
+    <view class="zp-link-row">
+      <text class="zp-label" style="margin:0">脉象类型</text>
+      <text class="zp-body-sm">{{diagnosisResult.pulse_characteristics.pulse_type}}</text>
+    </view>
+    <view class="zp-link-row">
+      <text class="zp-label" style="margin:0">脉象描述</text>
+      <text class="zp-body-sm">{{diagnosisResult.pulse_characteristics.description}}</text>
+    </view>
+    <view class="zp-link-row" wx:if="{{diagnosisResult.pulse_characteristics.characteristics}}">
+      <text class="zp-label" style="margin:0">脉象特征</text>
+      <text class="zp-body-sm">{{diagnosisResult.pulse_characteristics.characteristics.rate}}、{{diagnosisResult.pulse_characteristics.characteristics.rhythm}}、{{diagnosisResult.pulse_characteristics.characteristics.strength}}、{{diagnosisResult.pulse_characteristics.characteristics.depth}}</text>
+    </view>
+    <view class="zp-link-row" wx:if="{{diagnosisResult.pulse_characteristics.possible_conditions}}">
+      <text class="zp-label" style="margin:0">可能证候</text>
+      <text class="zp-body-sm">{{diagnosisResult.pulse_characteristics.possible_conditions.join('、')}}</text>
+    </view>
+    <view class="zp-link-row" wx:if="{{diagnosisResult.pulse_characteristics.treatment_recommendations}}">
+      <text class="zp-label" style="margin:0">治疗建议</text>
+      <text class="zp-body-sm">{{diagnosisResult.pulse_characteristics.treatment_recommendations.join('、')}}</text>
+    </view>
+  </view>
+
+  <view class="zp-primary-banner" wx:if="{{diagnosisResult.syndrome}}">
+    <text class="zp-label" style="color:rgba(255,255,255,0.7);margin-bottom:8rpx">辨证摘要</text>
+    <text class="zp-display" style="color:#fff;font-size:48rpx">{{diagnosisResult.syndrome}}</text>
+    <text class="zp-body-sm" style="color:rgba(255,255,255,0.85);margin-top:16rpx;display:block">{{diagnosisResult.source}}</text>
+  </view>
+
+  <view class="zp-card zp-glass zp-report-card">
+    <view class="zp-report-header">
+      <text class="zp-report-icon">!</text>
+      <text class="zp-headline" style="font-size:36rpx">重要提示</text>
+    </view>
+    <text class="zp-disclaimer">{{diagnosisResult.disclaimer || '本诊断结果仅供参考，不能替代专业医生的诊断'}}</text>
+    <text class="zp-disclaimer">如有不适，请及时就医</text>
+    <text class="zp-disclaimer">请保持良好的生活习惯和饮食习惯</text>
+  </view>
+
+  <button class="zp-btn-primary" bindtap="shareResult">分享 / 导出报告</button>
+  <button class="zp-btn-secondary" bindtap="newDiagnosis">重新诊断</button>
+  <button class="zp-btn-plain" bindtap="backToHome">返回首页</button>
+
+  <canvas type="2d" id="reportCanvas" class="zp-report-canvas"></canvas>
+</view>

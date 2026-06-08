@@ -1,0 +1,67 @@
+[
+    {
+        "patient_id": "case_0001",
+        "age": 35,
+        "gender": "男",
+        "symptoms": "头痛，失眠，心烦易怒，口干口苦，舌红苔黄，脉弦数",
+        "diagnosis": "头痛",
+        "syndrome": "肝火上扰证",
+        "treatment": "清肝泻火，安神止痛。方药：龙胆泻肝汤加减",
+        "efficacy": "治疗1周后头痛减轻，睡眠改善，情绪稳定",
+        "date": "2024-01-15",
+        "doctor": "张医生",
+        "hospital": "北京中医医院"
+    },
+    {
+        "patient_id": "case_0002",
+        "age": 42,
+        "gender": "女",
+        "symptoms": "胃脘部隐痛，喜温喜按，泛吐清水，神疲乏力，舌淡苔白，脉沉弱",
+        "diagnosis": "胃痛",
+        "syndrome": "脾胃虚寒证",
+        "treatment": "温中健脾，和胃止痛。方药：黄芪建中汤加减",
+        "efficacy": "治疗2周后胃痛消失，饮食正常，精神好转",
+        "date": "2024-02-08",
+        "doctor": "李医生",
+        "hospital": "上海中医医院"
+    },
+    {
+        "patient_id": "case_0003",
+        "age": 28,
+        "gender": "女",
+        "symptoms": "月经提前，量多色红，心烦口渴，舌红苔薄黄，脉数",
+        "diagnosis": "月经不调",
+        "syndrome": "血热证",
+        "treatment": "清热凉血，调经止血。方药：清经散加减",
+        "efficacy": "治疗1个月经周期后月经恢复正常",
+        "date": "2024-03-12",
+        "doctor": "王医生",
+        "hospital": "广州中医医院"
+    },
+    {
+        "patient_id": "case_0004",
+        "age": 56,
+        "gender": "男",
+        "symptoms": "咳嗽，痰白量多，胸闷气短，食少便溏，舌淡苔白腻，脉滑",
+        "diagnosis": "咳嗽",
+        "syndrome": "痰湿阻肺证",
+        "treatment": "燥湿化痰，理气止咳。方药：二陈汤合三子养亲汤加减",
+        "efficacy": "治疗2周后咳嗽减轻，痰量减少，食欲增加",
+        "date": "2024-04-05",
+        "doctor": "赵医生",
+        "hospital": "成都中医医院"
+    },
+    {
+        "patient_id": "case_0005",
+        "age": 68,
+        "gender": "男",
+        "symptoms": "腰膝酸软，头晕耳鸣，失眠健忘，舌红少苔，脉细数",
+        "diagnosis": "眩晕",
+        "syndrome": "肾阴虚证",
+        "treatment": "滋补肾阴，填精益髓。方药：六味地黄丸加减",
+        "efficacy": "治疗1个月后眩晕减轻，睡眠改善，记忆力增强",
+        "date": "2024-05-18",
+        "doctor": "刘医生",
+        "hospital": "杭州中医医院"
+    }
+]

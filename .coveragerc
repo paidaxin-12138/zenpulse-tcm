@@ -1,0 +1,14 @@
+[run]
+source = tcm_ai
+omit =
+    tcm_ai_env/*
+    tests/*
+    */__pycache__/*
+
+[report]
+exclude_lines =
+    pragma: no cover
+    if TYPE_CHECKING:
+    raise NotImplementedError
+show_missing = true
+skip_covered = false

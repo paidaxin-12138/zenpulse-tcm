@@ -1,0 +1,63 @@
+{
+  "admin_api_key": "请首次启动后查看 data/admin_config.json 自动生成",
+  "embedding": {
+    "provider": "local",
+    "model": "models/bge-small-zh-v1.5",
+    "base_url": "http://127.0.0.1:11434",
+    "api_key": ""
+  },
+  "llm": {
+    "provider": "ollama",
+    "model": "deepseek-r1:1.5b",
+    "base_url": "http://127.0.0.1:11434",
+    "api_key": "",
+    "temperature": 0.3
+  },
+  "rerank": {
+    "provider": "none",
+    "model": "BAAI/bge-reranker-base",
+    "base_url": "",
+    "api_key": "",
+    "top_n": 5
+  },
+  "rag": {
+    "retrieval_top_k": 20,
+    "final_top_k": 5,
+    "enable_llm_answer": true,
+    "rebuild_on_missing_index": true
+  },
+  "server": {
+    "cors_origins": [
+      "http://127.0.0.1:8000",
+      "http://localhost:8000"
+    ],
+    "allow_public_diagnose": true,
+    "allow_public_knowledge_search": true,
+    "rate_limit_per_minute": 60,
+    "admin_session_ttl_hours": 8,
+    "admin_session_secret": ""
+  },
+  "rbac": {
+    "enabled": false,
+    "keys": [
+      {
+        "name": "只读账号示例",
+        "key": "请替换为 secrets.token_urlsafe(32)",
+        "role": "viewer"
+      }
+    ]
+  },
+  "wechat_miniprogram": {
+    "app_id": "你的小程序 AppID",
+    "app_secret": "你的小程序 AppSecret",
+    "dev_mode": false,
+    "token_ttl_hours": 72,
+    "token_refresh_grace_hours": 168,
+    "token_secret": "生产环境必填，开发可留空（使用内置开发密钥）"
+  },
+  "storage": {
+    "history_backend": "json",
+    "history_database_url": "",
+    "comment": "小程序诊断历史优先使用微信云开发存储桶，见 wechat-miniprogram/config/cloud.js"
+  }
+}

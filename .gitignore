@@ -1,0 +1,33 @@
+# Secrets & runtime data
+data/admin_config.json
+data/rag_logs.jsonl
+data/diagnosis_history.json
+data/patients.json
+data/wx_users.json
+data/history/
+data/visits/
+stm_data_processor.log
+
+# Python
+__pycache__/
+*.py[cod]
+.Python
+*.egg-info/
+.venv/
+.venv-ci/
+venv/
+tcm_ai_env/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# ML weights (download locally)
+models/
+yolov8n.pt
+
+# Vector index (optional - remove if you want to commit index)
+vector_store/
+backups/
+
+# OS
+.DS_Store

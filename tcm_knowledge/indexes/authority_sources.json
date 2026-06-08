@@ -1,0 +1,81 @@
+{
+  "version": "1.0",
+  "total_sources": 6,
+  "last_updated": "2025-12-23T10:00:00",
+  "sources": [
+    {
+      "id": "src_0001",
+      "name": "中医基础理论.txt",
+      "type": "现代教材",
+      "author": "中国中医药出版社编写组",
+      "publish_year": "2020",
+      "publisher": "中国中医药出版社",
+      "is_authoritative": true,
+      "files": ["basic_theory/中医基础理论.txt"],
+      "word_count": 50000
+    },
+    {
+      "id": "src_0002",
+      "name": "中医诊断学.txt",
+      "type": "现代教材",
+      "author": "中国中医药出版社编写组",
+      "publish_year": "2020",
+      "publisher": "中国中医药出版社",
+      "is_authoritative": true,
+      "files": ["diagnosis/中医诊断学.txt"],
+      "word_count": 45000
+    },
+    {
+      "id": "src_0003",
+      "name": "中医体质学.txt",
+      "type": "现代教材",
+      "author": "王琦",
+      "publish_year": "2018",
+      "publisher": "人民卫生出版社",
+      "is_authoritative": true,
+      "files": ["constitution/中医体质学.txt"],
+      "word_count": 35000
+    },
+    {
+      "id": "src_0004",
+      "name": "中药学.txt",
+      "type": "现代教材",
+      "author": "中国中医药出版社编写组",
+      "publish_year": "2021",
+      "publisher": "中国中医药出版社",
+      "is_authoritative": true,
+      "files": ["herbal_medicine/中药学.txt"],
+      "word_count": 60000
+    },
+    {
+      "id": "src_0005",
+      "name": "中医治疗学.txt",
+      "type": "现代教材",
+      "author": "中国中医药出版社编写组",
+      "publish_year": "2020",
+      "publisher": "中国中医药出版社",
+      "is_authoritative": true,
+      "files": ["treatment/中医治疗学.txt"],
+      "word_count": 40000
+    },
+    {
+      "id": "src_0006",
+      "name": "clinical_cases.json",
+      "type": "临床案例集",
+      "author": "全国中医药学会",
+      "publish_year": "2024",
+      "publisher": "中国中医药出版社",
+      "is_authoritative": true,
+      "files": ["cases/clinical_cases.json"],
+      "case_count": 5
+    }
+  ],
+  "source_types": [
+    {"name": "现代教材", "count": 5},
+    {"name": "临床案例集", "count": 1}
+  ],
+  "publishers": [
+    {"name": "中国中医药出版社", "count": 5},
+    {"name": "人民卫生出版社", "count": 1}
+  ]
+}

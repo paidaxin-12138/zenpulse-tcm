@@ -1,0 +1,52 @@
+{
+  "_comment": "生产环境模板。复制为 admin_config.json 并替换占位符；启动时设置 TCM_ENV=production",
+  "admin_api_key": "请用 python3 -c \"import secrets; print(secrets.token_urlsafe(32))\" 生成",
+  "embedding": {
+    "provider": "local",
+    "model": "models/bge-small-zh-v1.5",
+    "base_url": "",
+    "api_key": ""
+  },
+  "llm": {
+    "provider": "ollama",
+    "model": "deepseek-r1:1.5b",
+    "base_url": "http://127.0.0.1:11434",
+    "api_key": "",
+    "temperature": 0.3
+  },
+  "rerank": {
+    "provider": "none",
+    "model": "BAAI/bge-reranker-base",
+    "base_url": "",
+    "api_key": "",
+    "top_n": 5
+  },
+  "rag": {
+    "retrieval_top_k": 20,
+    "final_top_k": 5,
+    "enable_llm_answer": true,
+    "rebuild_on_missing_index": false
+  },
+  "server": {
+    "cors_origins": [
+      "https://your-domain.com"
+    ],
+    "allow_public_diagnose": false,
+    "allow_public_knowledge_search": false,
+    "rate_limit_per_minute": 60,
+    "admin_session_ttl_hours": 8,
+    "admin_session_secret": "可与 token_secret 相同或单独生成"
+  },
+  "rbac": {
+    "enabled": true,
+    "keys": []
+  },
+  "wechat_miniprogram": {
+    "app_id": "wxXXXXXXXXXXXXXXXX",
+    "app_secret": "你的小程序 AppSecret",
+    "dev_mode": false,
+    "token_ttl_hours": 72,
+    "token_refresh_grace_hours": 168,
+    "token_secret": "请用 secrets.token_urlsafe(32) 生成独立密钥"
+  }
+}

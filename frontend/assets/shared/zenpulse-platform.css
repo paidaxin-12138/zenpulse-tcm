@@ -1,0 +1,116 @@
+/* ZenPulse 全平台统一圆角与跨端导航 */
+:root {
+  --zp-radius-sm: 12px;
+  --zp-radius-md: 16px;
+  --zp-radius-lg: 20px;
+  --zp-radius-xl: 24px;
+  --zp-radius-2xl: 32px;
+  --zp-primary: #6c2f00;
+}
+
+.zen-glass,
+.zen-card,
+.scan-preview,
+.herb-card-shadow,
+.view-banner,
+.hero-banner {
+  border-radius: var(--zp-radius-xl) !important;
+}
+
+.zen-glass {
+  overflow: hidden;
+}
+
+.platform-dock {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  padding: 12px 14px;
+  background: rgba(255, 241, 233, 0.85);
+  border: 1px solid rgba(218, 194, 182, 0.6);
+  border-radius: var(--zp-radius-lg);
+}
+
+.platform-dock-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #877369;
+  width: 100%;
+  margin-bottom: 2px;
+}
+
+.platform-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--zp-primary);
+  background: #fff;
+  border: 1px solid rgba(218, 194, 182, 0.8);
+  border-radius: 9999px;
+  text-decoration: none;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.platform-link:hover {
+  background: #fbdbb0;
+  box-shadow: 0 4px 12px rgba(108, 47, 0, 0.08);
+}
+
+.platform-link-muted {
+  background: transparent;
+  cursor: default;
+  opacity: 0.9;
+}
+
+.platform-link-muted:hover {
+  background: transparent;
+  box-shadow: none;
+}
+
+input:not([type="checkbox"]):not([type="radio"]),
+select,
+textarea {
+  border-radius: var(--zp-radius-md) !important;
+}
+
+button,
+.zp-round-btn {
+  border-radius: var(--zp-radius-lg) !important;
+}
+
+/* Admin 管理端 — 与用户端 ZenPulse 卡片圆角对齐 */
+#admin-panels .rounded-lg,
+#admin-panels section.bg-surface,
+#admin-panels section.bg-surface-container-lowest,
+#admin-panels .bg-surface.border,
+#admin-panels .bg-surface-container-lowest.border,
+#auth-gate .rounded-lg {
+  border-radius: var(--zp-radius-xl) !important;
+}
+
+#admin-panels .rounded-xl,
+#admin-panels .rounded-\[15px\],
+#admin-panels .patient-card {
+  border-radius: var(--zp-radius-2xl) !important;
+}
+
+#admin-panels pre.rounded,
+#admin-panels .bg-surface-container.rounded,
+#admin-panels .bg-surface-container-low.rounded,
+#admin-panels div.rounded.flex,
+#admin-panels div.rounded.p-3,
+#admin-panels div.rounded.p-4,
+#admin-panels div.rounded.mb-6 {
+  border-radius: var(--zp-radius-md) !important;
+}
+
+aside.bg-surface-container-low {
+  border-top-right-radius: var(--zp-radius-xl);
+  border-bottom-right-radius: var(--zp-radius-xl);
+}

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>AI 算法说明 · ZenPulse AI</title>
+  <style>
+    body { font-family: "PingFang SC", sans-serif; max-width: 720px; margin: 2rem auto; padding: 0 1rem; color: #3a2718; line-height: 1.7; }
+    h1 { color: #8b4513; }
+    a { color: #8b4513; }
+    code { background: #f5f5dc; padding: 0.1em 0.4em; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <a href="/">← 返回首页</a>
+  <h1>AI 算法说明</h1>
+  <p>诊断流程：多模态体征 + 可选舌/面/眼图像 → 视觉特征提取 → 知识库检索（向量/关键词）→ LLM 推理或规则引擎降级。</p>
+  <p>LLM 不可用时自动切换<strong>规则引擎</strong>，结果中会标注 <code>diagnosis_mode</code>。</p>
+  <p>百科检索使用 BGE 嵌入 + Chroma 向量库；检索失败时回退关键词匹配。</p>
+  <p>本说明不构成医疗器械注册声明；仅供研究与演示。</p>
+</body>
+</html>

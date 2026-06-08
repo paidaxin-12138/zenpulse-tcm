@@ -1,0 +1,67 @@
+<view class="zp-page zp-page-footer-fixed">
+  <view class="zp-step-wrap" style="text-align:left">
+    <view style="display:flex;align-items:center;gap:16rpx;margin-bottom:8rpx">
+      <view style="width:48rpx;height:48rpx;border-radius:50%;background:#6c2f00;color:#fff;font-size:24rpx;display:flex;align-items:center;justify-content:center">2</view>
+      <text class="zp-headline">望诊采集</text>
+    </view>
+    <text class="zp-body-sm">请在光线充足的环境下拍摄，以确保诊断的准确性</text>
+  </view>
+
+  <view class="zp-upload-card {{images.tongue ? 'zp-upload-card-done' : ''}}" wx:if="{{!images.tongue}}" bindtap="chooseTongueImage">
+    <view class="zp-upload-icon">舌</view>
+    <text class="zp-upload-title">舌象采集</text>
+    <text class="zp-body-sm">点击拍照或上传清晰舌面图</text>
+  </view>
+  <block wx:else>
+    <view class="zp-preview" bindtap="previewImage" data-image="{{images.tongue}}">
+      <image class="zp-preview-img" src="{{images.tongue}}" mode="aspectFill"></image>
+    </view>
+    <view class="zp-preview-actions">
+      <view class="zp-preview-btn zp-preview-del" bindtap="deleteImage" data-type="tongue">删除</view>
+      <view class="zp-preview-btn zp-preview-re" bindtap="chooseTongueImage">重新拍摄</view>
+    </view>
+  </block>
+
+  <view class="zp-upload-card {{images.face ? 'zp-upload-card-done' : ''}}" wx:if="{{!images.face}}" bindtap="chooseFaceImage">
+    <view class="zp-upload-icon">面</view>
+    <text class="zp-upload-title">面色采集</text>
+    <text class="zp-body-sm">正对光源，保持面部放松</text>
+  </view>
+  <block wx:else>
+    <view class="zp-preview" bindtap="previewImage" data-image="{{images.face}}">
+      <image class="zp-preview-img" src="{{images.face}}" mode="aspectFill"></image>
+    </view>
+    <view class="zp-preview-actions">
+      <view class="zp-preview-btn zp-preview-del" bindtap="deleteImage" data-type="face">删除</view>
+      <view class="zp-preview-btn zp-preview-re" bindtap="chooseFaceImage">重新拍摄</view>
+    </view>
+  </block>
+
+  <view class="zp-upload-card {{images.eye ? 'zp-upload-card-done' : ''}}" wx:if="{{!images.eye}}" bindtap="chooseEyeImage">
+    <view class="zp-upload-icon">目</view>
+    <text class="zp-upload-title">目诊采集</text>
+    <text class="zp-body-sm">请拍摄眼白部分的清晰照片</text>
+  </view>
+  <block wx:else>
+    <view class="zp-preview" bindtap="previewImage" data-image="{{images.eye}}">
+      <image class="zp-preview-img" src="{{images.eye}}" mode="aspectFill"></image>
+    </view>
+    <view class="zp-preview-actions">
+      <view class="zp-preview-btn zp-preview-del" bindtap="deleteImage" data-type="eye">删除</view>
+      <view class="zp-preview-btn zp-preview-re" bindtap="chooseEyeImage">重新拍摄</view>
+    </view>
+  </block>
+
+  <view class="zp-card" style="margin-top:32rpx">
+    <image style="width:100%;height:384rpx" src="/images/zenpulse/hero-upload.jpg" mode="aspectFill"></image>
+    <text class="zp-quote">"观其面，察其色，知其疾。"</text>
+  </view>
+
+  <button class="zp-btn-secondary" bindtap="backToMetrics">返回上一步</button>
+  <button class="zp-btn-plain" bindtap="backToHome">返回首页</button>
+</view>
+
+<view class="zp-footer-bar">
+  <button class="zp-btn-primary" bindtap="startDiagnosis">开始 AI 辩证诊断</button>
+  <text class="zp-caption" style="margin-top:16rpx;font-size:20rpx;letter-spacing:0.1em">TRADITIONAL INTELLIGENCE ENGINE</text>
+</view>

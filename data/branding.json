@@ -1,0 +1,22 @@
+{
+  "brandName": "御心调理",
+  "productName": "ZenPulse AI",
+  "tagline": "中医智慧诊疗",
+  "links": {
+    "web": "/",
+    "admin": "/admin",
+    "legal": "/legal/privacy"
+  },
+  "miniprogram": {
+    "name": "御心调理",
+    "shortName": "御心调理",
+    "hint": "微信搜索「御心调理」或扫描机构小程序码"
+  },
+  "radius": {
+    "sm": "12px",
+    "md": "16px",
+    "lg": "20px",
+    "xl": "24px",
+    "2xl": "32px"
+  }
+}

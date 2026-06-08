@@ -1,0 +1,98 @@
+{
+  "version": "1.0",
+  "total_cases": 5,
+  "last_updated": "2025-12-23T10:00:00",
+  "cases": [
+    {
+      "case_id": "case_0001",
+      "patient_id": "pt_0001",
+      "age": 35,
+      "gender": "男",
+      "diagnosis": "头痛",
+      "syndrome": "肝火上扰证",
+      "source": "北京中医医院",
+      "publish_year": "2024",
+      "author": "张医生",
+      "file_path": "cases/clinical_cases.json",
+      "position": 1,
+      "indexed_at": "2025-12-23T10:00:00"
+    },
+    {
+      "case_id": "case_0002",
+      "patient_id": "pt_0002",
+      "age": 42,
+      "gender": "女",
+      "diagnosis": "胃痛",
+      "syndrome": "脾胃虚寒证",
+      "source": "上海中医医院",
+      "publish_year": "2024",
+      "author": "李医生",
+      "file_path": "cases/clinical_cases.json",
+      "position": 2,
+      "indexed_at": "2025-12-23T10:00:00"
+    },
+    {
+      "case_id": "case_0003",
+      "patient_id": "pt_0003",
+      "age": 28,
+      "gender": "女",
+      "diagnosis": "月经不调",
+      "syndrome": "血热证",
+      "source": "广州中医医院",
+      "publish_year": "2024",
+      "author": "王医生",
+      "file_path": "cases/clinical_cases.json",
+      "position": 3,
+      "indexed_at": "2025-12-23T10:00:00"
+    },
+    {
+      "case_id": "case_0004",
+      "patient_id": "pt_0004",
+      "age": 56,
+      "gender": "男",
+      "diagnosis": "咳嗽",
+      "syndrome": "痰湿阻肺证",
+      "source": "成都中医医院",
+      "publish_year": "2024",
+      "author": "赵医生",
+      "file_path": "cases/clinical_cases.json",
+      "position": 4,
+      "indexed_at": "2025-12-23T10:00:00"
+    },
+    {
+      "case_id": "case_0005",
+      "patient_id": "pt_0005",
+      "age": 68,
+      "gender": "男",
+      "diagnosis": "眩晕",
+      "syndrome": "肾阴虚证",
+      "source": "杭州中医医院",
+      "publish_year": "2024",
+      "author": "刘医生",
+      "file_path": "cases/clinical_cases.json",
+      "position": 5,
+      "indexed_at": "2025-12-23T10:00:00"
+    }
+  ],
+  "diagnosis_types": [
+    {"name": "头痛", "count": 1},
+    {"name": "胃痛", "count": 1},
+    {"name": "月经不调", "count": 1},
+    {"name": "咳嗽", "count": 1},
+    {"name": "眩晕", "count": 1}
+  ],
+  "syndrome_types": [
+    {"name": "肝火上扰证", "count": 1},
+    {"name": "脾胃虚寒证", "count": 1},
+    {"name": "血热证", "count": 1},
+    {"name": "痰湿阻肺证", "count": 1},
+    {"name": "肾阴虚证", "count": 1}
+  ],
+  "source_statistics": [
+    {"name": "北京中医医院", "count": 1},
+    {"name": "上海中医医院", "count": 1},
+    {"name": "广州中医医院", "count": 1},
+    {"name": "成都中医医院", "count": 1},
+    {"name": "杭州中医医院", "count": 1}
+  ]
+}

@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ZenPulse AI · 中医智能诊断系统</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..900;1,8..60,400..900&amp;family=Source+Sans+3:ital,wght@0,200..900;1,200..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "tertiary-container": "#3e6226",
+                "on-secondary-fixed-variant": "#584324",
+                "surface-variant": "#fedcc5",
+                "on-surface-variant": "#54433a",
+                "surface-container-lowest": "#ffffff",
+                "primary-container": "#8b4513",
+                "tertiary": "#274a10",
+                "surface-dim": "#f5d4bd",
+                "surface-container-low": "#fff1e9",
+                "secondary": "#725a39",
+                "secondary-fixed": "#feddb3",
+                "tertiary-fixed": "#c4efa3",
+                "primary-fixed-dim": "#ffb68c",
+                "on-error": "#ffffff",
+                "on-primary-container": "#ffc29f",
+                "on-secondary-container": "#765f3d",
+                "on-primary-fixed-variant": "#753401",
+                "on-tertiary-container": "#b1dc92",
+                "tertiary-fixed-dim": "#a8d38a",
+                "inverse-primary": "#ffb68c",
+                "surface-container-high": "#ffe3d0",
+                "outline-variant": "#dac2b6",
+                "primary": "#6c2f00",
+                "on-secondary": "#ffffff",
+                "on-tertiary-fixed-variant": "#2c4f15",
+                "background": "#fff8f5",
+                "secondary-container": "#fbdbb0",
+                "primary-fixed": "#ffdbc9",
+                "on-secondary-fixed": "#281801",
+                "surface": "#fff8f5",
+                "inverse-on-surface": "#ffede3",
+                "inverse-surface": "#402c1d",
+                "error-container": "#ffdad6",
+                "surface-bright": "#fff8f5",
+                "on-primary": "#ffffff",
+                "surface-tint": "#934b19",
+                "secondary-fixed-dim": "#e1c299",
+                "outline": "#877369",
+                "surface-container-highest": "#fedcc5",
+                "on-surface": "#29180a",
+                "on-tertiary": "#ffffff",
+                "error": "#ba1a1a",
+                "on-error-container": "#93000a",
+                "on-primary-fixed": "#321200",
+                "surface-container": "#ffeadd",
+                "on-tertiary-fixed": "#0a2100",
+                "on-background": "#29180a",
+                "gold-accent": "#D4AF37",
+                "bronze-accent": "#CD7F32"
+            },
+            "borderRadius": {
+                "DEFAULT": "12px",
+                "md": "16px",
+                "lg": "20px",
+                "xl": "24px",
+                "2xl": "32px",
+                "full": "9999px"
+            },
+            "spacing": {
+                "stack-sm": "12px",
+                "unit": "8px",
+                "gutter": "24px",
+                "container-padding": "32px",
+                "stack-md": "24px",
+                "stack-lg": "48px"
+            },
+            "fontFamily": {
+                "display-lg": ["Source Serif 4"],
+                "body-md": ["Source Sans 3"],
+                "label-md": ["Source Sans 3"],
+                "body-lg": ["Source Sans 3"],
+                "headline-md": ["Source Serif 4"],
+                "headline-lg": ["Source Serif 4"],
+                "headline-lg-mobile": ["Source Serif 4"]
+            },
+            "fontSize": {
+                "display-lg": ["56px", {"lineHeight": "64px", "letterSpacing": "-0.03em", "fontWeight": "800"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.1em", "fontWeight": "700"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                "headline-lg": ["36px", {"lineHeight": "44px", "fontWeight": "700"}],
+                "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body {
+            background-color: #fff8f5;
+            color: #29180a;
+            scroll-behavior: smooth;
+        }
+        .parchment-texture {
+            background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+            background-repeat: repeat;
+        }
+        .zen-glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(139, 69, 19, 0.1);
+            box-shadow: 0 8px 32px rgba(139, 69, 19, 0.05);
+        }
+        .zen-glass:hover {
+            box-shadow: 0 12px 48px rgba(139, 69, 19, 0.1);
+            transform: translateY(-4px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .gold-shimmer {
+            background: linear-gradient(135deg, #6c2f00 0%, #934b19 50%, #6c2f00 100%);
+            box-shadow: 0 10px 30px -10px rgba(108, 47, 0, 0.5);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        .loader {
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top: 2px solid #ffffff;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .brush-accent {
+            position: relative;
+        }
+        .brush-accent::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: radial-gradient(circle, #D4AF37 0%, transparent 80%);
+            opacity: 0.6;
+        }
+
+        .circular-scanner {
+            position: relative;
+            overflow: hidden;
+        }
+        .circular-scanner::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        .scan-line {
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.8), transparent);
+            animation: scan 3s ease-in-out infinite;
+        }
+        @keyframes scan {
+            0% { transform: translateY(0); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(100%); opacity: 0; }
+        }
+        .herb-card-shadow {
+            box-shadow: 0 4px 20px -2px rgba(139, 69, 19, 0.08);
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #dac2b6; border-radius: 10px; }
+        .sidebar-link.active {
+            background-color: #fbdbb0;
+            color: #765f3d;
+            font-weight: 700;
+        }
+        .herb-filter.active {
+            background-color: #8b4513;
+            color: #ffc29f;
+        }
+        .media-fill {
+            position: relative;
+            overflow: hidden;
+            background-color: #fff1e9;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .media-fill-featured { min-height: 280px; }
+        .media-fill-card { min-height: 160px; }
+        .hero-banner {
+            background-image: url("/assets/stitch/hero-banner.jpg");
+            min-height: 200px;
+        }
+        @media (min-width: 768px) {
+            .hero-banner { min-height: 280px; }
+        }
+        .view-banner {
+            background-image: linear-gradient(to right, rgba(41,24,10,0.55), rgba(41,24,10,0.15)), var(--banner-image);
+            background-size: cover;
+            background-position: center;
+        }
+        .library-view-banner { --banner-image: url("/assets/stitch/library-banner.jpg"); }
+        .history-view-banner { --banner-image: url("/assets/stitch/history-banner.jpg"); }
+        .herb-visual-renshen { background-image: url("/assets/stitch/herbs/renshen.jpg"); }
+        .herb-visual-gouqi { background-image: url("/assets/stitch/herbs/gouqi.jpg"); }
+        .herb-visual-huangqi { background-image: url("/assets/stitch/herbs/huangqi.jpg"); }
+        .herb-visual-danggui { background-image: url("/assets/stitch/herbs/danggui.jpg"); }
+        .herb-visual-bohe { background-image: url("/assets/stitch/herbs/bohe.jpg"); }
+        .scan-visual-tongue { background-image: url("/assets/stitch/scan/tongue.jpg"); }
+        .scan-visual-face { background-image: url("/assets/stitch/scan/face.jpg"); }
+        .scan-visual-eye { background-image: url("/assets/stitch/scan/eye.jpg"); }
+        .media-fill > img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform 0.7s ease;
+        }
+        .group:hover .media-fill > img {
+            transform: scale(1.05);
+        }
+        .media-fill-featured {
+            min-height: 14rem;
+            height: 14rem;
+        }
+        @media (min-width: 768px) {
+            .media-fill-featured { min-height: 100%; height: auto; }
+        }
+        .media-fill-card {
+            height: 10rem;
+            min-height: 10rem;
+        }
+        .scan-preview {
+            padding: 0 !important;
+        }
+        .scan-preview .scan-preview-placeholder {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.55;
+            pointer-events: none;
+        }
+        .scan-preview .scan-preview-overlay {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            width: 100%;
+            height: 100%;
+            min-height: 100%;
+            padding: 2rem 1.5rem 1.5rem;
+            background: linear-gradient(to top, rgba(255,248,245,0.92) 0%, rgba(255,248,245,0.35) 45%, transparent 100%);
+        }
+        .scan-preview.has-photo .scan-preview-overlay {
+            background: linear-gradient(to top, rgba(41,24,10,0.75) 0%, rgba(41,24,10,0.2) 50%, transparent 100%);
+        }
+        .scan-preview.has-photo .scan-preview-overlay h3,
+        .scan-preview.has-photo .scan-preview-overlay p {
+            color: #fff;
+            text-shadow: 0 1px 8px rgba(0,0,0,0.35);
+        }
+        .scan-preview.has-photo .scan-preview-placeholder,
+        .scan-preview.has-photo .preview-empty-icon {
+            display: none;
+        }
+        .scan-preview .scan-user-photo {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            z-index: 1;
+        }
+    </style>
+    <link href="/assets/shared/zenpulse-platform.css" rel="stylesheet"/>
+    <link href="/assets/shared/report-export.css" rel="stylesheet"/>
+</head>
+<body class="font-body-md text-body-md bg-background text-on-surface overflow-hidden">
+<div class="flex h-screen overflow-hidden">
+<!-- SideNav (Stitch ai_3) -->
+<aside class="hidden lg:flex flex-col h-screen py-stack-md px-4 border-r border-outline-variant bg-surface w-64 flex-shrink-0 z-20">
+<div class="mb-stack-lg px-2">
+<h1 class="font-headline-md text-headline-md text-primary">ZenPulse AI</h1>
+<p class="font-label-md text-label-md text-on-surface-variant mt-1">中医智慧诊疗</p>
+</div>
+<nav class="flex-grow space-y-2" id="sidebar-nav">
+<button type="button" class="sidebar-link active w-full flex items-center gap-3 px-4 py-3 rounded-lg font-label-md text-label-md transition-all" data-nav="diagnosis">
+<span class="material-symbols-outlined">clinical_notes</span><span>智能诊断</span>
+</button>
+<button type="button" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-lg font-label-md text-label-md transition-all" data-nav="library">
+<span class="material-symbols-outlined">eco</span><span>中药百科</span>
+</button>
+<button type="button" class="sidebar-link w-full flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant rounded-lg font-label-md text-label-md transition-all" data-nav="history">
+<span class="material-symbols-outlined">history</span><span>诊断历史</span>
+</button>
+</nav>
+<div class="mt-4 px-2 platform-dock">
+<span class="platform-dock-label">ZenPulse 全平台</span>
+<a class="platform-link w-full justify-center" href="/admin"><span class="material-symbols-outlined text-base">admin_panel_settings</span>管理后台</a>
+<span class="platform-link platform-link-muted w-full justify-center" id="sidebar-mp-label">微信小程序 · 御心调理</span>
+</div>
+<div class="mt-auto border-t border-outline-variant pt-stack-md px-2">
+<button type="button" id="new-consultation-btn" class="w-full bg-primary-container text-on-primary-container py-2 rounded-lg font-label-md text-label-md mb-4 hover:opacity-90 active:scale-95 transition-all">新建问诊</button>
+<button type="button" id="sidebar-refresh-metrics" class="w-full flex items-center justify-center gap-2 border border-outline-variant text-on-surface-variant py-2 rounded-lg font-label-md text-label-md hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">settings</span><span>刷新体征</span>
+</button>
+</div>
+</aside>
+<!-- Main -->
+<main class="flex-grow flex flex-col h-screen overflow-hidden min-w-0">
+<!-- Mobile top bar -->
+<header class="lg:hidden flex justify-between items-center px-4 h-14 border-b border-outline-variant bg-surface shrink-0">
+<span id="mobile-header-title" class="font-headline-md text-primary text-lg">中医 AI 辅助诊断</span>
+<div class="flex gap-2">
+<button type="button" class="mobile-nav px-3 py-1 rounded-full text-xs bg-primary-container text-on-primary-container" data-nav="diagnosis">诊断</button>
+<button type="button" class="mobile-nav px-3 py-1 rounded-full text-xs border border-outline-variant" data-nav="library">百科</button>
+<button type="button" class="mobile-nav px-3 py-1 rounded-full text-xs border border-outline-variant" data-nav="history">历史</button>
+</div>
+</header>
+<!-- TopAppBar -->
+<header class="hidden lg:flex justify-between items-center w-full px-gutter h-20 bg-surface z-10 shadow-sm shrink-0 border-b border-outline-variant/20">
+<div class="flex items-center gap-4 min-w-0 flex-1">
+<h2 id="main-header-title" class="font-headline-md text-headline-md text-primary shrink-0">中医 AI 辅助诊断</h2>
+<div id="library-header-search" class="relative ml-4 hidden flex-1 max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input id="library-search-input" class="pl-10 pr-4 py-2 w-full bg-surface-container-low border-none rounded-full font-body-md focus:ring-2 focus:ring-primary-container focus:bg-surface-container" placeholder="搜索药材名称、功效或症候…" type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4 shrink-0">
+<button type="button" id="history-nav-btn" class="material-symbols-outlined text-primary hover:text-primary-container transition-colors" title="诊断历史">account_circle</button>
+<button type="button" id="refresh-metrics-btn" class="material-symbols-outlined text-primary hover:text-primary-container transition-colors" title="刷新体征">settings</button>
+</div>
+</header>
+<div class="flex-grow overflow-y-auto custom-scrollbar parchment-texture">
+<div class="max-w-[1440px] mx-auto px-4 md:px-gutter py-gutter relative">
+<!-- Diagnosis View -->
+<div id="view-diagnosis">
+<!-- TCM Decoration Background Motif -->
+<div class="absolute top-20 right-0 -z-10 opacity-[0.03] pointer-events-none">
+<svg class="text-primary" fill="currentColor" height="600" viewbox="0 0 100 100" width="600">
+<circle cx="50" cy="50" fill="none" r="45" stroke="currentColor" stroke-width="0.5"></circle>
+<path d="M50 5 L50 95 M5 50 L95 50" stroke="currentColor" stroke-width="0.2"></path>
+</svg>
+</div>
+<!-- Hero Section: Refined Centered Layout -->
+<section id="section-diagnosis" class="mb-20 scroll-mt-28">
+<div class="hero-banner media-fill rounded-xl mb-10 max-w-5xl mx-auto w-full shadow-sm border border-outline-variant/20" role="img" aria-label="中医 AI 诊断系统"></div>
+<div class="flex flex-col items-center text-center">
+<h1 class="font-display-lg text-display-lg text-primary mb-4 brush-accent">中医 AI 辅助诊断系统</h1>
+<p class="font-body-lg text-on-surface-variant max-w-2xl tracking-wide opacity-80">
+            融合历代医理精要与尖端神经网络，重构东方智慧的数字化表达
+        </p>
+</div>
+</section>
+<!-- Metrics Grid: Layered Depth -->
+<section class="mb-24 relative">
+<div class="flex items-center gap-4 mb-10">
+<h2 class="font-headline-lg text-primary">基础体征记录</h2>
+<button type="button" id="load-health-metrics-btn" class="text-sm border border-outline-variant/50 text-primary px-3 py-1 rounded-full hover:bg-surface-container-low transition-colors">随机采样</button>
+<div class="h-px flex-1 bg-gradient-to-r from-outline-variant/50 to-transparent"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Heart Rate -->
+<div class="zen-glass p-8 rounded-xl flex flex-col gap-6">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">favorite</span>
+</div>
+<span class="font-label-md uppercase text-on-surface-variant">心率</span>
+</div>
+</div>
+<div class="relative group">
+<input id="heart-rate" class="w-full bg-surface-container-low/50 rounded-lg border-b border-outline-variant focus:border-primary border-t-0 border-l-0 border-r-0 px-6 py-3 text-xl text-primary focus:ring-0 transition-all placeholder:text-on-surface-variant/30" placeholder="75" type="number" min="30" max="220"/>
+<div class="absolute bottom-0 left-0 w-0 h-0.5 bg-gold-accent group-focus-within:w-full transition-all duration-500"></div>
+</div>
+</div>
+<!-- Pulse Type -->
+<div class="zen-glass p-8 rounded-xl flex flex-col gap-6">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">waves</span>
+</div>
+<span class="font-label-md uppercase text-on-surface-variant">脉搏</span>
+</div>
+<div class="relative group">
+<input id="pulse" class="w-full bg-surface-container-low/50 rounded-lg border-b border-outline-variant focus:border-primary border-t-0 border-l-0 border-r-0 px-6 py-3 text-xl text-primary focus:ring-0 transition-all placeholder:text-on-surface-variant/30" placeholder="72" type="number" min="30" max="220"/>
+<div class="absolute bottom-0 left-0 w-0 h-0.5 bg-gold-accent group-focus-within:w-full transition-all duration-500"></div>
+</div>
+</div>
+<!-- Blood Pressure -->
+<div class="zen-glass p-8 rounded-xl flex flex-col gap-6 lg:row-span-1">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">compress</span>
+</div>
+<span class="font-label-md uppercase text-on-surface-variant">血压</span>
+</div>
+<div class="flex gap-4">
+<div class="flex-1 relative group">
+<input id="systolic" class="w-full bg-surface-container-low/50 rounded-lg border-b border-outline-variant focus:border-primary border-t-0 border-l-0 border-r-0 px-6 py-3 text-lg text-primary focus:ring-0" placeholder="收缩压" type="number" min="60" max="250"/>
+<div class="absolute bottom-0 left-0 w-0 h-0.5 bg-gold-accent group-focus-within:w-full transition-all duration-500"></div>
+</div>
+<span class="self-end pb-3 text-outline opacity-40">/</span>
+<div class="flex-1 relative group">
+<input id="diastolic" class="w-full bg-surface-container-low/50 rounded-lg border-b border-outline-variant focus:border-primary border-t-0 border-l-0 border-r-0 px-6 py-3 text-lg text-primary focus:ring-0" placeholder="舒张压" type="number" min="40" max="150"/>
+<div class="absolute bottom-0 left-0 w-0 h-0.5 bg-gold-accent group-focus-within:w-full transition-all duration-500"></div>
+</div>
+</div>
+</div>
+<!-- Age & Gender (Simplified Row) -->
+<div class="zen-glass p-8 rounded-xl flex items-center justify-between col-span-1 md:col-span-2 lg:col-span-3">
+<div class="flex flex-1 items-center gap-8 border-r border-outline-variant/20 pr-8">
+<div class="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">calendar_today</span>
+</div>
+<div class="flex-1 relative group">
+<input id="age" class="w-full bg-surface-container-low/50 rounded-lg border-b border-outline-variant focus:border-primary border-t-0 border-l-0 border-r-0 px-6 py-2 text-lg text-primary focus:ring-0" placeholder="年龄" type="number" min="0" max="120"/>
+<div class="absolute bottom-0 left-0 w-0 h-0.5 bg-gold-accent group-focus-within:w-full transition-all duration-500"></div>
+</div>
+</div>
+<div class="flex flex-1 items-center gap-8 pl-8">
+<div class="w-10 h-10 rounded-full bg-primary/5 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">person_pin</span>
+</div>
+<div class="flex-1 relative group">
+<select id="gender" class="w-full bg-surface-container-low/50 rounded-lg border-b border-outline-variant focus:border-primary border-t-0 border-l-0 border-r-0 px-6 py-2 text-lg text-primary focus:ring-0 appearance-none">
+<option value="">请选择</option>
+<option value="男">男</option>
+<option value="女">女</option>
+</select>
+<span class="material-symbols-outlined absolute right-0 bottom-2 pointer-events-none opacity-40">expand_more</span>
+<div class="absolute bottom-0 left-0 w-0 h-0.5 bg-gold-accent group-focus-within:w-full transition-all duration-500"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Photo Upload Modules: Professional Scan UI -->
+<section class="mb-24">
+<div class="flex items-center gap-4 mb-10">
+<h2 class="font-headline-lg text-primary">望诊影像采集</h2>
+<div class="h-px flex-1 bg-gradient-to-r from-outline-variant/50 to-transparent"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+<!-- Tongue Scan -->
+<div class="flex flex-col items-center group">
+<div id="tongue-preview" class="scan-preview w-full aspect-[4/5] zen-glass rounded-xl mb-6 flex flex-col items-center justify-center relative overflow-hidden transition-all duration-500 hover:scale-[1.02] cursor-pointer" data-label="舌苔采集" data-hint="光线充足 · 完整露舌">
+<div class="scan-preview-placeholder scan-visual-tongue" aria-hidden="true"></div>
+<div class="scan-preview-overlay">
+<div class="preview-empty-icon circular-scanner w-32 h-32 rounded-full border-2 border-outline-variant/30 flex items-center justify-center bg-white/50 mb-4 relative">
+<span class="material-symbols-outlined text-primary text-4xl opacity-40">add_a_photo</span>
+<div class="scan-line"></div>
+</div>
+<h3 class="font-headline-md text-primary mb-2">舌苔采集</h3>
+<p class="text-on-surface-variant font-body-md opacity-80 text-center text-sm">光线充足 · 完整露舌</p>
+</div>
+</div>
+<input type="file" id="tongue-upload" accept="image/*" capture="environment" class="hidden">
+<div class="flex gap-2 w-full">
+<button type="button" class="pick-photo flex-1 py-3 border border-primary/20 rounded-lg text-primary font-label-md hover:bg-primary hover:text-white transition-all" data-upload="tongue-upload">选择文件</button>
+<button type="button" class="camera-photo flex-1 py-3 border border-secondary/30 rounded-lg text-secondary font-label-md hover:bg-secondary/10 transition-all" data-upload="tongue-upload" data-preview="tongue-preview">拍照</button>
+</div>
+</div>
+<!-- Face Scan -->
+<div class="flex flex-col items-center group">
+<div id="face-preview" class="scan-preview w-full aspect-[4/5] zen-glass rounded-xl mb-6 flex flex-col items-center justify-center relative overflow-hidden transition-all duration-500 hover:scale-[1.02] cursor-pointer" data-label="面部分析" data-hint="不遮额头 · 表情自然">
+<div class="scan-preview-placeholder scan-visual-face" aria-hidden="true"></div>
+<div class="scan-preview-overlay">
+<div class="preview-empty-icon circular-scanner w-32 h-32 rounded-full border-2 border-outline-variant/30 flex items-center justify-center bg-white/50 mb-4 relative">
+<span class="material-symbols-outlined text-primary text-4xl opacity-40">face</span>
+<div class="scan-line" style="animation-delay: 1s;"></div>
+</div>
+<h3 class="font-headline-md text-primary mb-2">面部分析</h3>
+<p class="text-on-surface-variant font-body-md opacity-80 text-center text-sm">不遮额头 · 表情自然</p>
+</div>
+</div>
+<input type="file" id="face-upload" accept="image/*" capture="user" class="hidden">
+<div class="flex gap-2 w-full">
+<button type="button" class="pick-photo flex-1 py-3 border border-primary/20 rounded-lg text-primary font-label-md hover:bg-primary hover:text-white transition-all" data-upload="face-upload">选择文件</button>
+<button type="button" class="camera-photo flex-1 py-3 border border-secondary/30 rounded-lg text-secondary font-label-md hover:bg-secondary/10 transition-all" data-upload="face-upload" data-preview="face-preview">拍照</button>
+</div>
+</div>
+<!-- Eye Scan -->
+<div class="flex flex-col items-center group">
+<div id="eye-preview" class="scan-preview w-full aspect-[4/5] zen-glass rounded-xl mb-6 flex flex-col items-center justify-center relative overflow-hidden transition-all duration-500 hover:scale-[1.02] cursor-pointer" data-label="眼部望诊" data-hint="对准巩膜 · 避免闪光">
+<div class="scan-preview-placeholder scan-visual-eye" aria-hidden="true"></div>
+<div class="scan-preview-overlay">
+<div class="preview-empty-icon circular-scanner w-32 h-32 rounded-full border-2 border-outline-variant/30 flex items-center justify-center bg-white/50 mb-4 relative">
+<span class="material-symbols-outlined text-primary text-4xl opacity-40">visibility</span>
+<div class="scan-line" style="animation-delay: 2s;"></div>
+</div>
+<h3 class="font-headline-md text-primary mb-2">眼部望诊</h3>
+<p class="text-on-surface-variant font-body-md opacity-80 text-center text-sm">对准巩膜 · 避免闪光</p>
+</div>
+</div>
+<input type="file" id="eye-upload" accept="image/*" capture="environment" class="hidden">
+<div class="flex gap-2 w-full">
+<button type="button" class="pick-photo flex-1 py-3 border border-primary/20 rounded-lg text-primary font-label-md hover:bg-primary hover:text-white transition-all" data-upload="eye-upload">选择文件</button>
+<button type="button" class="camera-photo flex-1 py-3 border border-secondary/30 rounded-lg text-secondary font-label-md hover:bg-secondary/10 transition-all" data-upload="eye-upload" data-preview="eye-preview">拍照</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Diagnosis Action: Premium Button Styling -->
+<section class="flex flex-col items-center py-24 relative">
+<!-- Floating decorative element -->
+<div class="absolute inset-0 flex justify-center items-center -z-10 opacity-5 pointer-events-none">
+<div class="w-[500px] h-[500px] border border-primary rounded-full animate-pulse"></div>
+</div>
+<button class="gold-shimmer text-white px-16 py-6 rounded-full font-headline-md text-headline-md shadow-[0_20px_50px_rgba(108,47,0,0.3)] hover:scale-[1.05] hover:shadow-[0_25px_60px_rgba(108,47,0,0.4)] active:scale-95 transition-all flex items-center gap-6 relative group overflow-hidden" id="diagnose-btn">
+<div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out"></div>
+<span id="btn-text">开始 AI 辅助诊断</span>
+<div class="loader hidden" id="loading-spinner"></div>
+</button>
+<p class="mt-8 text-on-surface-variant font-label-md tracking-widest opacity-40">传承千年医道 · 融合智能辨证</p>
+</section>
+<!-- Result Panel -->
+<section class="hidden mb-24" id="result-panel">
+<div class="zen-glass rounded-xl overflow-hidden border border-gold-accent/10">
+<div class="bg-primary/5 p-10 border-b border-outline-variant/20 flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+<div>
+<div class="flex items-center gap-2 mb-2">
+<span class="w-8 h-px bg-gold-accent"></span>
+<span class="text-gold-accent font-label-md tracking-widest">辨证报告</span>
+</div>
+<h2 class="font-display-lg text-4xl text-primary">中医辨证结论</h2>
+</div>
+<div id="report-meta" class="text-sm text-on-surface-variant"></div>
+</div>
+<div id="diagnosis-result" class="p-10 space-y-8 text-on-surface"></div>
+<div class="px-10 pb-10 flex flex-wrap gap-4 border-t border-outline-variant/10 pt-6">
+<button type="button" id="export-report-btn" class="flex items-center gap-2 px-6 py-2 bg-primary-container text-on-primary-container rounded-lg font-label-md hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-[18px]">download</span>导出报告图片</button>
+<button type="button" id="save-history-btn" class="hidden bg-primary text-white px-6 py-2 rounded-full text-sm hover:opacity-90">保存到诊断历史</button>
+<span id="save-history-status" class="text-sm text-on-surface-variant self-center"></span>
+</div>
+</div>
+</section>
+</div><!-- /view-diagnosis -->
+
+<!-- Herbal Library View (Stitch ai_3) -->
+<div id="view-library" class="hidden">
+<div class="view-banner library-view-banner media-fill rounded-xl mb-8 p-8 md:p-10 text-white min-h-[140px] flex items-end">
+<div>
+<p class="font-label-md tracking-widest opacity-80 mb-2">本草经 · 百科</p>
+<h2 class="font-headline-lg text-headline-lg">中药知识库</h2>
+</div>
+</div>
+<div class="lg:hidden mb-6 flex gap-2">
+<input id="library-search-input-mobile" class="flex-1 pl-4 pr-4 py-2 bg-surface-container-low rounded-full border-none font-body-md focus:ring-2 focus:ring-primary-container" placeholder="搜索药材、功效或症候…" type="text"/>
+<button type="button" id="library-search-btn-mobile" class="bg-primary text-on-primary px-4 py-2 rounded-full text-sm">搜索</button>
+</div>
+<div class="flex gap-3 mb-stack-md flex-wrap" id="herb-category-filters">
+<button type="button" class="herb-filter active px-6 py-2 rounded-full font-label-md text-label-md" data-query="">全部药材</button>
+<button type="button" class="herb-filter px-6 py-2 rounded-full bg-surface-container hover:bg-secondary-container transition-colors text-on-surface-variant font-label-md text-label-md" data-query="解表药">解表药</button>
+<button type="button" class="herb-filter px-6 py-2 rounded-full bg-surface-container hover:bg-secondary-container transition-colors text-on-surface-variant font-label-md text-label-md" data-query="清热药">清热药</button>
+<button type="button" class="herb-filter px-6 py-2 rounded-full bg-surface-container hover:bg-secondary-container transition-colors text-on-surface-variant font-label-md text-label-md" data-query="补益药">补益药</button>
+<button type="button" class="herb-filter px-6 py-2 rounded-full bg-surface-container hover:bg-secondary-container transition-colors text-on-surface-variant font-label-md text-label-md" data-query="活血化瘀">活血化瘀药</button>
+<button type="button" class="herb-filter px-6 py-2 rounded-full bg-surface-container hover:bg-secondary-container transition-colors text-on-surface-variant font-label-md text-label-md" data-query="理气药">理气药</button>
+</div>
+<div id="library-search-status" class="text-sm text-on-surface-variant mb-4"></div>
+<div id="library-search-results" class="space-y-4 mb-stack-md hidden"></div>
+<div id="library-default-content">
+<div class="grid grid-cols-12 gap-6 mb-stack-lg">
+<div class="col-span-12 lg:col-span-7 bg-white rounded-[15px] herb-card-shadow overflow-hidden group border border-outline-variant/30 flex flex-col md:flex-row">
+<div class="md:w-1/2 w-full media-fill media-fill-featured herb-visual-renshen shrink-0" role="img" aria-label="人参"></div>
+<div class="md:w-1/2 p-6 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-headline-md text-headline-md text-primary">人参</h3>
+<span class="px-3 py-1 bg-tertiary-fixed text-on-tertiary-fixed-variant rounded-full text-[12px] font-bold">补益药</span>
+</div>
+<div class="space-y-3 text-sm">
+<div class="flex items-start gap-2"><span class="text-secondary font-bold whitespace-nowrap">【性味】</span><p class="text-on-surface-variant">微温；甘、微苦</p></div>
+<div class="flex items-start gap-2"><span class="text-secondary font-bold whitespace-nowrap">【归经】</span><p class="text-on-surface-variant">归脾、肺、心、肾经</p></div>
+<div class="flex items-start gap-2"><span class="text-secondary font-bold whitespace-nowrap">【功效】</span><p class="text-on-surface-variant">大补元气，复脉固脱，补脾益肺，安神增智。</p></div>
+</div>
+</div>
+<button type="button" class="herb-search-trigger mt-6 flex items-center gap-2 text-primary font-bold hover:gap-3 transition-all" data-query="人参 大补元气"><span>查看百科全书</span><span class="material-symbols-outlined">arrow_forward</span></button>
+</div>
+</div>
+<div class="col-span-12 lg:col-span-5 bg-tertiary-container text-white p-8 rounded-[15px] herb-card-shadow flex flex-col justify-center relative overflow-hidden">
+<div class="absolute -right-10 -bottom-10 opacity-10"><span class="material-symbols-outlined text-[200px]" style="font-variation-settings:'FILL' 1">eco</span></div>
+<h3 class="font-headline-md text-headline-md mb-4">今日推荐：时令养生</h3>
+<p class="font-body-lg opacity-90 mb-6">仲春时节，万物生发。此时应注重疏肝理气，可适当选用薄荷、佛手等辛凉疏散之品，助肝气调达，平衡阴阳。</p>
+<button type="button" id="goto-diagnosis-btn" class="bg-white text-tertiary-container px-6 py-2 rounded-full font-label-md w-fit hover:bg-tertiary-fixed transition-colors">开始 AI 问诊</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="herb-search-trigger bg-white rounded-[15px] herb-card-shadow border border-outline-variant/30 hover:border-primary transition-colors overflow-hidden group cursor-pointer" data-query="枸杞子 滋补肝肾">
+<div class="h-40 media-fill media-fill-card herb-visual-gouqi shrink-0" role="img" aria-label="枸杞子"></div>
+<div class="p-5"><div class="flex justify-between items-start mb-2"><h4 class="font-headline-md text-[20px] text-primary">枸杞子</h4><span class="text-[12px] bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded">补益</span></div>
+<div class="text-[13px] text-on-surface-variant space-y-1 mb-4"><p><span class="font-bold">性味：</span>平；甘</p><p><span class="font-bold">归经：</span>肝、肾</p></div>
+<div class="flex flex-wrap gap-1"><span class="text-[11px] px-2 py-1 bg-surface-container text-secondary rounded-full">滋补肝肾</span><span class="text-[11px] px-2 py-1 bg-surface-container text-secondary rounded-full">益精明目</span></div></div>
+</div>
+<div class="herb-search-trigger bg-white rounded-[15px] herb-card-shadow border border-outline-variant/30 hover:border-primary transition-colors overflow-hidden group cursor-pointer" data-query="黄芪 补气升阳">
+<div class="h-40 media-fill media-fill-card herb-visual-huangqi shrink-0" role="img" aria-label="黄芪"></div>
+<div class="p-5"><div class="flex justify-between items-start mb-2"><h4 class="font-headline-md text-[20px] text-primary">黄芪</h4><span class="text-[12px] bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded">补益</span></div>
+<div class="text-[13px] text-on-surface-variant space-y-1 mb-4"><p><span class="font-bold">性味：</span>微温；甘</p><p><span class="font-bold">归经：</span>肺、脾</p></div>
+<div class="flex flex-wrap gap-1"><span class="text-[11px] px-2 py-1 bg-surface-container text-secondary rounded-full">补气升阳</span><span class="text-[11px] px-2 py-1 bg-surface-container text-secondary rounded-full">固表止汗</span></div></div>
+</div>
+<div class="herb-search-trigger bg-white rounded-[15px] herb-card-shadow border border-outline-variant/30 hover:border-primary transition-colors overflow-hidden group cursor-pointer" data-query="当归 补血活血">
+<div class="h-40 media-fill media-fill-card herb-visual-danggui shrink-0" role="img" aria-label="当归"></div>
+<div class="p-5"><div class="flex justify-between items-start mb-2"><h4 class="font-headline-md text-[20px] text-primary">当归</h4><span class="text-[12px] bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded">补血</span></div>
+<div class="text-[13px] text-on-surface-variant space-y-1 mb-4"><p><span class="font-bold">性味：</span>温；甘、辛</p><p><span class="font-bold">归经：</span>肝、心、脾</p></div>
+<div class="flex flex-wrap gap-1"><span class="text-[11px] px-2 py-1 bg-surface-container text-secondary rounded-full">补血活血</span><span class="text-[11px] px-2 py-1 bg-surface-container text-secondary rounded-full">调经止痛</span></div></div>
+</div>
+<div class="herb-search-trigger bg-white rounded-[15px] herb-card-shadow border border-outline-variant/30 hover:border-primary transition-colors overflow-hidden group cursor-pointer" data-query="薄荷 疏散风热">
+<div class="h-40 media-fill media-fill-card herb-visual-bohe shrink-0" role="img" aria-label="薄荷"></div>
+<div class="p-5"><div class="flex justify-between items-start mb-2"><h4 class="font-headline-md text-[20px] text-primary">薄荷</h4><span class="text-[12px] bg-secondary-container text-on-secondary-container px-2 py-0.5 rounded">解表</span></div>
+<div class="text-[13px] text-on-surface-variant space-y-1 mb-4"><p><span class="font-bold">性味：</span>凉；辛</p><p><span class="font-bold">归经：</span>肺、肝</p></div>
+<div class="flex flex-wrap gap-1"><span class="text-[11px] px-2 py-1 bg-surface-container text-secondary rounded-full">疏散风热</span><span class="text-[11px] px-2 py-1 bg-surface-container text-secondary rounded-full">清利头目</span></div></div>
+</div>
+</div>
+<div class="mt-stack-lg bg-white rounded-[15px] herb-card-shadow border border-outline-variant/30 overflow-hidden">
+<div class="bg-surface-container-low px-6 py-4 border-b border-outline-variant/30"><h3 class="font-headline-md text-[20px] text-primary">常用药对查询</h3></div>
+<div class="overflow-x-auto">
+<table class="w-full text-left font-body-md">
+<thead class="bg-surface text-secondary font-bold"><tr><th class="px-6 py-3">药对组合</th><th class="px-6 py-3">配伍意义</th><th class="px-6 py-3">主治证候</th><th class="px-6 py-3">操作</th></tr></thead>
+<tbody class="divide-y divide-outline-variant/20">
+<tr class="hover:bg-surface-container-low transition-colors"><td class="px-6 py-4 font-bold">黄芪 + 当归</td><td class="px-6 py-4">气能生血，气血双补</td><td class="px-6 py-4">气血亏虚证</td><td class="px-6 py-4"><button type="button" class="herb-pair-search text-primary hover:underline" data-query="黄芪 当归 气血双补">详情</button></td></tr>
+<tr class="bg-surface/30 hover:bg-surface-container-low transition-colors"><td class="px-6 py-4 font-bold">柴胡 + 枳壳</td><td class="px-6 py-4">一升一降，理气舒肝</td><td class="px-6 py-4">肝气郁结证</td><td class="px-6 py-4"><button type="button" class="herb-pair-search text-primary hover:underline" data-query="柴胡 枳壳 疏肝理气">详情</button></td></tr>
+<tr class="hover:bg-surface-container-low transition-colors"><td class="px-6 py-4 font-bold">连翘 + 银花</td><td class="px-6 py-4">双清解毒，透表疏风</td><td class="px-6 py-4">风热感冒</td><td class="px-6 py-4"><button type="button" class="herb-pair-search text-primary hover:underline" data-query="连翘 银花 风热感冒">详情</button></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div><!-- /view-library -->
+
+<!-- History View -->
+<div id="view-history" class="hidden">
+<div class="view-banner history-view-banner media-fill rounded-xl mb-8 p-8 md:p-10 text-white min-h-[140px] flex items-end">
+<div>
+<p class="font-label-md tracking-widest opacity-80 mb-2">问诊档案</p>
+<h2 class="font-headline-lg text-headline-lg">诊断历史</h2>
+</div>
+</div>
+<div class="flex items-center gap-4 mb-10">
+<h2 class="font-headline-lg text-primary sr-only">诊断历史列表</h2>
+<button type="button" id="clear-history-btn" class="text-sm text-error border border-error/30 px-3 py-1 rounded-full hover:bg-error/5">清空</button>
+<div class="h-px flex-1 bg-gradient-to-r from-outline-variant/50 to-transparent"></div>
+</div>
+<div id="history-list" class="space-y-4 text-on-surface-variant text-sm">暂无历史记录</div>
+</div><!-- /view-history -->
+
+<footer class="mt-stack-lg border-t border-outline-variant py-stack-md">
+<div class="flex flex-col md:flex-row justify-between items-center gap-4">
+<div class="flex flex-col items-center md:items-start">
+<span class="font-label-md font-bold text-primary mb-2">ZenPulse AI 中医智库</span>
+<p class="font-body-md text-on-surface-variant text-center md:text-left max-w-2xl text-sm">© 2024 ZenPulse AI · 免责声明：本系统 AI 分析结果仅供临床参考，不构成最终诊断结论。</p>
+<p id="system-status-hint" class="text-xs text-on-surface-variant/80 mt-1"></p>
+</div>
+<div class="flex gap-6 text-on-surface-variant text-sm flex-wrap justify-center md:justify-end">
+<a class="hover:text-primary transition-colors" href="/admin">管理后台</a>
+<a class="hover:text-primary transition-colors" href="/" id="footer-web-link">Web 用户端</a>
+<span class="text-on-surface-variant/70" id="footer-mp-label">小程序 · 御心调理</span>
+<a class="hover:text-primary transition-colors" href="/legal/privacy">隐私政策</a>
+<a class="hover:text-primary transition-colors" href="/legal/terms">服务条款</a>
+<a class="hover:text-primary transition-colors" href="/legal/algorithm">AI 算法说明</a>
+</div>
+</div>
+</footer>
+</div>
+</div>
+</main>
+</div>
+<div id="camera-modal" class="hidden fixed inset-0 z-[200] bg-black/60 flex items-center justify-center p-4">
+  <div class="bg-white rounded-xl max-w-lg w-full p-4 shadow-xl">
+    <h3 class="font-headline-md text-primary mb-3" id="camera-modal-title">拍照</h3>
+    <video id="camera-video" autoplay playsinline muted class="w-full rounded-lg bg-black aspect-video object-cover"></video>
+    <p id="camera-error" class="text-error text-sm mt-2 hidden"></p>
+    <div class="flex gap-2 mt-4 justify-end">
+      <button type="button" id="camera-cancel-btn" class="px-4 py-2 border border-outline-variant rounded-lg">取消</button>
+      <button type="button" id="camera-capture-btn" class="px-4 py-2 bg-primary text-white rounded-lg">拍照</button>
+    </div>
+  </div>
+</div>
+<div id="report-export-root" class="fixed -left-[9999px] top-0 pointer-events-none opacity-0" aria-hidden="true"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous"></script>
+<script src="/assets/shared/report-export.js"></script>
+<script>
+    const HISTORY_KEY = 'tcm_diagnosis_history';
+    let lastDiagnosisResult = null;
+    let lastDiagnosisContext = {};
+
+    function getReportContextFromForm() {
+      const age = document.getElementById('age')?.value?.trim();
+      const gender = document.getElementById('gender')?.value?.trim();
+      const hr = document.getElementById('heart-rate')?.value;
+      const sys = document.getElementById('systolic')?.value;
+      let vitalsStatus = '稳定';
+      if (hr && parseInt(hr, 10) > 100) vitalsStatus = '偏快';
+      if (sys && parseInt(sys, 10) > 140) vitalsStatus = '需关注';
+      return {
+        age: age || lastDiagnosisContext.age,
+        gender: gender || lastDiagnosisContext.gender || '—',
+        vitalsStatus,
+        date: new Date().toISOString(),
+        patientName: lastDiagnosisContext.patientName || '问诊用户'
+      };
+    }
+
+    async function exportDiagnosisReportImage() {
+      if (!lastDiagnosisResult) {
+        alert('请先完成诊断后再导出报告');
+        return;
+      }
+      const btn = document.getElementById('export-report-btn');
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = '正在生成图片…';
+      }
+      try {
+        await window.ZenPulseReportExport.exportReportAsImage(
+          lastDiagnosisResult,
+          getReportContextFromForm()
+        );
+      } catch (err) {
+        alert('导出失败：' + (err.message || err));
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<span class="material-symbols-outlined text-[18px]">download</span>导出报告图片';
+        }
+      }
+    }
+
+    function setupPhotoPreview(uploadId, previewId) {
+      const upload = document.getElementById(uploadId);
+      const preview = document.getElementById(previewId);
+      const pick = () => upload.click();
+      preview.addEventListener('click', pick);
+      document.querySelector(`[data-upload="${uploadId}"]`)?.addEventListener('click', pick);
+      upload.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          preview.querySelector('.scan-user-photo')?.remove();
+          const img = document.createElement('img');
+          img.src = ev.target.result;
+          img.alt = preview.dataset.label || '预览';
+          img.className = 'scan-user-photo';
+          preview.insertBefore(img, preview.firstChild);
+          preview.classList.add('has-photo');
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function resetPhotoPreview(previewId) {
+      const preview = document.getElementById(previewId);
+      if (!preview) return;
+      preview.querySelector('.scan-user-photo')?.remove();
+      preview.classList.remove('has-photo');
+    }
+
+    let cameraStream = null;
+    let cameraUploadId = null;
+    let cameraPreviewId = null;
+
+    function assignFileToInput(uploadId, file) {
+      const input = document.getElementById(uploadId);
+      if (!input) return;
+      const dt = new DataTransfer();
+      dt.items.add(file);
+      input.files = dt.files;
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
+    async function closeCameraModal() {
+      document.getElementById('camera-modal')?.classList.add('hidden');
+      if (cameraStream) {
+        cameraStream.getTracks().forEach((t) => t.stop());
+        cameraStream = null;
+      }
+      const video = document.getElementById('camera-video');
+      if (video) video.srcObject = null;
+      cameraUploadId = null;
+      cameraPreviewId = null;
+    }
+
+    async function openCameraModal(uploadId, previewId) {
+      cameraUploadId = uploadId;
+      cameraPreviewId = previewId;
+      const modal = document.getElementById('camera-modal');
+      const video = document.getElementById('camera-video');
+      const errEl = document.getElementById('camera-error');
+      const preview = document.getElementById(previewId);
+      if (!modal || !video) return;
+      if (errEl) { errEl.classList.add('hidden'); errEl.textContent = ''; }
+      const title = document.getElementById('camera-modal-title');
+      if (title && preview) title.textContent = preview.dataset.label || '拍照';
+      modal.classList.remove('hidden');
+      try {
+        if (!navigator.mediaDevices?.getUserMedia) throw new Error('当前浏览器不支持摄像头');
+        cameraStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: uploadId.includes('face') ? 'user' : 'environment' },
+          audio: false,
+        });
+        video.srcObject = cameraStream;
+      } catch (err) {
+        if (errEl) {
+          errEl.textContent = err.message || '无法打开摄像头';
+          errEl.classList.remove('hidden');
+        }
+      }
+    }
+
+    function captureCameraPhoto() {
+      const video = document.getElementById('camera-video');
+      if (!video || !cameraUploadId || !cameraStream) return;
+      const canvas = document.createElement('canvas');
+      canvas.width = video.videoWidth || 640;
+      canvas.height = video.videoHeight || 480;
+      canvas.getContext('2d').drawImage(video, 0, 0);
+      canvas.toBlob((blob) => {
+        if (!blob) return;
+        const file = new File([blob], `capture-${Date.now()}.jpg`, { type: 'image/jpeg' });
+        assignFileToInput(cameraUploadId, file);
+        closeCameraModal();
+      }, 'image/jpeg', 0.92);
+    }
+
+    function setupCameraControls() {
+      document.querySelectorAll('.camera-photo').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openCameraModal(btn.dataset.upload, btn.dataset.preview);
+        });
+      });
+      document.getElementById('camera-cancel-btn')?.addEventListener('click', () => closeCameraModal());
+      document.getElementById('camera-capture-btn')?.addEventListener('click', () => captureCameraPhoto());
+      document.getElementById('camera-modal')?.addEventListener('click', (e) => {
+        if (e.target.id === 'camera-modal') closeCameraModal();
+      });
+    }
+
+    function resetConsultationForm() {
+      ['heart-rate', 'pulse', 'systolic', 'diastolic', 'age'].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      const gender = document.getElementById('gender');
+      if (gender) gender.value = '';
+      ['tongue-upload', 'face-upload', 'eye-upload'].forEach((id) => {
+        const input = document.getElementById(id);
+        if (input) input.value = '';
+      });
+      resetPhotoPreview('tongue-preview');
+      resetPhotoPreview('face-preview');
+      resetPhotoPreview('eye-preview');
+      lastDiagnosisResult = null;
+      document.getElementById('result-panel')?.classList.add('hidden');
+      const diagnosisResult = document.getElementById('diagnosis-result');
+      if (diagnosisResult) diagnosisResult.innerHTML = '';
+      document.getElementById('save-history-btn')?.classList.add('hidden');
+      const saveStatus = document.getElementById('save-history-status');
+      if (saveStatus) saveStatus.textContent = '';
+      const btnText = document.getElementById('btn-text');
+      if (btnText) btnText.textContent = '开始 AI 辅助诊断';
+      loadHealthMetrics();
+    }
+
+    function escapeHtml(s) {
+      return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    const HEADER_TITLES = {
+      diagnosis: '中医 AI 辅助诊断',
+      library: '中药百科库',
+      history: '诊断历史',
+    };
+
+    function showSection(name) {
+      const views = { diagnosis: 'view-diagnosis', library: 'view-library', history: 'view-history' };
+      Object.entries(views).forEach(([key, id]) => {
+        document.getElementById(id)?.classList.toggle('hidden', key !== name);
+      });
+      document.querySelectorAll('.sidebar-link').forEach((btn) => {
+        const on = btn.dataset.nav === name;
+        btn.classList.toggle('active', on);
+        btn.classList.toggle('text-on-surface-variant', !on);
+        btn.classList.toggle('hover:bg-surface-variant', !on);
+      });
+      document.querySelectorAll('.mobile-nav').forEach((btn) => {
+        const on = btn.dataset.nav === name;
+        btn.classList.toggle('bg-primary-container', on);
+        btn.classList.toggle('text-on-primary-container', on);
+        btn.classList.toggle('border', !on);
+        btn.classList.toggle('border-outline-variant', !on);
+      });
+      const title = document.getElementById('main-header-title');
+      if (title) title.textContent = HEADER_TITLES[name] || HEADER_TITLES.diagnosis;
+      const mobileTitle = document.getElementById('mobile-header-title');
+      if (mobileTitle) mobileTitle.textContent = HEADER_TITLES[name] || HEADER_TITLES.diagnosis;
+      document.getElementById('library-header-search')?.classList.toggle('hidden', name !== 'library');
+      document.getElementById('library-header-search')?.classList.toggle('flex', name === 'library');
+      if (name === 'history') renderHistory().catch(() => {});
+      document.querySelector('.custom-scrollbar')?.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function getLibraryQuery() {
+      const desktop = document.getElementById('library-search-input')?.value.trim();
+      const mobile = document.getElementById('library-search-input-mobile')?.value.trim();
+      return desktop || mobile || '';
+    }
+
+    function setLibraryQuery(q) {
+      const d = document.getElementById('library-search-input');
+      const m = document.getElementById('library-search-input-mobile');
+      if (d) d.value = q;
+      if (m) m.value = q;
+    }
+
+    function renderLibraryResults(items) {
+      const results = document.getElementById('library-search-results');
+      const defaults = document.getElementById('library-default-content');
+      if (!results) return;
+      if (!items.length) {
+        results.classList.add('hidden');
+        defaults?.classList.remove('hidden');
+        return;
+      }
+      defaults?.classList.add('hidden');
+      results.classList.remove('hidden');
+      results.innerHTML = items.map((r, i) => `<div class="bg-white rounded-[15px] herb-card-shadow border border-outline-variant/30 overflow-hidden">
+        <div class="h-28 media-fill media-fill-card" style="background:linear-gradient(135deg,#fff1e9,#fedcc5)">
+          <div class="absolute inset-0 flex items-center justify-center opacity-30"><span class="material-symbols-outlined text-5xl text-primary">menu_book</span></div>
+        </div>
+        <div class="p-5">
+        <div class="flex justify-between items-start gap-4 mb-2">
+          <span class="text-primary font-bold">${escapeHtml(r.title || r.category || '知识片段')}</span>
+          <span class="text-xs text-secondary shrink-0">#${i + 1} · ${((r.rerank_score ?? r.score ?? 0)).toFixed?.(3) ?? '—'}</span>
+        </div>
+        ${r.source || r.file_path ? `<p class="text-xs text-secondary mb-2">${escapeHtml(r.source || r.file_path)}</p>` : ''}
+        <p class="text-on-surface-variant text-sm whitespace-pre-wrap leading-relaxed">${escapeHtml(r.content || r.text || '')}</p>
+        </div>
+      </div>`).join('');
+    }
+
+    async function searchLibrary(presetQuery) {
+      const q = (presetQuery != null ? presetQuery : getLibraryQuery()).trim();
+      const status = document.getElementById('library-search-status');
+      if (!q) {
+        if (status) status.textContent = '请输入检索关键词，或点击药材卡片浏览';
+        renderLibraryResults([]);
+        return;
+      }
+      setLibraryQuery(q);
+      if (status) status.textContent = '检索中…';
+      try {
+        const res = await fetch('/api/knowledge/search', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query: q, top_k: 8 }),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          const detail = typeof data.detail === 'string' ? data.detail : '检索失败';
+          throw new Error(detail);
+        }
+        const items = data.results || [];
+        const modeHint = data.mode === 'keyword' ? '（关键词匹配）' : '';
+        if (status) status.textContent = `「${q}」找到 ${items.length} 条相关知识片段${modeHint}`;
+        renderLibraryResults(items);
+      } catch (err) {
+        if (status) status.textContent = '检索失败：' + err.message;
+        renderLibraryResults([]);
+      }
+    }
+
+    function setHerbFilterActive(btn) {
+      document.querySelectorAll('.herb-filter').forEach((b) => {
+        const on = b === btn;
+        b.classList.toggle('active', on);
+        b.classList.toggle('herb-filter', true);
+        if (!on) {
+          b.classList.add('bg-surface-container', 'text-on-surface-variant');
+          b.classList.remove('bg-primary-container', 'text-on-primary-container');
+        } else {
+          b.classList.remove('bg-surface-container', 'text-on-surface-variant');
+        }
+      });
+    }
+
+    async function loadSystemStatus() {
+      const el = document.getElementById('system-status-hint');
+      if (!el) return;
+      try {
+        const res = await fetch('/api/system/status');
+        if (!res.ok) return;
+        const s = await res.json();
+        const parts = [];
+        if (!s.rag_deps_ok) parts.push('RAG 依赖未装全');
+        else if (!s.index_ready) parts.push('向量索引未就绪');
+        if (!s.ollama_ok) parts.push('LLM 离线（规则降级）');
+        el.textContent = parts.length ? '系统提示：' + parts.join(' · ') : '系统就绪：百科检索与 LLM 诊断可用';
+      } catch (_) {}
+    }
+
+    async function loadHistory() {
+      try {
+        return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+      } catch {
+        return [];
+      }
+    }
+
+    async function saveHistoryEntry(entry) {
+      try {
+        const local = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+        local.unshift(entry);
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(local.slice(0, 50)));
+      } catch (_) {}
+      await renderHistory();
+    }
+
+    async function loadHealthMetrics() {
+      try {
+        const res = await fetch('/api/health-metrics');
+        if (!res.ok) throw new Error('体征采样失败');
+        const data = await res.json();
+        document.getElementById('heart-rate').value = data.heart_rate;
+        document.getElementById('pulse').value = data.pulse;
+        document.getElementById('systolic').value = data.systolic;
+        document.getElementById('diastolic').value = data.diastolic;
+      } catch (err) {
+        console.warn('health-metrics:', err.message);
+      }
+    }
+
+    async function renderHistory() {
+      const box = document.getElementById('history-list');
+      if (!box) return;
+      const list = await loadHistory();
+      if (!list.length) {
+        box.innerHTML = '<p class="text-on-surface-variant">暂无历史记录。完成诊断后可点击「保存到诊断历史」。</p>';
+        return;
+      }
+      box.innerHTML = list.map((item, i) => `<div class="bg-white rounded-[15px] herb-card-shadow border border-outline-variant/30 p-6">
+        <div class="flex justify-between gap-4 mb-2">
+          <strong class="text-primary">${escapeHtml(item.syndrome || item.diagnosis || '未命名')}</strong>
+          <span class="text-xs shrink-0">${escapeHtml(item.time)}</span>
+        </div>
+        <p class="text-on-surface-variant line-clamp-2">${escapeHtml(item.summary || '')}</p>
+        <div class="flex gap-4 mt-3">
+          <button type="button" class="text-primary text-xs hover:underline" data-history-index="${i}">查看详情</button>
+          <button type="button" class="text-error text-xs hover:underline" data-history-delete="${item.id || i}">删除</button>
+        </div>
+      </div>`).join('');
+      box.querySelectorAll('[data-history-index]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const item = list[parseInt(btn.dataset.historyIndex, 10)];
+          if (!item) return;
+          document.getElementById('report-meta').textContent = item.time;
+          document.getElementById('diagnosis-result').innerHTML = item.html || `<p>${escapeHtml(item.summary)}</p>`;
+          document.getElementById('result-panel').classList.remove('hidden');
+          showSection('diagnosis');
+          document.getElementById('result-panel').scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+      box.querySelectorAll('[data-history-delete]').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const key = btn.dataset.historyDelete;
+          const item = list.find((e) => e.id === key) || list[parseInt(key, 10)];
+          if (!confirm('删除这条诊断历史？')) return;
+          const local = JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+          const idx = item?.id ? local.findIndex((e) => e.id === item.id) : parseInt(key, 10);
+          if (idx >= 0) {
+            local.splice(idx, 1);
+            localStorage.setItem(HISTORY_KEY, JSON.stringify(local));
+          }
+          await renderHistory();
+        });
+      });
+    }
+
+    function renderDiagnosisResult(result, tongueFile, faceFile, eyeFile) {
+      const listHtml = (items, title) => {
+        if (!items || !items.length) return '';
+        return `<div class="p-6 bg-white/60 rounded-xl border border-outline-variant/20">
+          <h3 class="font-headline-md text-primary mb-3">${title}</h3>
+          <ul class="space-y-2 list-disc pl-5 text-on-surface-variant">${items.map(i => `<li>${escapeHtml(i)}</li>`).join('')}</ul>
+        </div>`;
+      };
+
+      let pulseHtml = '';
+      if (result.pulse_characteristics) {
+        const p = result.pulse_characteristics;
+        pulseHtml = `<div class="p-6 bg-white/60 rounded-xl border border-outline-variant/20">
+          <h3 class="font-headline-md text-primary mb-3">脉象分析</h3>
+          <ul class="space-y-1 text-on-surface-variant">
+            <li><strong>脉象类型：</strong>${escapeHtml(p.pulse_type || '未检测')}</li>
+            <li><strong>描述：</strong>${escapeHtml(p.description || '未检测')}</li>
+          </ul>
+        </div>`;
+      }
+
+      return [
+        result.diagnosis_mode === 'rule' ? `<div class="p-4 bg-amber-50 border border-amber-200/80 rounded-xl text-sm text-on-surface-variant">
+          <strong class="text-primary">规则引擎模式</strong>：LLM 不可用，已自动降级。${result.llm_fallback_reason ? `<span class="block mt-1 opacity-80">${escapeHtml(result.llm_fallback_reason)}</span>` : ''}
+          <span class="block mt-1">请启动 Ollama 或配置 LLM API 以获得 AI 深度分析。</span>
+        </div>` : '',
+        result.diagnosis_mode === 'metrics' ? `<div class="p-3 bg-surface-container-low/60 rounded-xl text-sm text-on-surface-variant">基于健康指标的简要评估（未上传望诊图片）。</div>` : '',
+        result.syndrome ? `<div class="inline-block bg-white border border-gold-accent/30 px-8 py-4 rounded-full font-headline-md text-primary">${escapeHtml(result.syndrome)}</div>` : '',
+        result.analysis ? `<p class="text-on-surface leading-relaxed border-l-2 border-primary/20 pl-6">${escapeHtml(result.analysis)}</p>` : '',
+        result.fusion_summary ? `<div class="p-6 bg-primary-container/20 rounded-xl border border-primary/10">
+          <h3 class="font-headline-md text-primary mb-2">多模态融合摘要</h3>
+          <p class="text-on-surface-variant leading-relaxed whitespace-pre-wrap">${escapeHtml(result.fusion_summary)}</p>
+        </div>` : '',
+        listHtml(result.face_analysis, '面部分析'),
+        listHtml(result.tongue_analysis, '舌象分析'),
+        listHtml(result.eye_analysis, '目诊分析'),
+        listHtml(result.suggestions, '调理建议'),
+        listHtml(result.prescriptions, '方剂建议'),
+        result.diagnosis ? `<div class="p-6 bg-surface-container-low/40 rounded-xl"><h3 class="font-headline-md text-primary mb-3">完整报告</h3><div class="whitespace-pre-wrap text-on-surface-variant">${escapeHtml(result.diagnosis)}</div></div>` : '',
+        pulseHtml,
+        `<div class="p-6 bg-white/40 rounded-xl border border-outline-variant/20 text-sm text-on-surface-variant">
+          <p>参考来源：${escapeHtml(result.source)}</p>
+          <p class="mt-2 italic">${escapeHtml(result.disclaimer || '此诊断结果仅供参考，请咨询专业中医医师。')}</p>
+          <p class="mt-2">舌象：${tongueFile ? '已上传' : '未提供'} · 面部：${faceFile ? '已上传' : '未提供'} · 眼部：${eyeFile ? '已上传' : '未提供'}</p>
+        </div>`
+      ].join('');
+    }
+
+    document.getElementById('diagnose-btn').addEventListener('click', async function() {
+      const btn = this;
+      const btnText = document.getElementById('btn-text');
+      const loader = document.getElementById('loading-spinner');
+      const resultPanel = document.getElementById('result-panel');
+      const diagnosisResult = document.getElementById('diagnosis-result');
+
+      btnText.textContent = 'AI 正在深度辨证...';
+      loader.classList.remove('hidden');
+      btn.disabled = true;
+
+      try {
+        const formData = new FormData();
+        formData.append('heart_rate', document.getElementById('heart-rate').value || '72');
+        formData.append('pulse', document.getElementById('pulse').value || '72');
+        formData.append('systolic', document.getElementById('systolic').value || '120');
+        formData.append('diastolic', document.getElementById('diastolic').value || '80');
+        const ageVal = document.getElementById('age')?.value?.trim();
+        const genderVal = document.getElementById('gender')?.value?.trim();
+        if (ageVal) formData.append('age', ageVal);
+        if (genderVal) formData.append('gender', genderVal);
+
+        const tongueFile = document.getElementById('tongue-upload').files[0];
+        const faceFile = document.getElementById('face-upload').files[0];
+        const eyeFile = document.getElementById('eye-upload').files[0];
+        if (tongueFile) formData.append('tongue_image', tongueFile);
+        if (faceFile) formData.append('face_image', faceFile);
+        if (eyeFile) formData.append('eye_image', eyeFile);
+
+        const response = await fetch('/api/diagnose', { method: 'POST', body: formData });
+        let result;
+        try {
+          result = await response.json();
+        } catch (_) {
+          throw new Error(response.ok ? '响应解析失败' : `诊断请求失败（HTTP ${response.status}）`);
+        }
+        if (!response.ok) {
+          let detail = '诊断请求失败';
+          if (typeof result?.detail === 'string') detail = result.detail;
+          else if (Array.isArray(result?.detail)) {
+            detail = result.detail.map((d) => d.msg || JSON.stringify(d)).join('；');
+          }
+          throw new Error(detail);
+        }
+        lastDiagnosisResult = result;
+        lastDiagnosisContext = {
+          age: ageVal || '',
+          gender: genderVal || '—',
+          date: new Date().toISOString()
+        };
+
+        document.getElementById('report-meta').textContent = new Date().toLocaleString('zh-CN');
+        const html = renderDiagnosisResult(result, tongueFile, faceFile, eyeFile);
+        diagnosisResult.innerHTML = html;
+        resultPanel.classList.remove('hidden');
+        resultPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        btnText.textContent = '重新评估诊断报告';
+        const saveBtn = document.getElementById('save-history-btn');
+        if (saveBtn) {
+          saveBtn.classList.remove('hidden');
+          saveBtn.onclick = async () => {
+            await saveHistoryEntry({
+              time: new Date().toLocaleString('zh-CN'),
+              syndrome: result.syndrome,
+              diagnosis: result.diagnosis,
+              summary: result.analysis || result.syndrome || '',
+              html,
+              diagnosis_mode: result.diagnosis_mode || '',
+            });
+            const st = document.getElementById('save-history-status');
+            if (st) st.textContent = '已保存到本机诊断历史';
+          };
+        }
+      } catch (err) {
+        diagnosisResult.innerHTML = `<p class="text-error">诊断失败：${escapeHtml(err.message)}</p>`;
+        resultPanel.classList.remove('hidden');
+        btnText.textContent = '开始 AI 辅助诊断';
+      } finally {
+        loader.classList.add('hidden');
+        btn.disabled = false;
+      }
+    });
+
+    async function loadBranding() {
+      try {
+        const res = await fetch('/api/public/branding');
+        if (!res.ok) return;
+        const b = await res.json();
+        const mp = b.miniprogram?.shortName || b.miniprogram?.name || '御心调理';
+        const brand = b.brandName || b.productName || 'ZenPulse AI';
+        document.title = `${brand} · ${b.tagline || '中医智能诊断'}`;
+        const mpLabel = `微信小程序 · ${mp}`;
+        document.getElementById('sidebar-mp-label') && (document.getElementById('sidebar-mp-label').textContent = mpLabel);
+        document.getElementById('footer-mp-label') && (document.getElementById('footer-mp-label').textContent = `小程序 · ${mp}`);
+        const asideTitle = document.querySelector('aside h1');
+        if (asideTitle && b.productName) asideTitle.textContent = b.productName;
+      } catch (_) {}
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadBranding();
+      setupPhotoPreview('tongue-upload', 'tongue-preview');
+      setupPhotoPreview('face-upload', 'face-preview');
+      setupPhotoPreview('eye-upload', 'eye-preview');
+      setupCameraControls();
+      loadHealthMetrics();
+      loadSystemStatus();
+      showSection('diagnosis');
+
+      document.querySelectorAll('.sidebar-link, .mobile-nav').forEach((btn) => {
+        btn.addEventListener('click', () => showSection(btn.dataset.nav || 'diagnosis'));
+      });
+      document.getElementById('history-nav-btn')?.addEventListener('click', () => showSection('history'));
+      document.getElementById('refresh-metrics-btn')?.addEventListener('click', () => loadHealthMetrics());
+      document.getElementById('sidebar-refresh-metrics')?.addEventListener('click', () => loadHealthMetrics());
+      document.getElementById('load-health-metrics-btn')?.addEventListener('click', () => loadHealthMetrics());
+      document.getElementById('new-consultation-btn')?.addEventListener('click', () => {
+        resetConsultationForm();
+        showSection('diagnosis');
+      });
+      document.getElementById('goto-diagnosis-btn')?.addEventListener('click', () => showSection('diagnosis'));
+      document.getElementById('export-report-btn')?.addEventListener('click', () => exportDiagnosisReportImage());
+
+      const triggerSearch = () => searchLibrary();
+      document.getElementById('library-search-input')?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') triggerSearch();
+      });
+      document.getElementById('library-search-input-mobile')?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') triggerSearch();
+      });
+      document.getElementById('library-search-btn-mobile')?.addEventListener('click', triggerSearch);
+
+      document.querySelectorAll('.herb-filter').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          setHerbFilterActive(btn);
+          const q = btn.dataset.query || '';
+          if (q) searchLibrary(q);
+          else {
+            setLibraryQuery('');
+            document.getElementById('library-search-status').textContent = '';
+            renderLibraryResults([]);
+          }
+        });
+      });
+      document.querySelectorAll('.herb-search-trigger').forEach((el) => {
+        el.addEventListener('click', () => searchLibrary(el.dataset.query || ''));
+      });
+      document.querySelectorAll('.herb-pair-search').forEach((btn) => {
+        btn.addEventListener('click', () => searchLibrary(btn.dataset.query || ''));
+      });
+
+      document.getElementById('clear-history-btn')?.addEventListener('click', async () => {
+        if (confirm('清空全部诊断历史？')) {
+          localStorage.removeItem(HISTORY_KEY);
+          await renderHistory();
+        }
+      });
+    });
+</script>
+</body></html>

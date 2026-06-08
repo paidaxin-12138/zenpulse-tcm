@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>中医知识库 · 管理端</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Source Serif 4 & Source Sans 3 -->
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&amp;family=Source+Serif+4:wght@600;700&amp;family=JetBrains+Mono&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface": "#1d1b1a",
+                        "tertiary": "#004c10",
+                        "surface-container-lowest": "#ffffff",
+                        "surface": "#fff8f5",
+                        "on-background": "#1d1b1a",
+                        "on-secondary-fixed-variant": "#484742",
+                        "tertiary-container": "#12661e",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed-dim": "#88d982",
+                        "inverse-surface": "#33302e",
+                        "secondary": "#5f5e59",
+                        "inverse-on-surface": "#f6efec",
+                        "surface-variant": "#e8e1de",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-high": "#ede7e4",
+                        "secondary-fixed": "#e5e2db",
+                        "primary-fixed": "#ffdbc9",
+                        "primary-container": "#8b4513",
+                        "primary": "#6c2f00",
+                        "on-error-container": "#93000a",
+                        "surface-container-highest": "#e8e1de",
+                        "surface-bright": "#fff8f5",
+                        "secondary-fixed-dim": "#c9c6c0",
+                        "on-surface-variant": "#54433a",
+                        "on-tertiary-fixed-variant": "#005312",
+                        "on-primary-fixed-variant": "#753401",
+                        "on-primary-container": "#ffc29f",
+                        "on-primary-fixed": "#321200",
+                        "on-primary": "#ffffff",
+                        "surface-container-low": "#f9f2ef",
+                        "on-tertiary-container": "#90e28a",
+                        "inverse-primary": "#ffb68c",
+                        "surface-container": "#f3ecea",
+                        "outline": "#877369",
+                        "outline-variant": "#dac2b6",
+                        "on-tertiary-fixed": "#002204",
+                        "on-secondary-fixed": "#1c1c18",
+                        "surface-tint": "#934b19",
+                        "on-error": "#ffffff",
+                        "on-secondary-container": "#65645f",
+                        "background": "#fff8f5",
+                        "on-secondary": "#ffffff",
+                        "surface-dim": "#dfd9d6",
+                        "secondary-container": "#e5e2db",
+                        "primary-fixed-dim": "#ffb68c",
+                        "tertiary-fixed": "#a3f69c",
+                        "error": "#ba1a1a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "12px",
+                        "md": "16px",
+                        "lg": "20px",
+                        "xl": "24px",
+                        "2xl": "32px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-sm": "4px",
+                        "base": "8px",
+                        "stack-md": "16px",
+                        "stack-lg": "32px",
+                        "margin-page": "32px",
+                        "container-max": "1100px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Source Serif 4"],
+                        "display-lg": ["Source Serif 4"],
+                        "body-sm": ["Source Sans 3"],
+                        "label-caps": ["Source Sans 3"],
+                        "data-mono": ["JetBrains Mono"],
+                        "title-sm": ["Source Sans 3"],
+                        "body-md": ["Source Sans 3"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "display-lg": ["36px", {"lineHeight": "44px", "fontWeight": "700"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "label-caps": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700"}],
+                        "data-mono": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "title-sm": ["18px", {"lineHeight": "24px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #fff8f5;
+            color: #1d1b1a;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #dac2b6;
+            border-radius: 2px;
+        }
+        .status-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+    
+    .admin-panel { display: none; }
+    .admin-panel.active { display: block; }
+    .status { padding: 8px 12px; border-radius: 8px; font-size: 0.875rem; margin-top: 8px; }
+    .status.ok { background: #e8f5e9; color: #2d5016; }
+    .status.err { background: #ffebee; color: #b71c1c; }
+    .card-shadow { box-shadow: 0 4px 20px rgba(139, 69, 19, 0.08); }
+    .knowledge-tab-panel { display: none; }
+    .knowledge-tab-panel.active { display: block; }
+    .knowledge-tab.active { background-color: #6c2f00; color: #fff; }
+    #admin-panels .rounded-xl,
+    #admin-panels .bg-surface-container-lowest,
+    #auth-gate .login-card {
+      border-radius: 24px !important;
+    }
+    .glass-panel {
+      background: rgba(249, 242, 239, 0.88);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .ink-overlay {
+      background: linear-gradient(to bottom, rgba(51, 48, 46, 0.35), rgba(51, 48, 46, 0.65));
+    }
+    #auth-gate .login-field:focus-within {
+      border-color: #6c2f00;
+      box-shadow: 0 0 0 1px rgba(108, 47, 0, 0.15);
+    }
+    #admin-panels .rounded-\[15px\] {
+      border-radius: 32px !important;
+    }
+    #admin-panels table {
+      border-radius: 24px;
+      overflow: hidden;
+    }
+    #admin-panels .overflow-hidden.rounded-xl {
+      border-radius: 24px !important;
+    }
+    #dashboard-content {
+      min-width: 0;
+    }
+    #dashboard-content .dashboard-tile {
+      min-width: 0;
+      overflow: hidden;
+    }
+    
+  </style>
+  <link href="/assets/shared/zenpulse-platform.css" rel="stylesheet"/>
+</head>
+<body class="font-body-md bg-surface text-on-surface overflow-x-hidden">
+
+<input id="api-key-input" type="hidden" value=""/>
+
+<div id="auth-gate" class="fixed inset-0 z-[100] flex flex-col bg-background text-on-background min-h-screen overflow-hidden">
+  <header class="relative z-10 px-margin-page h-16 flex items-center justify-between shrink-0 bg-black/25 backdrop-blur-sm">
+    <div class="flex items-center gap-2">
+      <span id="login-brand-title" class="font-headline-md text-headline-md font-bold text-white">ZenPulse AI</span>
+      <span class="hidden md:inline-block h-4 w-px bg-white/30 mx-2"></span>
+      <span class="hidden md:inline font-body-md text-body-md text-white/80">Administrative Suite</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="/" class="font-body-sm text-body-sm text-white/80 hover:text-white transition-colors flex items-center gap-1" title="返回用户端">
+        <span class="material-symbols-outlined text-[20px]">clinical_notes</span>
+        <span class="hidden sm:inline">用户端</span>
+      </a>
+    </div>
+  </header>
+  <main class="relative flex-grow flex items-center justify-center px-4 pb-24">
+    <div class="absolute inset-0 z-0">
+      <img alt="" class="w-full h-full object-cover" src="/assets/stitch/hero-banner.jpg"/>
+      <div class="absolute inset-0 ink-overlay"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-50"></div>
+    </div>
+    <div class="relative z-10 w-full max-w-md">
+      <div class="glass-panel login-card p-stack-lg rounded-xl border border-outline-variant shadow-lg">
+        <div class="text-center mb-stack-lg">
+          <span class="material-symbols-outlined text-4xl text-primary">admin_panel_settings</span>
+          <h1 class="font-headline-md text-headline-md text-primary mt-3 mb-2">管理员登录</h1>
+          <p id="login-tagline" class="font-body-sm text-body-sm text-on-surface-variant">欢迎使用 ZenPulse AI 智慧中医管理后台</p>
+        </div>
+        <form id="login-form" class="space-y-stack-md" autocomplete="on">
+          <div class="relative">
+            <label class="absolute -top-2 left-3 px-1 bg-surface-container-low text-label-caps text-primary z-10" for="login-account">访问标识</label>
+            <div class="login-field flex items-center border border-outline-variant rounded-xl bg-surface-container-lowest transition-all duration-200">
+              <span class="material-symbols-outlined pl-3 text-on-surface-variant">person</span>
+              <input class="w-full p-3 bg-transparent border-none focus:ring-0 text-body-md placeholder:text-on-surface-variant/40" id="login-account" name="account" placeholder="可选，便于识别此 Key" type="text" autocomplete="username"/>
+            </div>
+          </div>
+          <div class="relative">
+            <label class="absolute -top-2 left-3 px-1 bg-surface-container-low text-label-caps text-primary z-10" for="login-api-key">Admin API Key</label>
+            <div class="login-field flex items-center border border-outline-variant rounded-xl bg-surface-container-lowest transition-all duration-200">
+              <span class="material-symbols-outlined pl-3 text-on-surface-variant">lock</span>
+              <input class="w-full p-3 bg-transparent border-none focus:ring-0 text-body-md placeholder:text-on-surface-variant/40 font-data-mono" id="login-api-key" name="password" placeholder="请输入 Admin API Key" type="password" autocomplete="current-password" required/>
+              <button type="button" id="login-key-toggle" class="material-symbols-outlined pr-3 text-on-surface-variant hover:text-primary transition-colors" title="显示/隐藏">visibility</button>
+            </div>
+          </div>
+          <p class="font-body-sm text-body-sm text-on-surface-variant/80 px-1">Key 位于 <code class="text-primary">data/admin_config.json</code> 的 <code class="text-primary">admin_api_key</code>；RBAC 附加 Key 亦可使用。关闭浏览器标签页后需重新登录。</p>
+          <div class="flex items-center justify-end py-1">
+            <button type="button" id="login-help-btn" class="font-body-sm text-body-sm text-primary hover:underline underline-offset-4 transition-all">如何获取 Key？</button>
+          </div>
+          <button type="submit" id="login-submit-btn" class="w-full py-stack-md bg-primary-container text-on-primary font-title-sm text-title-sm rounded-xl hover:opacity-90 active:scale-[0.98] transition-all shadow-md flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined text-[20px]">login</span>
+            进入系统
+          </button>
+          <div id="auth-gate-status" class="status err hidden"></div>
+        </form>
+      </div>
+    </div>
+  </main>
+  <footer class="relative z-10 border-t border-white/10 shrink-0">
+    <div class="flex flex-col md:flex-row justify-between items-center px-margin-page w-full max-w-container-max mx-auto gap-4 py-6">
+      <div class="flex flex-col items-center md:items-start text-center md:text-left">
+        <span class="text-title-sm font-title-sm text-on-primary">ZenPulse AI</span>
+        <span class="text-body-sm font-body-sm text-white/60 italic">Empowering TCM with Intelligence · 智慧赋能中医</span>
+        <p class="font-body-sm text-body-sm text-white/50 mt-1">© ZenPulse AI Administrative Suite</p>
+      </div>
+      <div class="flex flex-wrap justify-center gap-6">
+        <a class="font-body-sm text-body-sm text-white/70 hover:text-white hover:underline underline-offset-4 transition-all" href="/">用户诊断 Web</a>
+        <a class="font-body-sm text-body-sm text-white/70 hover:text-white hover:underline underline-offset-4 transition-all" href="/legal/privacy">隐私政策</a>
+        <a class="font-body-sm text-body-sm text-white/70 hover:text-white hover:underline underline-offset-4 transition-all" href="/docs" target="_blank" rel="noopener">API 文档</a>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<div id="admin-shell" class="hidden">
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-page py-base bg-surface/95 backdrop-blur border-b border-outline-variant">
+  <div class="flex items-center gap-4 lg:pl-64 flex-wrap">
+    <span id="admin-brand-title" class="font-headline-md font-bold text-primary">ZenPulse AI · 管理端</span>
+    <div class="platform-dock hidden sm:flex !py-1.5 !px-3 !gap-2 !mb-0">
+      <a class="platform-link" href="/" title="用户诊断 Web 端"><span class="material-symbols-outlined text-base">clinical_notes</span>用户端</a>
+      <span class="platform-link platform-link-muted" id="admin-mp-hint"><span class="material-symbols-outlined text-base">smartphone</span>小程序</span>
+    </div>
+  </div>
+  <div class="flex items-center gap-3 flex-wrap justify-end max-w-2xl">
+    <span id="admin-user-label" class="text-xs text-secondary max-w-[160px] truncate hidden sm:inline"></span>
+    <span id="auth-status" class="text-xs text-secondary max-w-[200px]"></span>
+    <button id="logout-btn" type="button" class="border border-outline-variant text-sm px-4 py-2 rounded-lg hover:bg-surface-container-high transition-colors">退出登录</button>
+  </div>
+</nav>
+
+<aside class="hidden lg:flex flex-col h-screen fixed left-0 top-0 p-stack-md w-64 bg-surface-container-low border-r border-outline-variant pt-24 z-40">
+  <div class="mb-8 px-4"><h2 class="font-title-sm text-primary">中医知识库管理端</h2><p class="font-label-caps text-secondary">Stitch UI</p></div>
+  <nav class="flex-1 flex flex-col gap-1 overflow-y-auto custom-scrollbar" id="sidebar-nav"><button type="button" class="tab flex items-center gap-3 rounded-full px-4 py-2 font-label-caps transition-all active bg-primary-container text-on-primary-container font-bold" data-tab="dashboard" data-scroll="概览"><span class="material-symbols-outlined">dashboard</span>概览</button><button type="button" class="tab flex items-center gap-3 rounded-full px-4 py-2 font-label-caps transition-all text-secondary hover:bg-secondary-container" data-tab="patients" data-scroll="患者管理"><span class="material-symbols-outlined">group</span>患者管理</button><button type="button" class="tab flex items-center gap-3 rounded-full px-4 py-2 font-label-caps transition-all text-secondary hover:bg-secondary-container" data-tab="knowledge" data-scroll="知识库"><span class="material-symbols-outlined">database</span>知识库</button><button type="button" class="tab flex items-center gap-3 rounded-full px-4 py-2 font-label-caps transition-all text-secondary hover:bg-secondary-container" data-tab="embedding" data-scroll="embedding"><span class="material-symbols-outlined">view_in_ar</span>Embedding</button><button type="button" class="tab flex items-center gap-3 rounded-full px-4 py-2 font-label-caps transition-all text-secondary hover:bg-secondary-container" data-tab="llm" data-scroll="llm"><span class="material-symbols-outlined">psychology</span>LLM</button><button type="button" class="tab flex items-center gap-3 rounded-full px-4 py-2 font-label-caps transition-all text-secondary hover:bg-secondary-container" data-tab="rerank" data-scroll="rerank"><span class="material-symbols-outlined">sort</span>Rerank</button><button type="button" class="tab flex items-center gap-3 rounded-full px-4 py-2 font-label-caps transition-all text-secondary hover:bg-secondary-container" data-tab="rag" data-scroll="rag 检索"><span class="material-symbols-outlined">bug_report</span>RAG 检索</button><button type="button" class="tab flex items-center gap-3 rounded-full px-4 py-2 font-label-caps transition-all text-secondary hover:bg-secondary-container" data-tab="system" data-scroll="系统"><span class="material-symbols-outlined">settings_suggest</span>系统</button></nav>
+  <div class="mt-auto pt-4 px-2 platform-dock">
+    <span class="platform-dock-label">ZenPulse 全平台</span>
+    <a class="platform-link w-full justify-center" href="/"><span class="material-symbols-outlined text-base">home</span>用户 Web 端</a>
+    <span class="platform-link platform-link-muted w-full justify-center text-center" id="sidebar-mp-name">微信小程序 · 御心调理</span>
+  </div>
+</aside>
+
+<div id="admin-panels">
+<section id="panel-dashboard" class="admin-panel active lg:ml-64 pt-24 pb-16 px-margin-page min-h-screen"><div class="max-w-container-max mx-auto"><div class="max-w-container-max mx-auto space-y-stack-lg">
+<!-- Welcome Header -->
+<header class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-outline-variant pb-stack-md">
+<div>
+<h1 class="font-display-lg text-display-lg text-on-surface">系统概览</h1>
+<p class="text-secondary font-body-md mt-1">欢迎回来，管理员。当前系统运行状态良好，各项指标均在预设阈值内。</p>
+</div>
+<div class="flex gap-3">
+<span class="bg-tertiary-fixed text-on-tertiary-fixed px-3 py-1 rounded-full font-label-caps text-label-caps flex items-center gap-2">
+<span class="w-2 h-2 bg-tertiary rounded-full status-pulse"></span>
+                        系统运行中
+                    </span>
+<span class="text-secondary font-body-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="schedule">schedule</span>
+                        最后更新: <span id="dashboard-updated">--</span>
+                    </span>
+</div>
+</header>
+<!-- Top Level Metrics (Tiles) -->
+<section id="dashboard-content" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter"></section>
+<!-- Grid Layout for Detailed Info -->
+<section class="grid grid-cols-12 gap-gutter">
+<!-- API Key Verification (Left 7 Columns) -->
+<div class="col-span-12 lg:col-span-7 space-y-gutter">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden">
+<div class="px-stack-md py-stack-md bg-surface-container-low border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-label-caps text-label-caps text-primary">API KEY 验证与管理</h3>
+<button type="button" id="dashboard-manage-keys-btn" class="text-primary hover:underline font-label-caps text-label-caps">管理所有 Key</button>
+</div>
+<div class="p-stack-md space-y-stack-md">
+<div class="flex items-center gap-4 bg-surface p-stack-md border border-outline-variant rounded-xl">
+<div class="w-12 h-12 bg-primary-fixed rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary-fixed-variant" data-icon="vpn_key">vpn_key</span>
+</div>
+<div class="flex-1">
+<p class="font-title-sm text-title-sm text-on-surface">生产环境核心 Key</p>
+<p class="font-data-mono text-data-mono text-secondary">sk-zen-•••••••••••••4a2f</p>
+</div>
+<div class="flex gap-2">
+<span class="bg-tertiary/10 text-tertiary px-2 py-0.5 rounded text-[10px] font-bold uppercase">Active</span>
+<button class="material-symbols-outlined text-secondary hover:text-primary transition-colors" data-icon="content_copy">content_copy</button>
+</div>
+</div>
+<p class="text-secondary font-body-sm">登录后可在「系统」页轮换 Admin Key；退出登录后需重新输入 Key。</p>
+</div>
+</div>
+<!-- System Status Table -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden">
+<div class="px-stack-md py-stack-md bg-surface-container-low border-b border-outline-variant">
+<h3 class="font-label-caps text-label-caps text-primary">提供商连接状态</h3>
+</div>
+<table class="w-full text-left">
+<thead class="bg-surface-container-high/30 border-b border-outline-variant">
+<tr>
+<th class="px-stack-md py-3 font-label-caps text-label-caps text-secondary">服务提供商</th>
+<th class="px-stack-md py-3 font-label-caps text-label-caps text-secondary">服务类型</th>
+<th class="px-stack-md py-3 font-label-caps text-label-caps text-secondary">连接状态</th>
+<th class="px-stack-md py-3 font-label-caps text-label-caps text-secondary">操作</th>
+</tr>
+</thead>
+<tbody id="provider-status-body" class="divide-y divide-outline-variant"></tbody>
+</table>
+</div>
+</div>
+<!-- Fast Links & Health (Right 5 Columns) -->
+<div class="col-span-12 lg:col-span-5 space-y-gutter">
+<!-- Quick Actions -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md">
+<h3 class="font-label-caps text-label-caps text-primary mb-4">快捷操作</h3>
+<div class="grid grid-cols-2 gap-3">
+<a class="flex flex-col items-center justify-center p-4 border border-outline-variant rounded-xl hover:bg-secondary-container/30 transition-all group" href="#" data-quick-action="upload">
+<span class="material-symbols-outlined text-primary mb-2 group-hover:scale-110 transition-transform" data-icon="upload_file">upload_file</span>
+<span class="font-label-caps text-label-caps text-on-surface">上传文档</span>
+</a>
+<a class="flex flex-col items-center justify-center p-4 border border-outline-variant rounded-xl hover:bg-secondary-container/30 transition-all group" href="#" data-quick-action="rag">
+<span class="material-symbols-outlined text-primary mb-2 group-hover:scale-110 transition-transform" data-icon="terminal">terminal</span>
+<span class="font-label-caps text-label-caps text-on-surface">调试终端</span>
+</a>
+<a class="flex flex-col items-center justify-center p-4 border border-outline-variant rounded-xl hover:bg-secondary-container/30 transition-all group" href="#" data-quick-action="stats">
+<span class="material-symbols-outlined text-primary mb-2 group-hover:scale-110 transition-transform" data-icon="analytics">analytics</span>
+<span class="font-label-caps text-label-caps text-on-surface">性能分析</span>
+</a>
+<a class="flex flex-col items-center justify-center p-4 border border-outline-variant rounded-xl hover:bg-secondary-container/30 transition-all group" href="#" data-quick-action="audit">
+<span class="material-symbols-outlined text-primary mb-2 group-hover:scale-110 transition-transform" data-icon="history">history</span>
+<span class="font-label-caps text-label-caps text-on-surface">操作审计</span>
+</a>
+</div>
+</div>
+<!-- System Health Visual -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md">
+<h3 class="font-label-caps text-label-caps text-primary mb-4">服务器负载</h3>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between font-label-caps text-label-caps mb-1">
+<span class="text-secondary">CPU 占用率</span>
+<span class="text-on-surface">24%</span>
+</div>
+<div class="w-full bg-surface-variant h-1.5 rounded-full">
+<div class="bg-tertiary h-full w-[24%] rounded-full"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between font-label-caps text-label-caps mb-1">
+<span class="text-secondary">内存使用 (RAM)</span>
+<span class="text-on-surface">6.2 / 16 GB</span>
+</div>
+<div class="w-full bg-surface-variant h-1.5 rounded-full">
+<div class="bg-primary h-full w-[38%] rounded-full"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between font-label-caps text-label-caps mb-1">
+<span class="text-secondary">存储空间</span>
+<span class="text-on-surface">1.2 / 10 TB</span>
+</div>
+<div class="w-full bg-surface-variant h-1.5 rounded-full">
+<div class="bg-tertiary h-full w-[12%] rounded-full"></div>
+</div>
+</div>
+</div>
+<div class="mt-6 pt-6 border-t border-outline-variant">
+<img class="w-full h-32 object-cover rounded-xl" alt="系统运行状态装饰图" src="/assets/stitch/history-banner.jpg"/>
+</div>
+</div>
+</div>
+</section>
+</div></div></section>
+<section id="panel-patients" class="admin-panel lg:ml-64 pt-24 pb-16 px-margin-page min-h-screen"><div class="max-w-container-max mx-auto"><!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-gutter max-w-1440 mx-auto h-20 bg-surface shadow-sm shrink-0">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-3 flex-wrap"><h2 class="font-headline-md text-headline-md text-primary">患者管理</h2><button type="button" id="refresh-patients-btn" class="border border-outline-variant px-4 py-1.5 rounded-full text-sm">刷新</button><button type="button" id="new-patient-btn" class="bg-primary text-on-primary px-4 py-1.5 rounded-full text-sm">新建患者</button></div>
+</div>
+<div class="flex-1 max-w-md mx-8">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-full py-2.5 pl-12 pr-4 focus:outline-none focus:border-secondary transition-all font-body-md text-body-md" id="patient-search" placeholder="搜索患者姓名、手机号或 ID..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-variant transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-variant transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Content Canvas -->
+<section class="flex-1 overflow-y-auto custom-scrollbar bg-background p-gutter">
+<div class="max-w-1440 mx-auto grid grid-cols-12 gap-gutter">
+<!-- Left Column: Patient List -->
+<div class="col-span-12 lg:col-span-4 space-y-stack-md">
+<div class="flex items-center justify-between">
+<h3 class="font-label-md text-label-md uppercase tracking-wider text-outline">最近访客</h3>
+<button class="text-primary font-label-md text-label-md flex items-center gap-1 hover:underline">
+                            查看全部 <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+<!-- Bento-style Patient List -->
+<div id="patient-list" class="space-y-4 custom-scrollbar max-h-[70vh] overflow-y-auto"></div>
+<p id="patient-list-meta" class="text-xs text-secondary mt-2"></p>
+</div>
+<!-- Right Column: Patient Details & History -->
+<div class="col-span-12 lg:col-span-8 space-y-stack-md" id="patient-detail-panel">
+<div id="patient-detail-empty" class="bg-surface rounded-[15px] card-shadow p-12 text-center text-secondary">
+<span class="material-symbols-outlined text-5xl mb-4 opacity-40">person_search</span>
+<p>从左侧选择患者，或点击「新建患者」</p>
+</div>
+<div id="patient-detail-content" class="hidden space-y-stack-md">
+<div class="bg-surface rounded-[15px] card-shadow overflow-hidden">
+<div class="bg-surface-container px-gutter py-6 border-b border-outline-variant flex flex-wrap justify-between items-end gap-4">
+<div>
+<h4 id="patient-detail-title" class="font-display-lg text-headline-lg text-on-surface"></h4>
+<div id="patient-detail-meta" class="flex flex-wrap gap-4 mt-2 text-on-surface-variant text-sm"></div>
+</div>
+<div class="flex gap-2 flex-wrap" id="patient-detail-actions"></div>
+</div>
+<div class="p-gutter grid grid-cols-1 md:grid-cols-2 gap-6">
+<div><h5 class="font-label-md text-outline uppercase mb-3">主诉 / 症状</h5><p id="patient-detail-symptoms" class="text-on-surface leading-relaxed"></p></div>
+<div><h5 class="font-label-md text-outline uppercase mb-3">诊断与治疗</h5><p id="patient-detail-treatment" class="text-on-surface leading-relaxed"></p></div>
+</div>
+</div>
+<div class="space-y-stack-sm">
+<h3 class="font-label-md uppercase text-outline px-2">诊疗记录</h3>
+<div class="bg-surface rounded-[15px] card-shadow overflow-hidden">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low text-on-surface-variant text-[13px] uppercase">
+<tr><th class="px-6 py-4">日期</th><th class="px-6 py-4">主诉</th><th class="px-6 py-4">证型</th><th class="px-6 py-4">疗效</th><th class="px-6 py-4 text-right">操作</th></tr>
+</thead>
+<tbody id="patient-history-body" class="divide-y divide-outline-variant"></tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<div id="patient-form-panel" class="hidden mt-stack-lg bg-surface border border-outline-variant rounded-xl p-stack-md">
+  <h3 id="patient-form-title" class="font-title-sm text-primary mb-4">新建患者</h3>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
+    <input id="pf-name" placeholder="姓名 *" class="border border-outline-variant rounded px-3 py-2 text-sm"/>
+    <input id="pf-gender" placeholder="性别" class="border border-outline-variant rounded px-3 py-2 text-sm"/>
+    <input id="pf-age" type="number" placeholder="年龄" class="border border-outline-variant rounded px-3 py-2 text-sm"/>
+    <input id="pf-phone" placeholder="手机号" class="border border-outline-variant rounded px-3 py-2 text-sm"/>
+    <input id="pf-id-number" placeholder="证件号" class="border border-outline-variant rounded px-3 py-2 text-sm col-span-2"/>
+    <input id="pf-address" placeholder="地址" class="border border-outline-variant rounded px-3 py-2 text-sm col-span-2"/>
+    <input id="pf-constitution" placeholder="体质" class="border border-outline-variant rounded px-3 py-2 text-sm col-span-2"/>
+    <input id="pf-allergies" placeholder="过敏史" class="border border-outline-variant rounded px-3 py-2 text-sm col-span-2"/>
+  </div>
+  <textarea id="pf-notes" placeholder="备注" class="w-full border border-outline-variant rounded px-3 py-2 mb-3 min-h-[50px]"></textarea>
+  <div class="flex gap-2">
+    <button type="button" id="pf-save-btn" class="bg-primary text-on-primary px-4 py-2 rounded">保存</button>
+    <button type="button" id="pf-cancel-btn" class="border border-outline-variant px-4 py-2 rounded">取消</button>
+  </div>
+  <div id="patient-status" class="mt-2"></div>
+</div>
+<div id="visit-form-panel" class="hidden mt-stack-md bg-surface-container-low border border-outline-variant rounded-xl p-stack-md">
+  <h3 class="font-title-sm text-primary mb-3">新增就诊记录</h3>
+  <div class="grid grid-cols-2 gap-2 mb-2">
+    <input id="vf-date" placeholder="日期 YYYY-MM-DD" class="border rounded px-2 py-1 text-sm"/>
+    <input id="vf-complaint" placeholder="主诉" class="border rounded px-2 py-1 text-sm"/>
+    <input id="vf-diagnosis" placeholder="诊断" class="border rounded px-2 py-1 text-sm"/>
+    <input id="vf-syndrome" placeholder="证型" class="border rounded px-2 py-1 text-sm"/>
+  </div>
+  <textarea id="vf-symptoms" placeholder="症状" class="w-full border rounded px-2 py-1 text-sm mb-1 min-h-[40px]"></textarea>
+  <textarea id="vf-treatment" placeholder="治疗方案" class="w-full border rounded px-2 py-1 text-sm mb-1 min-h-[40px]"></textarea>
+  <textarea id="vf-efficacy" placeholder="疗效" class="w-full border rounded px-2 py-1 text-sm mb-2 min-h-[30px]"></textarea>
+  <div class="flex gap-2">
+    <button type="button" id="vf-save-btn" class="bg-primary text-white px-3 py-1 rounded text-sm">保存就诊</button>
+    <button type="button" id="vf-cancel-btn" class="border px-3 py-1 rounded text-sm">取消</button>
+  </div>
+</div></div></section>
+<section id="panel-knowledge" class="admin-panel lg:ml-64 pt-24 pb-16 px-margin-page min-h-screen"><div class="max-w-container-max mx-auto"><div class="max-w-[1100px] mx-auto">
+<!-- Header Section -->
+<div class="mb-stack-lg flex justify-between items-end">
+<div>
+<h1 class="font-display-lg text-display-lg text-on-surface mb-2">知识库运维中心</h1>
+<p class="text-secondary font-body-md max-w-2xl">集成化的临床医疗数据管理与索引平台。您可以在此监控系统状态、管理核心文档库及同步最新的临床研究案例。</p>
+</div>
+<div class="flex gap-stack-md">
+<button type="button" id="knowledge-sync-index-btn" class="border border-outline-variant text-primary px-stack-md py-2 rounded-xl font-label-caps text-label-caps flex items-center gap-2 hover:bg-surface-container transition-colors"><span class="material-symbols-outlined text-[18px]">sync</span> 同步索引</button>
+<button type="button" id="knowledge-goto-import-btn" class="bg-primary text-on-primary px-stack-lg py-2 rounded-xl font-label-caps text-label-caps flex items-center gap-2 hover:opacity-90 transition-opacity"><span class="material-symbols-outlined text-[18px]">upload_file</span> 批量导入</button>
+</div>
+</div>
+<!-- Dashboard Metrics Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter mb-stack-lg">
+<div class="bg-surface border border-outline-variant p-stack-md rounded-xl flex flex-col">
+<span class="font-label-caps text-label-caps text-secondary uppercase mb-2">已索引文档</span>
+<span id="kn-metric-docs" class="font-display-lg text-display-lg text-primary">—</span>
+<div class="mt-auto pt-4 flex items-center text-tertiary">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span class="text-xs font-label-caps ml-1">+12% vs 上月</span>
+</div>
+</div>
+<div class="bg-surface border border-outline-variant p-stack-md rounded-xl flex flex-col">
+<span class="font-label-caps text-label-caps text-secondary uppercase mb-2">活跃案例库</span>
+<span id="kn-metric-cases" class="font-display-lg text-display-lg text-on-surface">—</span>
+<div class="mt-auto pt-4 flex items-center text-secondary">
+<span id="kn-metric-cases-sub" class="text-xs font-label-caps">加载中…</span>
+</div>
+</div>
+<div class="bg-surface border border-outline-variant p-stack-md rounded-xl flex flex-col">
+<span class="font-label-caps text-label-caps text-secondary uppercase mb-2">存储占用</span>
+<span id="kn-metric-storage" class="font-display-lg text-display-lg text-on-surface">—</span>
+<div class="mt-auto pt-4 w-full bg-secondary-container h-1 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[42%]"></div>
+</div>
+</div>
+<div class="bg-surface border border-outline-variant p-stack-md rounded-xl flex flex-col">
+<span class="font-label-caps text-label-caps text-secondary uppercase mb-2">API 响应 (ms)</span>
+<span id="kn-metric-index" class="font-display-lg text-display-lg text-on-surface">—</span>
+<div class="mt-auto pt-4 flex items-center text-tertiary">
+<span class="material-symbols-outlined text-sm">check_circle</span>
+<span class="text-xs font-label-caps ml-1">状态良好</span>
+</div>
+</div>
+</div>
+<!-- Tabs Section -->
+<div id="knowledge-tabs" class="flex items-center gap-2 bg-secondary-container p-1 rounded-xl w-fit mb-stack-md">
+<button type="button" data-knowledge-tab="docs" class="knowledge-tab active bg-primary text-on-primary px-stack-lg py-2 rounded-xl font-label-caps text-label-caps">知识文档列表</button>
+<button type="button" data-knowledge-tab="cases" class="knowledge-tab text-secondary px-stack-lg py-2 rounded-xl font-label-caps text-label-caps hover:bg-surface-variant transition-colors">临床案例管理</button>
+<button type="button" data-knowledge-tab="index" class="knowledge-tab text-secondary px-stack-lg py-2 rounded-xl font-label-caps text-label-caps hover:bg-surface-variant transition-colors">索引状态分析</button>
+</div>
+<!-- Tab: 知识文档 -->
+<div id="knowledge-tab-docs" class="knowledge-tab-panel active">
+<div class="bg-surface border border-outline-variant rounded-xl overflow-hidden">
+<div class="p-stack-md border-b border-outline-variant bg-surface-container-low flex justify-between items-center flex-wrap gap-3">
+<div class="relative w-72">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-secondary text-lg">search</span>
+<input id="knowledge-doc-search" class="w-full bg-surface border border-outline-variant rounded-xl pl-10 pr-4 py-2 text-sm focus:outline-none focus:border-primary" placeholder="文件名筛选；Enter 关键词搜索内容…" type="text"/>
+</div>
+<button type="button" id="knowledge-keyword-search-btn" class="text-sm border border-outline-variant px-3 py-2 rounded-xl hover:bg-surface-container-low">关键词搜索</button>
+<div class="flex items-center gap-base">
+<span class="text-sm text-secondary">分类:</span>
+<select id="knowledge-doc-filter" class="bg-surface border border-outline-variant rounded-xl px-2 py-1 text-xs font-label-caps text-secondary">
+<option value="">全部分类</option>
+</select>
+</div>
+</div>
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low">
+<tr>
+<th class="px-stack-md py-4 font-label-caps text-label-caps text-secondary border-b border-outline-variant">文件名</th>
+<th class="px-stack-md py-4 font-label-caps text-label-caps text-secondary border-b border-outline-variant">大小</th>
+<th class="px-stack-md py-4 font-label-caps text-label-caps text-secondary border-b border-outline-variant">分类</th>
+<th class="px-stack-md py-4 font-label-caps text-label-caps text-secondary border-b border-outline-variant">状态</th>
+<th class="px-stack-md py-4 font-label-caps text-label-caps text-secondary border-b border-outline-variant text-right">操作</th>
+</tr>
+</thead>
+<tbody id="knowledge-files-table" class="divide-y divide-outline-variant"></tbody>
+</table>
+<div class="px-stack-md py-4 bg-surface-container-low border-t border-outline-variant">
+<span id="knowledge-doc-count" class="text-sm text-secondary">共 0 个文件</span>
+</div>
+<div id="knowledge-keyword-results" class="hidden border-t border-outline-variant bg-surface-container-lowest p-stack-md space-y-3"></div>
+</div>
+</div>
+<!-- Tab: 临床案例 -->
+<div id="knowledge-tab-cases" class="knowledge-tab-panel hidden">
+<div class="bg-surface border border-outline-variant rounded-xl overflow-hidden mb-stack-md">
+<div class="p-stack-md border-b border-outline-variant bg-surface-container-low flex flex-wrap justify-between items-center gap-3">
+<div class="relative flex-1 min-w-[240px] max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-secondary text-lg">search</span>
+<input id="case-library-search" class="w-full bg-surface border border-outline-variant rounded-xl pl-10 pr-4 py-2 text-sm" placeholder="搜索证型、症状、诊断、病例 ID…" type="text"/>
+</div>
+<button type="button" id="search-case-library-btn" class="bg-primary text-on-primary px-4 py-2 rounded-xl text-sm">搜索病例</button>
+</div>
+<p id="case-library-stats" class="px-stack-md py-2 text-xs text-secondary border-b border-outline-variant">加载中…</p>
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low">
+<tr>
+<th class="px-stack-md py-3 text-xs text-secondary">病例 ID</th>
+<th class="px-stack-md py-3 text-xs text-secondary">证型 / 诊断</th>
+<th class="px-stack-md py-3 text-xs text-secondary">性别·年龄</th>
+<th class="px-stack-md py-3 text-xs text-secondary">来源文件</th>
+<th class="px-stack-md py-3 text-xs text-secondary">症状摘要</th>
+</tr>
+</thead>
+<tbody id="case-library-table" class="divide-y divide-outline-variant text-sm"></tbody>
+</table>
+<div class="px-stack-md py-3 bg-surface-container-low border-t border-outline-variant flex justify-between items-center">
+<span id="case-library-count" class="text-sm text-secondary">—</span>
+<button type="button" id="load-more-cases-btn" class="text-primary text-sm hidden">加载更多</button>
+</div>
+</div>
+<div class="bg-surface border border-outline-variant rounded-xl overflow-hidden">
+<div class="p-stack-md border-b border-outline-variant"><h3 class="font-title-sm text-primary">病例库文件（cases/）</h3></div>
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low"><tr>
+<th class="px-stack-md py-3 text-xs text-secondary">文件</th>
+<th class="px-stack-md py-3 text-xs text-secondary">大小</th>
+<th class="px-stack-md py-3 text-xs text-secondary text-right">操作</th>
+</tr></thead>
+<tbody id="case-files-table" class="divide-y divide-outline-variant text-sm"></tbody>
+</table>
+</div>
+</div>
+<!-- Tab: 索引状态 -->
+<div id="knowledge-tab-index" class="knowledge-tab-panel hidden">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<section class="bg-surface border border-outline-variant p-stack-md rounded-xl">
+<h3 class="font-title-sm text-primary mb-3">向量索引</h3>
+<div id="knowledge-index-summary" class="space-y-2 text-sm text-secondary">加载中…</div>
+<div class="flex flex-wrap gap-2 mt-4">
+<button type="button" id="knowledge-refresh-index-btn" class="border border-outline-variant px-4 py-2 rounded text-sm">刷新状态</button>
+<button type="button" id="knowledge-rebuild-index-btn" class="bg-primary text-on-primary px-4 py-2 rounded text-sm">重建索引</button>
+</div>
+<pre id="knowledge-index-detail" class="mt-4 text-xs bg-surface-container p-3 rounded max-h-64 overflow-auto"></pre>
+</section>
+<section class="bg-surface border border-outline-variant p-stack-md rounded-xl">
+<h3 class="font-title-sm text-primary mb-3">知识库健康</h3>
+<div id="knowledge-health-summary" class="space-y-2 text-sm"></div>
+</section>
+</div>
+</div>
+<!-- Management Section Lower Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter mt-stack-lg">
+<!-- Case Study Management -->
+<div class="bg-surface border border-outline-variant p-stack-md rounded-xl">
+<div class="flex justify-between items-start mb-4">
+<h3 class="font-title-sm text-title-sm text-primary">重点临床案例管理</h3>
+<span class="material-symbols-outlined text-secondary">medical_services</span>
+</div>
+<div class="space-y-3 max-h-64 overflow-y-auto custom-scrollbar pr-2">
+<div class="p-3 bg-surface-container-low rounded flex items-center justify-between group">
+<div class="flex flex-col">
+<span class="font-body-md">慢性呼吸道炎症临床康复路径</span>
+<span class="text-[10px] text-secondary font-label-caps">收录于: 呼吸内科库 | 2024-03-01</span>
+</div>
+<span class="material-symbols-outlined text-secondary group-hover:text-primary cursor-pointer">arrow_forward</span>
+</div>
+<div class="p-3 bg-surface-container-low rounded flex items-center justify-between group">
+<div class="flex flex-col">
+<span class="font-body-md">针刺疗法对老年失眠症的辅助干预</span>
+<span class="text-[10px] text-secondary font-label-caps">收录于: 中医外治库 | 2024-02-28</span>
+</div>
+<span class="material-symbols-outlined text-secondary group-hover:text-primary cursor-pointer">arrow_forward</span>
+</div>
+<div class="p-3 bg-surface-container-low rounded flex items-center justify-between group">
+<div class="flex flex-col">
+<span class="font-body-md">极罕见免疫系统紊乱案例(202312)</span>
+<span class="text-[10px] text-secondary font-label-caps">收录于: 罕见病库 | 2024-02-25</span>
+</div>
+<span class="material-symbols-outlined text-secondary group-hover:text-primary cursor-pointer">arrow_forward</span>
+</div>
+</div>
+<button type="button" id="cases-view-all-btn" class="w-full mt-4 text-center py-2 text-primary font-label-caps text-label-caps hover:bg-surface-variant transition-colors border-t border-dashed border-outline-variant">查看全部案例组</button>
+</div>
+<!-- Asset Visualization/Status -->
+<div class="bg-surface border border-outline-variant p-stack-md rounded-xl relative overflow-hidden">
+<h3 class="font-title-sm text-title-sm text-primary mb-4">知识库健康状态</h3>
+<div class="flex justify-between items-end h-40 gap-4 mb-4">
+<div class="flex-1 bg-surface-variant relative flex items-end">
+<div class="bg-primary w-full h-[60%]"></div>
+<span class="absolute -top-6 left-1/2 -translate-x-1/2 font-data-mono text-[10px] text-secondary">质量</span>
+</div>
+<div class="flex-1 bg-surface-variant relative flex items-end">
+<div class="bg-primary w-full h-[85%]"></div>
+<span class="absolute -top-6 left-1/2 -translate-x-1/2 font-data-mono text-[10px] text-secondary">多样性</span>
+</div>
+<div class="flex-1 bg-surface-variant relative flex items-end">
+<div class="bg-primary w-full h-[40%]"></div>
+<span class="absolute -top-6 left-1/2 -translate-x-1/2 font-data-mono text-[10px] text-secondary">新鲜度</span>
+</div>
+<div class="flex-1 bg-surface-variant relative flex items-end">
+<div class="bg-primary w-full h-[70%]"></div>
+<span class="absolute -top-6 left-1/2 -translate-x-1/2 font-data-mono text-[10px] text-secondary">引用率</span>
+</div>
+</div>
+<p class="text-xs text-secondary italic">注: 指标每24小时根据AI检索反馈及文档更新率自动计算。</p>
+</div>
+</div>
+</div>
+<div id="knowledge-import-section" class="mt-stack-lg grid grid-cols-1 lg:grid-cols-2 gap-gutter border-t border-outline-variant pt-stack-lg">
+  <section class="bg-surface border border-outline-variant p-stack-md rounded-xl">
+    <h3 class="font-title-sm text-primary mb-3">批量导入</h3>
+    <p class="text-xs text-secondary mb-2">病例 JSON 请导入到 <code>cases/</code> 子目录，与理论资料一样纳入知识库索引。</p>
+    <label class="font-label-caps text-label-caps text-secondary">子目录</label>
+    <input id="import-subdir" value="cases" class="w-full border border-outline-variant rounded px-3 py-2 mb-2"/>
+    <input id="import-files" type="file" multiple accept=".txt,.json,.md,.markdown" class="w-full mb-2"/>
+    <label class="flex items-center gap-2 text-sm mb-2"><input id="import-overwrite" type="checkbox"> 覆盖同名</label>
+    <button id="import-files-btn" class="bg-primary text-on-primary px-4 py-2 rounded font-label-caps">导入所选文件</button>
+    <pre id="import-result" class="hidden mt-2 text-xs bg-surface-container p-2 rounded overflow-auto max-h-32"></pre>
+  </section>
+  <section class="bg-surface border border-outline-variant p-stack-md rounded-xl">
+    <h3 class="font-title-sm text-primary mb-3">在线上传</h3>
+    <input id="upload-path" placeholder="cases/my_cases.json" class="w-full border border-outline-variant rounded px-3 py-2 mb-2"/>
+    <textarea id="upload-content" placeholder="文本 / JSON 内容…" class="w-full border border-outline-variant rounded px-3 py-2 mb-2 min-h-[80px]"></textarea>
+    <label class="flex items-center gap-2 text-sm mb-2"><input id="upload-overwrite" type="checkbox"> 覆盖</label>
+    <button id="upload-knowledge-btn" class="bg-primary text-on-primary px-4 py-2 rounded font-label-caps mb-3">上传文本</button>
+  </section>
+</div>
+</div></section>
+<section id="panel-models" class="admin-panel lg:ml-64 pt-24 pb-16 px-margin-page min-h-screen"><div class="max-w-container-max mx-auto"><div class="max-w-container-max mx-auto">
+<!-- Header Section -->
+<div class="mb-stack-lg">
+<h1 class="font-display-lg text-display-lg text-primary mb-2">模型中心配置</h1>
+<p class="font-body-md text-body-md text-secondary">管理并配置您的基础模型服务，包括嵌入、大语言模型及重排序服务。</p>
+</div>
+<!-- Configuration Bento Grid -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- LLM Configuration Card -->
+<section id="llm-section" class="col-span-12 lg:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-lg shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between mb-stack-md border-b border-outline-variant pb-base">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary p-2 bg-primary-fixed rounded-full" data-icon="psychology">psychology</span>
+<h2 class="font-headline-md text-headline-md text-on-surface">LLM 大语言模型</h2>
+</div>
+<span class="px-3 py-1 bg-tertiary/10 text-tertiary rounded-full font-label-caps text-label-caps flex items-center gap-1">
+<span class="w-2 h-2 bg-tertiary rounded-full animate-pulse"></span> 运行正常
+                        </span>
+</div>
+<form class="space-y-stack-md">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-md">
+<div class="flex flex-col gap-base">
+<label class="font-label-caps text-label-caps text-on-surface-variant">供应商 (Provider)</label>
+<select id="llm-provider" class="w-full bg-white border border-outline-variant rounded px-4 py-2 focus:ring-1 focus:ring-primary focus:border-primary outline-none appearance-none">
+<option value="ollama">Local (Ollama)</option><option value="openai">OpenAI</option><option value="local">Local</option></select>
+</div>
+<div class="flex flex-col gap-base">
+<label class="font-label-caps text-label-caps text-on-surface-variant">模型 ID (Model ID)</label>
+<input id="llm-model" class="w-full bg-white border border-outline-variant rounded px-4 py-2 focus:ring-1 focus:ring-primary focus:border-primary outline-none" placeholder="deepseek-r1:1.5b" type="text"/>
+</div>
+<div class="flex flex-col gap-base">
+<label class="font-label-caps text-label-caps text-on-surface-variant">Base URL</label>
+<input id="llm-base-url" class="w-full bg-white border border-outline-variant rounded px-4 py-2 focus:ring-1 focus:ring-primary focus:border-primary outline-none" placeholder="http://127.0.0.1:11434" type="text"/>
+</div>
+<div class="flex flex-col gap-base">
+<label class="font-label-caps text-label-caps text-on-surface-variant">Temperature</label>
+<input id="llm-temperature" type="number" step="0.1" class="w-full bg-white border border-outline-variant rounded px-4 py-2 focus:ring-1 focus:ring-primary focus:border-primary outline-none" placeholder="0.3"/>
+</div>
+</div>
+<div class="flex flex-col gap-base">
+<label class="font-label-caps text-label-caps text-on-surface-variant">API 密钥 (API Key)</label>
+<div class="relative">
+<input id="llm-api-key" class="w-full bg-white border border-outline-variant rounded px-4 py-2 focus:ring-1 focus:ring-primary focus:border-primary outline-none" placeholder="API Key（留空不修改）" type="password"/>
+<button type="button" id="llm-key-toggle-btn" class="absolute right-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-secondary" data-icon="visibility">visibility</button>
+</div>
+</div>
+<div class="flex items-center justify-between pt-stack-md">
+<button type="button" id="test-llm-btn" class="border border-outline-variant text-primary px-6 py-2 rounded font-title-sm hover:bg-secondary-container transition-colors">连通性测试</button>
+<button type="button" id="save-llm-btn" class="bg-primary text-on-primary px-10 py-2 rounded font-title-sm hover:opacity-90">保存 LLM 配置</button>
+</div>
+</form>
+</section>
+<!-- Status Card (Right Column) -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-gutter">
+<div class="bg-primary text-on-primary rounded-xl p-stack-md relative overflow-hidden h-full flex flex-col justify-between">
+<div class="z-10">
+<p class="font-label-caps text-label-caps opacity-80 uppercase">当前令牌消耗</p>
+<h3 class="font-display-lg text-display-lg mt-2">1,284,502</h3>
+<p class="font-body-sm text-body-sm mt-1 opacity-90">本月累计 Tokens</p>
+</div>
+<div class="z-10 mt-stack-lg">
+<div class="w-full bg-on-primary/20 h-1 rounded-full mb-2">
+<div class="bg-on-primary h-full w-[65%] rounded-full"></div>
+</div>
+<p class="font-label-caps text-label-caps flex justify-between">
+<span>预算已使用 65%</span>
+<span>$48.50 / $75.00</span>
+</p>
+</div>
+<!-- Abstract Decorative Element -->
+<div class="absolute -right-8 -bottom-8 opacity-10">
+<span class="material-symbols-outlined text-[160px]" data-icon="analytics">analytics</span>
+</div>
+</div>
+</div>
+<!-- Embedding & Rerank (Row 2) -->
+<section id="emb-section" class="col-span-12 md:col-span-6 bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-lg shadow-sm">
+<div class="flex items-center gap-3 mb-stack-md border-b border-outline-variant pb-base">
+<span class="material-symbols-outlined text-tertiary p-2 bg-tertiary-fixed rounded-full">view_in_ar</span>
+<h2 class="font-title-sm text-title-sm text-on-surface">Embedding 嵌入模型</h2>
+</div>
+<div class="space-y-4">
+<div class="flex flex-col gap-1"><label class="font-label-caps text-label-caps text-secondary">Provider</label>
+<select id="emb-provider" class="w-full bg-white border border-outline-variant rounded px-4 py-2"><option value="local">local</option><option value="ollama">ollama</option><option value="openai">openai</option></select></div>
+<div class="flex flex-col gap-1"><label class="font-label-caps text-label-caps text-secondary">Model</label>
+<input id="emb-model" class="w-full bg-white border border-outline-variant rounded px-4 py-2" placeholder="model / 路径"/></div>
+<div class="flex flex-col gap-1"><label class="font-label-caps text-label-caps text-secondary">Base URL</label>
+<input id="emb-base-url" class="w-full bg-white border border-outline-variant rounded px-4 py-2" placeholder="http://127.0.0.1:11434"/></div>
+<div class="flex flex-col gap-1"><label class="font-label-caps text-label-caps text-secondary">API Key</label>
+<input id="emb-api-key" type="password" class="w-full bg-white border border-outline-variant rounded px-4 py-2" placeholder="留空不修改"/></div>
+<div class="flex gap-2 pt-2"><button type="button" id="save-emb-btn" class="flex-1 bg-primary text-on-primary py-2 rounded-xl font-label-caps">保存</button><button type="button" id="test-emb-btn" class="flex-1 border border-outline-variant text-primary py-2 rounded-xl font-label-caps">测试</button></div>
+<pre id="emb-test-result" class="hidden text-xs bg-surface-container p-2 rounded mt-2"></pre>
+</div>
+</section>
+<section id="rerank-section" class="col-span-12 md:col-span-6 bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-lg shadow-sm">
+<div class="flex items-center gap-3 mb-stack-md border-b border-outline-variant pb-base">
+<span class="material-symbols-outlined text-primary p-2 bg-primary-fixed rounded-full">sort</span>
+<h2 class="font-title-sm text-title-sm text-on-surface">Rerank 重排序模型</h2>
+</div>
+<div class="space-y-4">
+<div class="flex flex-col gap-1"><label class="font-label-caps text-label-caps text-secondary">Provider</label>
+<select id="rerank-provider" class="w-full bg-white border border-outline-variant rounded px-4 py-2"><option value="none">none</option><option value="local">local</option><option value="api">api</option></select></div>
+<div class="flex flex-col gap-1"><label class="font-label-caps text-label-caps text-secondary">Model</label>
+<input id="rerank-model" class="w-full bg-white border border-outline-variant rounded px-4 py-2"/></div>
+<div class="flex flex-col gap-1"><label class="font-label-caps text-label-caps text-secondary">Base URL</label>
+<input id="rerank-base-url" class="w-full bg-white border border-outline-variant rounded px-4 py-2"/></div>
+<div class="flex flex-col gap-1"><label class="font-label-caps text-label-caps text-secondary">API Key</label>
+<input id="rerank-api-key" type="password" class="w-full bg-white border border-outline-variant rounded px-4 py-2" placeholder="留空不修改"/></div>
+<div class="flex flex-col gap-1"><label class="font-label-caps text-label-caps text-secondary">Top N</label>
+<input id="rerank-top-n" type="number" class="w-full bg-white border border-outline-variant rounded px-4 py-2"/></div>
+<div class="flex gap-2 pt-2"><button type="button" id="save-rerank-btn" class="flex-1 bg-primary text-on-primary py-2 rounded-xl font-label-caps">保存</button><button type="button" id="test-rerank-btn" class="flex-1 border border-outline-variant text-primary py-2 rounded-xl font-label-caps">测试</button></div>
+<pre id="rerank-test-result" class="hidden text-xs bg-surface-container p-2 rounded mt-2"></pre>
+<pre id="llm-test-result" class="hidden text-xs bg-surface-container p-2 rounded mt-2"></pre>
+</div>
+</section>
+<!-- Advanced Settings Section (Horizontal Card) -->
+<section class="col-span-12 bg-surface-container-low border border-outline-variant rounded-xl p-stack-md">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-white border border-outline-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary" data-icon="tune">tune</span>
+</div>
+<div>
+<h3 class="font-title-sm text-title-sm text-on-surface">高级参数调整</h3>
+<p class="font-body-sm text-body-sm text-secondary">配置 Temperature, Top P, Max Tokens 等推理参数。</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<div class="flex -space-x-2 mr-4">
+<img class="w-8 h-8 rounded-full border-2 border-white object-cover" alt="" src="/assets/stitch/herbs/renshen.jpg"/>
+<img class="w-8 h-8 rounded-full border-2 border-white object-cover" alt="" src="/assets/stitch/herbs/gouqi.jpg"/>
+<div class="w-8 h-8 rounded-full bg-outline-variant border-2 border-white flex items-center justify-center text-[10px] font-bold text-secondary">+2</div>
+</div>
+<button type="button" id="expert-mode-btn" class="bg-surface border border-outline-variant px-4 py-2 rounded font-label-caps text-label-caps hover:bg-secondary-container">进入专家模式</button>
+</div>
+</div>
+</section>
+</div>
+</div></div></section>
+<section id="panel-rag" class="admin-panel lg:ml-64 pt-24 pb-16 px-margin-page min-h-screen"><div class="max-w-container-max mx-auto"><div class="max-w-container-max mx-auto">
+<header class="mb-stack-lg">
+<h1 class="font-display-lg text-display-lg text-primary mb-base">RAG 性能调试</h1>
+<p class="font-body-md text-body-md text-secondary">在此模块中测试检索准确度，分析 LLM 回复质量并调优提示词工程。</p>
+</header>
+<!-- Grid Layout -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Left Column: Testing Interface -->
+<div class="col-span-12 lg:col-span-5 space-y-gutter">
+<!-- Query Input Card -->
+<section class="bg-surface-container-lowest border border-outline-variant p-stack-lg rounded-xl">
+<h3 class="font-label-caps text-label-caps text-secondary mb-stack-md">测试输入</h3>
+<div class="space-y-stack-md">
+<div>
+<label class="block font-body-sm text-body-sm mb-base text-secondary">选择知识库</label>
+<select class="w-full bg-surface border border-outline-variant rounded-xl p-3 font-body-md text-body-md focus:border-primary outline-none transition-colors">
+<option>企业医疗规章制度 v2.1</option>
+<option>草本药物成分百科</option>
+</select>
+</div>
+<div>
+<label class="block font-body-sm text-body-sm mb-base text-secondary">输入问题</label>
+<textarea id="question" class="w-full bg-surface border border-outline-variant rounded-xl p-3 font-body-md focus:border-primary outline-none" placeholder="输入您想测试的问题..." rows="4"></textarea>
+</div>
+<div class="flex gap-stack-md">
+<button type="button" id="run-rag-btn" class="flex-1 bg-primary text-on-primary font-label-caps py-3 rounded flex items-center justify-center gap-2"><span class="material-symbols-outlined text-[20px]">send</span> 运行测试</button>
+<button type="button" id="clear-rag-btn" class="px-6 border border-outline-variant text-primary font-label-caps text-label-caps py-3 rounded hover:bg-secondary-container/20 transition-colors">
+                                    清除
+                                </button>
+</div>
+</div>
+</section>
+<!-- LLM Output Card -->
+<section class="bg-surface-container-lowest border border-outline-variant p-stack-lg rounded-xl">
+<div class="flex justify-between items-center mb-stack-md">
+<h3 class="font-label-caps text-label-caps text-secondary">LLM 回答展示</h3>
+<span class="bg-tertiary-container text-on-tertiary-container text-[10px] px-2 py-0.5 rounded-full font-bold" id="rag-llm-model-badge">LLM</span>
+</div>
+<div id="rag-answer" class="bg-surface p-stack-md rounded-xl border border-outline-variant/30 font-body-md text-on-surface">等待查询…</div>
+<div class="mt-stack-md flex items-center gap-stack-md">
+<div class="flex items-center gap-1 text-tertiary">
+<span class="material-symbols-outlined text-[16px]">timer</span>
+<span class="font-data-mono text-data-mono" id="rag-duration">—</span>
+</div>
+<div class="flex items-center gap-1 text-secondary">
+<span class="material-symbols-outlined text-[16px]">token</span>
+<span class="font-data-mono text-data-mono" id="rag-token-estimate">—</span>
+</div>
+<div class="flex items-center gap-1 text-secondary text-xs" id="rag-providers-hint"></div>
+</div>
+</section>
+</div>
+<!-- Right Column: Retrieval Analysis -->
+<div class="col-span-12 lg:col-span-7 space-y-gutter">
+<!-- Chunk List Tabs -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden">
+<div class="flex bg-secondary-container/30 p-1 border-b border-outline-variant ui-stub-hidden">
+<button class="flex-1 py-2 font-label-caps text-label-caps bg-primary text-on-primary rounded-sm transition-all">初检索 Chunks (Top 10)</button>
+<button class="flex-1 py-2 font-label-caps text-label-caps text-secondary hover:text-primary transition-all">重排序 Rerank 结果</button>
+</div>
+<div id="rag-retrieved" class="p-stack-md max-h-[600px] overflow-y-auto"></div></section><section class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden mt-gutter"><h3 class="font-label-caps p-stack-md border-b border-outline-variant text-secondary">Rerank 结果</h3><div id="rag-reranked" class="p-stack-md max-h-[400px] overflow-y-auto"></div></section><!-- Debug Logs Table -->
+<section class="bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden ui-stub-hidden">
+<div class="px-stack-lg py-stack-md border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-label-caps text-label-caps text-secondary">调用日志 (Stitch 演示)</h3>
+<button type="button" id="rag-logs-view-all-btn" class="text-primary text-[12px] font-bold">查看全部</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-low font-label-caps text-[11px] text-secondary">
+<tr>
+<th class="px-stack-lg py-3">时间</th>
+<th class="px-stack-lg py-3">类型</th>
+<th class="px-stack-lg py-3">状态</th>
+<th class="px-stack-lg py-3">延时</th>
+<th class="px-stack-lg py-3">操作</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm divide-y divide-outline-variant/30">
+<tr>
+<td class="px-stack-lg py-4 font-data-mono">14:20:12</td>
+<td class="px-stack-lg py-4">Knowledge_Retrieval</td>
+<td class="px-stack-lg py-4"><span class="bg-green-100 text-[#2E7D32] px-2 py-0.5 rounded-full text-[10px] font-bold">SUCCESS</span></td>
+<td class="px-stack-lg py-4">124ms</td>
+<td class="px-stack-lg py-4 text-primary cursor-pointer hover:underline">详情</td>
+</tr>
+<tr>
+<td class="px-stack-lg py-4 font-data-mono">14:19:55</td>
+<td class="px-stack-lg py-4">LLM_Inference</td>
+<td class="px-stack-lg py-4"><span class="bg-green-100 text-[#2E7D32] px-2 py-0.5 rounded-full text-[10px] font-bold">SUCCESS</span></td>
+<td class="px-stack-lg py-4">1.2s</td>
+<td class="px-stack-lg py-4 text-primary cursor-pointer hover:underline">详情</td>
+</tr>
+<tr>
+<td class="px-stack-lg py-4 font-data-mono">14:18:20</td>
+<td class="px-stack-lg py-4">Embedding_Request</td>
+<td class="px-stack-lg py-4"><span class="bg-red-100 text-[#C62828] px-2 py-0.5 rounded-full text-[10px] font-bold">FAILED</span></td>
+<td class="px-stack-lg py-4">5.0s</td>
+<td class="px-stack-lg py-4 text-primary cursor-pointer hover:underline">重试</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</div>
+</div>
+<div class="mt-gutter grid grid-cols-1 lg:grid-cols-2 gap-gutter">
+  <section class="bg-surface border border-outline-variant p-stack-md rounded-xl">
+    <h3 class="font-label-caps text-secondary mb-2">RAG 参数</h3>
+    <label>初检索 Top K</label><input id="retrieval-top-k" type="number" class="w-full border rounded px-3 py-2 mb-2"/>
+    <label>最终 Top K</label><input id="final-top-k" type="number" class="w-full border rounded px-3 py-2 mb-2"/>
+    <label class="flex items-center gap-2"><input id="enable-llm" type="checkbox" checked> 启用 LLM</label>
+    <div id="rag-status" class="mt-2 text-sm"></div>
+  </section>
+  <section class="bg-surface border border-outline-variant p-stack-md rounded-xl">
+    <button id="load-rag-stats-btn" class="border px-3 py-1 rounded text-sm mb-2">刷新统计</button>
+    <pre id="rag-stats" class="text-xs bg-surface-container p-2 rounded max-h-32 overflow-auto">点击刷新…</pre>
+    <div class="flex gap-2 mt-2 flex-wrap items-center">
+      <button id="load-rag-logs-btn" class="border px-3 py-1 rounded text-sm">刷新日志</button>
+      <button id="clear-rag-logs-btn" class="border px-3 py-1 rounded text-sm text-error">清空</button>
+      <select id="rag-log-source" class="border rounded px-2 py-1 text-sm"><option value="">全部来源</option><option value="admin">admin</option><option value="diagnosis">diagnosis</option></select>
+      <select id="rag-log-kind" class="border rounded px-2 py-1 text-sm"><option value="">全部类型</option><option value="query">query</option><option value="search">search</option></select>
+    </div>
+    <div id="rag-logs" class="mt-2 max-h-48 overflow-auto text-sm"></div>
+  </section>
+</div>
+</div></section>
+<section id="panel-system" class="admin-panel lg:ml-64 pt-24 pb-16 px-margin-page min-h-screen"><div class="max-w-container-max mx-auto"><div class="max-w-container-max w-full">
+<header class="mb-stack-lg">
+<h1 class="font-display-lg text-display-lg text-on-background">系统维护</h1>
+<p class="font-body-md text-body-md text-secondary mt-2">管理 AI 基础设施的核心配置、安全凭证与数据同步任务。</p>
+</header>
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Section 1: Index Reconstruction (Progress View) -->
+<section class="col-span-12 md:col-span-8 bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-lg">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="font-label-caps text-label-caps text-primary uppercase mb-1">索引管理</h3>
+<h2 class="font-title-sm text-title-sm">异步索引重建任务</h2>
+</div>
+<span class="bg-tertiary/10 text-tertiary px-3 py-1 rounded-full font-label-caps text-label-caps">运行中</span>
+</div>
+<div class="space-y-6">
+<div class="relative pt-1">
+<div class="flex mb-2 items-center justify-between">
+<div>
+<span class="font-label-caps text-label-caps py-1 px-2 uppercase rounded-full bg-primary-fixed text-on-primary-fixed-variant">
+                                        向量化进程
+                                    </span>
+</div>
+<div class="text-right">
+<span class="font-data-mono text-data-mono font-semibold inline-block text-primary">
+                                        68.4%
+                                    </span>
+</div>
+</div>
+<div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-secondary-container">
+<div id="rebuild-progress-bar" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary transition-all duration-500" style="width:0%">0%</div>
+</div>
+<p class="font-body-sm text-body-sm text-secondary">
+                                正在处理：<code class="font-data-mono bg-surface-container-high px-1 rounded">knowledge_base_v2_2024.idx</code> (45,820 / 67,000 块)
+                            </p>
+</div>
+<div class="flex gap-3">
+<button type="button" id="rebuild-index-btn" class="bg-primary text-on-primary px-6 py-2 rounded font-label-caps">异步重建索引</button>
+<button type="button" id="rebuild-index-sync-btn" class="border border-outline text-secondary px-6 py-2 rounded font-label-caps text-label-caps hover:bg-surface-variant transition-colors">同步重建（小库）</button>
+</div>
+</div>
+</section>
+<!-- Section 2: Admin Key Rotation (Action Card) -->
+<section class="col-span-12 md:col-span-4 bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-lg flex flex-col">
+<h3 class="font-label-caps text-label-caps text-primary uppercase mb-1">安全凭证</h3>
+<h2 class="font-title-sm text-title-sm mb-4">Admin Key 轮换</h2>
+<div class="bg-surface-container p-4 rounded mb-6 flex-grow">
+<p class="font-body-sm text-body-sm text-secondary mb-2">上次轮换时间</p>
+<p class="font-data-mono text-on-surface mb-4">2024-05-12 14:30:01</p>
+<div class="flex items-center gap-2 text-error">
+<span class="material-symbols-outlined text-[18px]">warning</span>
+<span class="font-label-caps text-label-caps">密钥将在 18 天后过期</span>
+</div>
+</div>
+<button type="button" id="regen-key-btn" class="w-full bg-primary text-on-primary py-3 rounded font-label-caps">立即生成新密钥</button>
+</section>
+<!-- Section 3: RAG Default Parameters (Form) -->
+<section class="col-span-12 lg:col-span-7 bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-lg">
+<h3 class="font-label-caps text-label-caps text-primary uppercase mb-1">检索增强生成</h3>
+<h2 class="font-title-sm text-title-sm mb-6">RAG 全局默认参数</h2>
+<div class="space-y-6">
+<div class="grid grid-cols-2 gap-gutter">
+<div>
+<label class="block font-label-caps text-label-caps text-secondary mb-2">Top-K 检索数量</label>
+<input class="w-full border border-outline-variant rounded px-4 py-2 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" type="number" value="5"/>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-secondary mb-2">相似度阈值 (Min Score)</label>
+<input class="w-full border border-outline-variant rounded px-4 py-2 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all" step="0.01" type="number" value="0.75"/>
+</div>
+</div>
+<div>
+<label class="block font-label-caps text-label-caps text-secondary mb-2">Rerank 模型路径</label>
+<input class="w-full border border-outline-variant rounded px-4 py-2 font-data-mono text-data-mono focus:border-primary focus:ring-1 focus:ring-primary outline-none" type="text" value="models/bge-reranker-large"/>
+</div>
+<div class="flex items-center gap-2">
+<input checked="" class="rounded text-primary focus:ring-primary border-outline-variant" id="hybrid-search" type="checkbox"/>
+<label class="font-body-md text-body-md" for="hybrid-search">启用混合检索 (Vector + BM25)</label>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-outline-variant flex justify-end">
+<button class="bg-primary text-on-primary px-8 py-2 rounded font-label-caps text-label-caps hover:opacity-90 transition-opacity">保存配置</button>
+</div>
+</section>
+<!-- Section 4: CORS Configuration (Interactive List) -->
+<section class="col-span-12 lg:col-span-5 bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-lg">
+<h3 class="font-label-caps text-label-caps text-primary uppercase mb-1">接口安全</h3>
+<h2 class="font-title-sm text-title-sm mb-6">CORS 跨域配置</h2>
+<div class="space-y-3 mb-6">
+<div class="flex items-center justify-between p-3 bg-surface-container rounded border border-outline-variant">
+<span class="font-data-mono text-body-sm">https://admin.zenpulse.ai</span>
+<button class="material-symbols-outlined text-secondary hover:text-error transition-colors">delete</button>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container rounded border border-outline-variant">
+<span class="font-data-mono text-body-sm">https://api.zenpulse.ai</span>
+<button class="material-symbols-outlined text-secondary hover:text-error transition-colors">delete</button>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container rounded border border-outline-variant">
+<span class="font-data-mono text-body-sm">http://localhost:3000</span>
+<button class="material-symbols-outlined text-secondary hover:text-error transition-colors">delete</button>
+</div>
+</div>
+<div class="flex gap-2">
+<input class="flex-grow border border-outline-variant rounded px-4 py-2 text-body-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none" placeholder="输入新的域名 (Origin)" type="text"/>
+<button class="bg-secondary-container text-on-secondary-container px-4 py-2 rounded font-label-caps text-label-caps hover:bg-outline-variant transition-colors">添加</button>
+</div>
+<div class="mt-6 flex items-start gap-3 p-4 bg-tertiary-container/10 rounded">
+<span class="material-symbols-outlined text-tertiary-container">info</span>
+<p class="font-body-sm text-body-sm text-on-secondary-fixed-variant">CORS 配置即时生效，无需重启 API 服务。</p>
+</div>
+</section>
+</div>
+</div>
+<div id="rebuild-progress-panel" class="hidden mt-4">
+  <p id="rebuild-progress-meta" class="font-body-sm text-secondary mb-2"></p>
+</div>
+<div class="mt-stack-lg grid grid-cols-1 lg:grid-cols-2 gap-gutter">
+  <section class="bg-surface border border-outline-variant p-stack-md rounded-xl">
+    <h3 class="font-title-sm text-primary mb-3">RAG 默认参数</h3>
+    <label>retrieval_top_k</label><input id="rag-retrieval-k" type="number" class="w-full border rounded px-3 py-2 mb-2"/>
+    <label>final_top_k</label><input id="rag-final-k" type="number" class="w-full border rounded px-3 py-2 mb-2"/>
+    <label class="flex items-center gap-2"><input id="rag-rebuild-missing" type="checkbox"> 索引缺失时自动构建</label>
+    <h4 class="font-label-caps text-secondary mt-4 mb-2">RBAC 多角色</h4>
+    <label class="flex items-center gap-2 mb-2"><input id="rbac-enabled" type="checkbox"> 启用附加 API Key（viewer/editor）</label>
+    <p class="text-xs text-secondary">主 <code>admin_api_key</code> 始终为 admin。附加 Key 请在 <code>data/admin_config.json</code> 的 <code>rbac.keys</code> 中配置。</p>
+    <div class="flex flex-wrap gap-2 mt-3">
+      <button id="save-config-btn" class="bg-primary text-white px-4 py-2 rounded">保存全部配置</button>
+      <button id="test-models-btn" class="border px-4 py-2 rounded">测试全部模型</button>
+      <button id="load-index-status-btn" class="border px-4 py-2 rounded">刷新索引状态</button>
+    </div>
+    <pre id="index-status" class="mt-2 text-xs bg-surface-container p-2 rounded max-h-40 overflow-auto"></pre>
+    <pre id="model-test-result" class="hidden mt-2 text-xs bg-surface-container p-2 rounded max-h-40 overflow-auto"></pre>
+  </section>
+  <section class="bg-surface border border-outline-variant p-stack-md rounded-xl">
+    <h3 class="font-title-sm text-primary mb-3">微信小程序</h3>
+    <label class="text-xs text-secondary">AppID</label>
+    <input id="wx-app-id" class="w-full border rounded px-3 py-2 mb-2" placeholder="wxXXXXXXXX"/>
+    <label class="text-xs text-secondary">AppSecret（留空不修改）</label>
+    <input id="wx-app-secret" type="password" class="w-full border rounded px-3 py-2 mb-2" placeholder="已配置则显示 ***"/>
+    <label class="text-xs text-secondary">Token 签名密钥（留空不修改）</label>
+    <input id="wx-token-secret" type="password" class="w-full border rounded px-3 py-2 mb-2" placeholder="生产必填"/>
+    <label class="text-xs text-secondary">Token 有效期（小时）</label>
+    <input id="wx-token-ttl" type="number" min="1" class="w-full border rounded px-3 py-2 mb-2"/>
+    <label class="text-xs text-secondary">开发模式（模拟 openid）</label>
+    <select id="wx-dev-mode" class="w-full border rounded px-3 py-2 mb-3">
+      <option value="false">关闭（生产）</option>
+      <option value="true">开启（仅本地调试）</option>
+    </select>
+    <div class="flex flex-wrap gap-2">
+      <button type="button" id="save-wx-config-btn" class="bg-primary text-white px-4 py-2 rounded">保存微信配置</button>
+    </div>
+    <p id="wx-config-status" class="text-xs text-secondary mt-2"></p>
+    <p class="text-xs text-secondary mt-2">真机联调 API 建议地址见下方「小程序联调」</p>
+  </section>
+  <section class="bg-surface border border-outline-variant p-stack-md rounded-xl">
+    <h3 class="font-title-sm text-primary mb-3">LLM 连接</h3>
+    <pre id="llm-setup-report" class="text-xs bg-surface-container p-2 rounded max-h-48 overflow-auto mb-3">加载中…</pre>
+    <div class="flex flex-wrap gap-2">
+      <button type="button" id="refresh-llm-setup-btn" class="border px-4 py-2 rounded">刷新状态</button>
+      <button type="button" id="pull-llm-model-btn" class="border px-4 py-2 rounded">拉取 Ollama 模型</button>
+    </div>
+    <p class="text-xs text-secondary mt-2">命令行: <code>bash scripts/setup_ollama.sh</code> 或 <code>python3 scripts/setup_llm.py --pull</code></p>
+  </section>
+  <section class="bg-surface border border-outline-variant p-stack-md rounded-xl">
+    <h3 class="font-title-sm text-primary mb-3">小程序真机联调</h3>
+    <pre id="dev-hints-panel" class="text-xs bg-surface-container p-2 rounded max-h-40 overflow-auto mb-3">加载中…</pre>
+    <button type="button" id="refresh-dev-hints-btn" class="border px-4 py-2 rounded">刷新联调地址</button>
+  </section>
+  <section class="bg-surface border border-outline-variant p-stack-md rounded-xl">
+    <h3 class="font-title-sm text-primary mb-3">CORS 与公开 API</h3>
+    <label class="text-xs text-secondary">CORS 来源（逗号分隔）</label>
+    <input id="cors-origins" placeholder="http://127.0.0.1:8000, http://localhost:8000" class="w-full border rounded px-3 py-2 mb-3"/>
+    <label class="text-xs text-secondary">允许公开诊断</label>
+    <select id="allow-public-diagnose" class="w-full border rounded px-3 py-2 mb-3">
+      <option value="true">是（开发/内网）</option>
+      <option value="false">否（生产推荐）</option>
+    </select>
+    <label class="text-xs text-secondary">允许公开知识检索</label>
+    <select id="allow-public-knowledge" class="w-full border rounded px-3 py-2 mb-3">
+      <option value="true">是</option>
+      <option value="false">否（生产推荐）</option>
+    </select>
+    <label class="text-xs text-secondary">公开 API 限流（次/分钟/IP）</label>
+    <input id="rate-limit-per-minute" type="number" min="0" class="w-full border rounded px-3 py-2"/>
+    <p class="text-xs text-secondary mt-2">生产环境请设 <code>TCM_ENV=production</code> 并配置 <code>wechat_miniprogram.token_secret</code>；修改 CORS 后需重启服务</p>
+  </section>
+</div>
+<div id="system-status" class="mt-3"></div>
+</div></section>
+</div>
+<footer class="lg:ml-64 py-6 px-margin-page border-t border-outline-variant text-center text-secondary text-sm">© ZenPulse AI · 中医知识库管理端</footer>
+</div>
+<script src="/admin-static/app.js"></script>
+</body></html>

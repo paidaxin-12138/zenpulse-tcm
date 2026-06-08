@@ -1,0 +1,25 @@
+<view class="page">
+  <view class="card">
+    <text class="title">后端 API 地址</text>
+    <text class="hint">真机预览请填电脑局域网 IP，例如 http://192.168.1.8:8000/api</text>
+    <input class="input" placeholder="http://192.168.x.x:8000/api" value="{{apiBase}}" bindinput="onInput" />
+    <view class="row">
+      <button class="btn primary" loading="{{testing}}" bindtap="onTestSave">测试并保存</button>
+      <button class="btn" bindtap="onUseSuggested" wx:if="{{suggestedBase}}">使用建议地址</button>
+    </view>
+    <button class="btn ghost" bindtap="onClear">恢复自动探测</button>
+  </view>
+
+  <view class="card" wx:if="{{currentBase}}">
+    <text class="label">当前地址</text>
+    <text class="mono">{{currentBase}}</text>
+    <text class="status {{connected ? 'ok' : 'err'}}">{{statusText}}</text>
+  </view>
+
+  <view class="card" wx:if="{{checklist.length}}">
+    <text class="title">联调清单</text>
+    <block wx:for="{{checklist}}" wx:key="*this">
+      <text class="check-item">· {{item}}</text>
+    </block>
+  </view>
+</view>

@@ -1,0 +1,74 @@
+<view class="zp-page zp-page-footer-fixed">
+  <view class="zp-step-wrap">
+    <text class="zp-label zp-label-primary">诊断向导 · 第 1 步</text>
+    <text class="zp-display">1. 体征采集</text>
+    <view class="zp-step-dots">
+      <view class="zp-step-dot zp-step-dot-active"></view>
+      <view class="zp-step-dot"></view>
+      <view class="zp-step-dot"></view>
+    </view>
+  </view>
+
+  <view class="zp-banner-img">
+    <image class="zp-banner-img-el" src="/images/zenpulse/hero-metrics.jpg" mode="aspectFill"></image>
+    <view class="zp-banner-caption">
+      <text class="zp-headline" style="color:#fff;font-size:36rpx;display:block;margin-bottom:8rpx">静息采集提示</text>
+      <text class="zp-body-sm" style="color:rgba(255,255,255,0.9)">请在平静状态下测量。如刚进行过剧烈运动，请休息 5–10 分钟后再记录。</text>
+    </view>
+  </view>
+
+  <view class="zp-field">
+    <text class="zp-label">性别</text>
+    <view class="zp-segment">
+      <view class="zp-segment-item {{metrics.gender === '男' ? 'selected' : ''}}" bindtap="onGenderSelect" data-gender="男">乾 (男)</view>
+      <view class="zp-segment-item {{metrics.gender === '女' ? 'selected' : ''}}" bindtap="onGenderSelect" data-gender="女">坤 (女)</view>
+    </view>
+  </view>
+
+  <view class="zp-field">
+    <text class="zp-label">年龄</text>
+    <view class="zp-input-wrap zp-input-wrap-unit">
+      <input class="zp-input" placeholder="请输入年龄" bindinput="onAgeInput" value="{{metrics.age}}" type="number" />
+      <text class="zp-input-unit">岁</text>
+    </view>
+  </view>
+
+  <view class="zp-grid-2">
+    <view class="zp-field">
+      <text class="zp-label">心率</text>
+      <view class="zp-input-wrap zp-input-wrap-unit">
+        <input class="zp-input" placeholder="--" bindinput="onHeartRateInput" value="{{metrics.heart_rate}}" type="number" />
+        <text class="zp-input-unit">bpm</text>
+      </view>
+    </view>
+    <view class="zp-field">
+      <text class="zp-label">脉搏</text>
+      <view class="zp-input-wrap zp-input-wrap-unit">
+        <input class="zp-input" placeholder="--" bindinput="onPulseInput" value="{{metrics.pulse}}" type="number" />
+        <text class="zp-input-unit">次/分</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="zp-field">
+    <text class="zp-label">血压</text>
+    <view class="zp-bp-row">
+      <view class="zp-input-wrap" style="flex:1">
+        <input class="zp-input" placeholder="收缩压" bindinput="onSystolicInput" value="{{metrics.systolic}}" type="number" />
+      </view>
+      <text class="zp-bp-sep">/</text>
+      <view class="zp-input-wrap" style="flex:1">
+        <input class="zp-input" placeholder="舒张压" bindinput="onDiastolicInput" value="{{metrics.diastolic}}" type="number" />
+      </view>
+      <text class="zp-body-sm" style="width:100rpx;text-align:right">mmHg</text>
+    </view>
+  </view>
+
+  <button class="zp-btn-secondary" bindtap="getRandomMetrics" style="margin-top:16rpx">随机生成</button>
+  <button class="zp-btn-plain" bindtap="backToHome">返回首页</button>
+</view>
+
+<view class="zp-footer-bar">
+  <button class="zp-btn-primary" bindtap="nextStep" style="margin-bottom:16rpx">下一步</button>
+  <text class="zp-caption" style="margin-top:0">数据仅用于健康分析，我们将严格保护您的隐私</text>
+</view>

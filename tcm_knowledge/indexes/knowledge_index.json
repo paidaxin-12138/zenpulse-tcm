@@ -1,0 +1,66 @@
+{
+  "version": "1.0",
+  "total_knowledge_items": 133,
+  "total_size": "200KB",
+  "last_updated": "2025-12-23T10:00:00",
+  "knowledge_items": [
+    {
+      "id": "kt_00001",
+      "title": "中医基础理论概述",
+      "content": "中医基础理论",
+      "source": "C:\\Users\\lenovo\\OneDrive\\桌面\\中医\\tcm_knowledge\\basic_theory\\中医基础理论.txt",
+      "type": "text",
+      "category": "基础理论",
+      "subcategory": "基本概念",
+      "file_path": "C:\\Users\\lenovo\\OneDrive\\桌面\\中医\\tcm_knowledge\\basic_theory\\中医基础理论.txt",
+      "section": "默认章节",
+      "section_number": 1,
+      "paragraph_number": 1,
+      "word_count": 5,
+      "indexed_at": "2025-12-23T10:00:00"
+    },
+    {
+      "id": "kt_00002",
+      "title": "一、中医的基本概念",
+      "content": "中医的基本概念\n中医是中国传统医学，是中华民族在长期的医疗实践中逐渐形成的具有独特理论风格和诊疗特点的医学体系。它以整体观念为指导思想，以阴阳五行学说为哲学基础，以脏腑经络学说为核心，以辨证论治为诊疗特点。",
+      "source": "C:\\Users\\lenovo\\OneDrive\\桌面\\中医\\tcm_knowledge\\basic_theory\\中医基础理论.txt",
+      "type": "text",
+      "category": "基础理论",
+      "subcategory": "基本概念",
+      "file_path": "C:\\Users\\lenovo\\OneDrive\\桌面\\中医\\tcm_knowledge\\basic_theory\\中医基础理论.txt",
+      "section": "一、中医的基本概念",
+      "section_number": 2,
+      "paragraph_number": 1,
+      "word_count": 150,
+      "indexed_at": "2025-12-23T10:00:00"
+    },
+    {
+      "id": "kt_00003",
+      "title": "二、阴阳五行学说",
+      "content": "阴阳五行学说\n阴阳学说是中医理论的核心之一，它认为宇宙间一切事物都包含着对立统一的两个方面，即阴阳。阴阳之间相互依存、相互制约、相互转化，维持着事物的动态平衡。\n五行学说认为宇宙间的一切事物都可以归纳为木、火、土、金、水五种基本物质的运动变化。这五种物质之间存在着相生相克的关系，构成了宇宙的基本秩序。",
+      "source": "C:\\Users\\lenovo\\OneDrive\\桌面\\中医\\tcm_knowledge\\basic_theory\\中医基础理论.txt",
+      "type": "text",
+      "category": "基础理论",
+      "subcategory": "哲学基础",
+      "file_path": "C:\\Users\\lenovo\\OneDrive\\桌面\\中医\\tcm_knowledge\\basic_theory\\中医基础理论.txt",
+      "section": "二、阴阳五行学说",
+      "section_number": 3,
+      "paragraph_number": 1,
+      "word_count": 200,
+      "indexed_at": "2025-12-23T10:00:00"
+    }
+  ],
+  "categories": [
+    {"name": "基础理论", "count": 50, "subcategories": [
+      {"name": "基本概念", "count": 5},
+      {"name": "哲学基础", "count": 10},
+      {"name": "脏腑经络", "count": 15},
+      {"name": "气血津液", "count": 10},
+      {"name": "病因病机", "count": 10}
+    ]},
+    {"name": "诊断学", "count": 30},
+    {"name": "中药学", "count": 25},
+    {"name": "治疗学", "count": 15},
+    {"name": "体质学", "count": 10}
+  ]
+}

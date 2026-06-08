@@ -1,0 +1,102 @@
+<view class="zp-page">
+  <view class="zp-hero">
+    <image class="zp-hero-img" src="/images/zenpulse/hero-home.jpg" mode="aspectFill"></image>
+    <view class="zp-hero-mask">
+      <text class="zp-hero-kicker">TRADITIONAL WISDOM</text>
+      <text class="zp-hero-title">东方智慧 · AI 赋能</text>
+    </view>
+  </view>
+
+  <button class="zp-btn-primary" bindtap="startDiagnosis">开始 AI 智能辨证</button>
+
+  <view class="zp-section-title">
+    <text class="zp-headline">健康律动</text>
+    <text class="zp-label zp-label-primary">实时监测</text>
+  </view>
+  <view class="zp-card">
+    <view style="padding:48rpx">
+      <view class="zp-chart-bars">
+        <view class="zp-bar zp-bar-1"></view>
+        <view class="zp-bar zp-bar-2"></view>
+        <view class="zp-bar zp-bar-3"></view>
+        <view class="zp-bar zp-bar-4"></view>
+        <view class="zp-bar zp-bar-5"></view>
+        <view class="zp-bar zp-bar-6"></view>
+        <view class="zp-bar zp-bar-7"></view>
+      </view>
+      <view class="zp-chart-labels">
+        <text>06:00</text>
+        <text>12:00</text>
+        <text>18:00</text>
+        <text>24:00</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="zp-bento-grid">
+    <view class="zp-bento-item zp-bento-photo">
+      <image class="zp-bento-bg" src="/images/zenpulse/card-herbs.jpg" mode="aspectFill"></image>
+      <view class="zp-bento-overlay">
+        <text class="zp-headline zp-bento-title">健康指标</text>
+        <text class="zp-body-sm zp-bento-desc">体征数据采集</text>
+      </view>
+    </view>
+    <view class="zp-bento-item zp-bento-photo">
+      <image class="zp-bento-bg" src="/images/zenpulse/card-ginseng.jpg" mode="aspectFill"></image>
+      <view class="zp-bento-overlay">
+        <text class="zp-headline zp-bento-title">望诊分析</text>
+        <text class="zp-body-sm zp-bento-desc">舌面眼多模态</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="zp-section-title">
+    <text class="zp-headline">本草图鉴</text>
+    <text class="zp-label zp-label-primary">ZenPulse</text>
+  </view>
+  <scroll-view class="zp-herb-scroll" scroll-x enable-flex>
+    <view class="zp-herb-card">
+      <image class="zp-herb-img" src="/images/zenpulse/card-ginseng.jpg" mode="aspectFill"></image>
+      <text class="zp-herb-name">人参</text>
+    </view>
+    <view class="zp-herb-card">
+      <image class="zp-herb-img" src="/images/zenpulse/card-goji.jpg" mode="aspectFill"></image>
+      <text class="zp-herb-name">枸杞</text>
+    </view>
+    <view class="zp-herb-card">
+      <image class="zp-herb-img" src="/images/zenpulse/card-danggui.jpg" mode="aspectFill"></image>
+      <text class="zp-herb-name">当归</text>
+    </view>
+    <view class="zp-herb-card">
+      <image class="zp-herb-img" src="/images/zenpulse/card-lingzhi.jpg" mode="aspectFill"></image>
+      <text class="zp-herb-name">灵芝</text>
+    </view>
+    <view class="zp-herb-card">
+      <image class="zp-herb-img" src="/images/zenpulse/card-herbs.jpg" mode="aspectFill"></image>
+      <text class="zp-herb-name">本草</text>
+    </view>
+  </scroll-view>
+
+  <view class="zp-card zp-glass zp-tip-photo">
+    <image class="zp-tip-photo-img" src="/images/zenpulse/card-lingzhi.jpg" mode="aspectFill"></image>
+    <view class="zp-tip-photo-body">
+      <text class="zp-headline" style="font-size:36rpx;display:block;margin-bottom:8rpx">智能中医诊断</text>
+      <text class="zp-body-sm">结合传统望闻问切与现代 AI，为您提供参考性健康分析。</text>
+    </view>
+  </view>
+
+  <view class="zp-list-group zp-glass">
+    <view class="zp-list-item" bindtap="goToHistory">
+      <view class="zp-list-icon zp-list-icon-warm">历</view>
+      <view class="zp-list-body"><text class="zp-list-title">历史记录</text></view>
+      <text class="zp-list-chevron">›</text>
+    </view>
+    <view class="zp-list-item" bindtap="goToAbout">
+      <view class="zp-list-icon zp-list-icon-peach">i</view>
+      <view class="zp-list-body"><text class="zp-list-title">关于我们</text></view>
+      <text class="zp-list-chevron">›</text>
+    </view>
+  </view>
+
+  <text class="zp-caption">© 2026 御心调理 · v1.1.0</text>
+</view>

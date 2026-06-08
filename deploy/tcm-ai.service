@@ -1,0 +1,19 @@
+[Unit]
+Description=TCM AI Diagnosis System
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/tcm-ai
+Environment=TCM_HOST=127.0.0.1
+Environment=TCM_PORT=8000
+Environment=TCM_ENV=production
+ExecStart=/opt/tcm-ai/.venv/bin/python -c "import os,uvicorn; uvicorn.run('web_server:app', host=os.getenv('TCM_HOST','127.0.0.1'), port=int(os.getenv('TCM_PORT','8000')))"
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,25 @@
+# CI / 测试环境依赖（与 requirements.txt 对齐，省略重型 ML 包以加快流水线）
+# 完整生产依赖请使用: pip install -r requirements.txt
+
+# Core
+fastapi>=0.100.0
+uvicorn>=0.23.0
+python-multipart>=0.0.6
+httpx>=0.25.0
+pydantic>=2.0.0
+
+# AI / RAG（轻量；集成测试通过 mock 覆盖主要路径）
+langchain-core>=0.2.0
+langchain-community>=0.2.0
+langchain-text-splitters>=0.2.0
+langchain-openai>=0.1.0
+
+# Vision / diagnosis（单元测试会 import cv2/numpy）
+opencv-python-headless>=4.8.0
+numpy>=1.24.0
+Pillow>=10.0.0
+scipy>=1.11.0
+
+# Dev / test
+pytest>=7.4.0
+pytest-cov>=4.1.0

@@ -1,0 +1,47 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/metrics/metrics",
+    "pages/upload/upload",
+    "pages/result/result",
+    "pages/profile/profile",
+    "pages/history/history",
+    "pages/settings/settings"
+  ],
+  "window": {
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#f9f9f7",
+    "navigationBarTitleText": "御心调理",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f9f9f7"
+  },
+  "tabBar": {
+    "color": "#877369",
+    "selectedColor": "#6c2f00",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的"
+      }
+    ]
+  },
+  "networkTimeout": {
+    "request": 60000,
+    "downloadFile": 60000,
+    "uploadFile": 120000
+  },
+  "debug": true,
+  "cloud": true,
+  "permission": {
+    "scope.writePhotosAlbum": {
+      "desc": "保存 ZenPulse 诊断报告图片到相册"
+    }
+  },
+  "sitemapLocation": "sitemap.json"
+}
