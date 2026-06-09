@@ -28,6 +28,7 @@ _system_service: Optional[Any] = None
 _rag_log_service: Optional[Any] = None
 _index_rebuild_service: Optional[Any] = None
 _stm_processor: Optional[Any] = None
+_vitals_service: Optional[Any] = None
 
 
 def get_face_detector() -> "FaceDetector":
@@ -113,3 +114,12 @@ def get_stm_processor() -> "STMDataProcessor":
 
         _stm_processor = STMDataProcessor()
     return _stm_processor
+
+
+def get_vitals_service():
+    global _vitals_service
+    if _vitals_service is None:
+        from tcm_ai.services.vitals_service import VitalsService
+
+        _vitals_service = VitalsService()
+    return _vitals_service

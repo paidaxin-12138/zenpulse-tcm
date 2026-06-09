@@ -15,7 +15,11 @@ logging.basicConfig(level=logging.INFO,
                         logging.FileHandler('stm_data_processor.log'),
                         logging.StreamHandler()
                     ])
+from tcm_ai.domain.pulse.analyzer import PpgWaveformAnalyzer
+from tcm_ai.domain.pulse.synthetic import synthetic_pulse_waveform
+
 logger = logging.getLogger(__name__)
+
 
 class MAX30102Processor:
     """
@@ -39,7 +43,17 @@ class MAX30102Processor:
         low = 0.5 / nyquist
         high = 5.0 / nyquist
         self.b, self.a = signal.butter(2, [low, high], btype='band')
+        self._analyzer = PpgWaveformAnalyzer()
     
+    def _extract_sensor_metrics(self, raw_data: List[int]) -> Dict[str, Any]:
+        """仅提取心率/血氧等轻量指标，不跑完整脉象分析。"""
+        ac_data, dc_data = self._extract_components(raw_data)
+        return {
+            'heart_rate': self._calculate_heart_rate(ac_data),
+            'spo2': self._calculate_spo2(ac_data, dc_data),
+            'pulse_waveform': raw_data,
+        }
+
     def process_pulse_data(self, raw_data: List[int]) -> Dict[str, Any]:
         """
         处理单个MAX30102采集的原始数据
@@ -50,28 +64,26 @@ class MAX30102Processor:
         Returns:
             处理后的脉搏数据
         """
-        # 提取AC和DC分量
+        metrics = self._extract_sensor_metrics(raw_data)
         self.ac_data, self.dc_data = self._extract_components(raw_data)
-        
-        # 计算心率和血氧
-        self.heart_rate = self._calculate_heart_rate(self.ac_data)
-        self.spo2 = self._calculate_spo2(self.ac_data, self.dc_data)
-        
-        # 生成脉搏波形
+        self.heart_rate = metrics['heart_rate']
+        self.spo2 = metrics['spo2']
         self.pulse_waveform = self._generate_waveform(self.ac_data)
-        
-        # 把脉分析
-        pulse_characteristics = self._analyze_pulse_characteristics()
-        
+
         return {
-            'heart_rate': self.heart_rate,
-            'spo2': self.spo2,
-            'pulse_characteristics': pulse_characteristics,
-            'pulse_waveform': self.pulse_waveform,
+            'heart_rate': metrics['heart_rate'],
+            'spo2': metrics['spo2'],
+            'pulse_waveform': raw_data,
+            'fs': self.sampling_rate,
             'timestamp': time.time()
         }
     
-    def process_dual_sensor_data(self, sensor1_data: List[int], sensor2_data: List[int]) -> Dict[str, Any]:
+    def process_dual_sensor_data(
+        self,
+        sensor1_data: List[int],
+        sensor2_data: List[int],
+        imu: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
         """
         处理两个MAX30102传感器采集的原始数据并取平均值
         
@@ -82,7 +94,7 @@ class MAX30102Processor:
         Returns:
             处理后的脉搏数据（平均值）
         """
-        # 分别处理两个传感器的数据
+        # 分别提取两个传感器的轻量指标
         self.sensor1_data = self.process_pulse_data(sensor1_data)
         self.sensor2_data = self.process_pulse_data(sensor2_data)
         
@@ -90,22 +102,30 @@ class MAX30102Processor:
         avg_heart_rate = (self.sensor1_data['heart_rate'] + self.sensor2_data['heart_rate']) / 2
         avg_spo2 = (self.sensor1_data['spo2'] + self.sensor2_data['spo2']) / 2
         
-        # 生成平均脉搏波形
-        avg_pulse_waveform = []
-        if self.sensor1_data['pulse_waveform'] and self.sensor2_data['pulse_waveform']:
-            min_length = min(len(self.sensor1_data['pulse_waveform']), len(self.sensor2_data['pulse_waveform']))
+        merged_raw: List[int] = []
+        if sensor1_data and sensor2_data:
+            min_length = min(len(sensor1_data), len(sensor2_data))
             for i in range(min_length):
-                avg_value = (self.sensor1_data['pulse_waveform'][i] + self.sensor2_data['pulse_waveform'][i]) / 2
-                avg_pulse_waveform.append(avg_value)
-        
-        # 综合分析脉搏特征
-        pulse_characteristics = self._analyze_dual_pulse_characteristics()
-        
+                merged_raw.append(int((sensor1_data[i] + sensor2_data[i]) / 2))
+        elif sensor1_data:
+            merged_raw = list(sensor1_data)
+        else:
+            merged_raw = list(sensor2_data)
+
+        analysis = self._analyzer.analyze_from_waveform(
+            merged_raw,
+            fs=self.sampling_rate,
+            imu=imu,
+            source="stm",
+            capability_level="L1",
+        )
+
         return {
-            'heart_rate': round(avg_heart_rate, 1),
+            'heart_rate': analysis.waveform_stats.get('heart_rate', round(avg_heart_rate, 1)),
             'spo2': round(avg_spo2, 1),
-            'pulse_characteristics': pulse_characteristics,
-            'pulse_waveform': avg_pulse_waveform,
+            'pulse_waveform': merged_raw,
+            'fs': self.sampling_rate,
+            'pulse_analysis': analysis.to_dict(),
             'sensor1_data': self.sensor1_data,
             'sensor2_data': self.sensor2_data,
             'timestamp': time.time()
@@ -209,88 +229,10 @@ class MAX30102Processor:
         """
         return ac_data
     
-    def _analyze_pulse_characteristics(self) -> Dict[str, str]:
-        """
-        分析脉搏特征，实现中医把脉功能
-        """
-        characteristics = {
-            'pulse_shape': '正常',
-            'pulse_strength': '适中',
-            'pulse_rate': '正常',
-            'tcm_interpretation': '平和脉'
-        }
-        
-        # 根据心率分析
-        if self.heart_rate < 60:
-            characteristics['pulse_rate'] = '过缓'
-            characteristics['tcm_interpretation'] = '迟脉'
-        elif self.heart_rate > 100:
-            characteristics['pulse_rate'] = '过速'
-            characteristics['tcm_interpretation'] = '数脉'
-        
-        # 根据脉搏强度分析（这里使用简化的方法）
-        if self.ac_data:
-            pulse_strength = np.std(self.ac_data)
-            if pulse_strength < 100:
-                characteristics['pulse_strength'] = '虚弱'
-                characteristics['tcm_interpretation'] = '虚脉'
-            elif pulse_strength > 500:
-                characteristics['pulse_strength'] = '强劲'
-                characteristics['tcm_interpretation'] = '实脉'
-        
-        return characteristics
-    
-    def _analyze_dual_pulse_characteristics(self) -> Dict[str, str]:
-        """
-        分析两个传感器的脉搏特征，实现综合中医把脉功能
-        """
-        # 获取两个传感器的特征
-        sensor1_char = self.sensor1_data.get('pulse_characteristics', {})
-        sensor2_char = self.sensor2_data.get('pulse_characteristics', {})
-        
-        # 综合分析
-        characteristics = {
-            'pulse_shape': '正常',
-            'pulse_strength': '适中',
-            'pulse_rate': '正常',
-            'tcm_interpretation': '平和脉',
-            'consistency': '一致'
-        }
-        
-        # 分析脉搏速率一致性
-        rate1 = sensor1_char.get('pulse_rate', '正常')
-        rate2 = sensor2_char.get('pulse_rate', '正常')
-        if rate1 != rate2:
-            characteristics['consistency'] = '速率不一致'
-        characteristics['pulse_rate'] = rate1 if rate1 != '正常' else rate2
-        
-        # 分析脉搏强度一致性
-        strength1 = sensor1_char.get('pulse_strength', '适中')
-        strength2 = sensor2_char.get('pulse_strength', '适中')
-        if strength1 != strength2:
-            characteristics['consistency'] = '强度不一致'
-        characteristics['pulse_strength'] = strength1 if strength1 != '适中' else strength2
-        
-        # 综合中医诊断
-        tcm1 = sensor1_char.get('tcm_interpretation', '平和脉')
-        tcm2 = sensor2_char.get('tcm_interpretation', '平和脉')
-        
-        if tcm1 != '平和脉' and tcm2 != '平和脉':
-            if tcm1 == tcm2:
-                characteristics['tcm_interpretation'] = tcm1
-            else:
-                # 如果两个传感器的诊断不同，优先考虑异常的诊断
-                abnormal_pulses = ['迟脉', '数脉', '虚脉', '实脉']
-                for pulse_type in abnormal_pulses:
-                    if pulse_type in [tcm1, tcm2]:
-                        characteristics['tcm_interpretation'] = pulse_type
-                        break
-        elif tcm1 != '平和脉':
-            characteristics['tcm_interpretation'] = tcm1
-        elif tcm2 != '平和脉':
-            characteristics['tcm_interpretation'] = tcm2
-        
-        return characteristics
+    def _generate_simulation_raw(self, duration_sec: float = 15.0) -> List[int]:
+        waveform = synthetic_pulse_waveform(duration_sec=duration_sec, fs=self.sampling_rate)
+        return [int(v) for v in waveform]
+
 
 class STMDataProcessor:
     def __init__(self, host: str = '192.168.1.100', port: int = 8080, timeout: float = 5.0, buffer_size: int = 500, process_interval: float = 5.0):
@@ -306,6 +248,7 @@ class STMDataProcessor:
         # 新增：线程和缓冲区管理
         self.buffer1 = deque(maxlen=buffer_size)   # 传感器1原始数据
         self.buffer2 = deque(maxlen=buffer_size)   # 传感器2原始数据
+        self._imu_buffer: deque = deque(maxlen=buffer_size)
         self.latest_result = None
         self.running = False
         self.recv_thread = None
@@ -348,7 +291,19 @@ class STMDataProcessor:
             if len(self.buffer1) >= 100 and len(self.buffer2) >= 100:  # 至少需要一定点数
                 data1 = list(self.buffer1)[-self.buffer_size:]
                 data2 = list(self.buffer2)[-self.buffer_size:]
-                result = self.max30102_processor.process_dual_sensor_data(data1, data2)
+                imu_payload = None
+                if self._imu_buffer:
+                    imu_payload = {
+                        'acc_x': [s.get('ax', 0) for s in self._imu_buffer],
+                        'acc_y': [s.get('ay', 0) for s in self._imu_buffer],
+                        'acc_z': [s.get('az', 0) for s in self._imu_buffer],
+                        'fs': self.max30102_processor.sampling_rate,
+                    }
+                result = self.max30102_processor.process_dual_sensor_data(
+                    data1,
+                    data2,
+                    imu=imu_payload,
+                )
                 self.latest_result = result
         self._start_timer()  # 重新启动定时器
     
@@ -388,22 +343,27 @@ class STMDataProcessor:
         self.is_connected = False
     
     def _handle_line(self, line: str):
-        """处理一行数据，格式：CH1:123,CH2:124"""
-        # 解析并追加数据时加锁
+        """处理一行数据。v0: CH1:123,CH2:124  v2: TS:...,CH1:...,CH2:...,AX:..."""
         with self.lock:
-            # 解析两个通道的值
+            imu_sample: Dict[str, int] = {}
             parts = line.split(',')
             for part in parts:
-                if ':' in part:
-                    key, val = part.split(':', 1)
-                    try:
-                        val = int(val.strip())
-                        if key.strip().upper() == 'CH1':
-                            self.buffer1.append(val)
-                        elif key.strip().upper() == 'CH2':
-                            self.buffer2.append(val)
-                    except:
-                        pass
+                if ':' not in part:
+                    continue
+                key, val = part.split(':', 1)
+                key = key.strip().upper()
+                try:
+                    num = int(val.strip())
+                except ValueError:
+                    continue
+                if key == 'CH1':
+                    self.buffer1.append(num)
+                elif key == 'CH2':
+                    self.buffer2.append(num)
+                elif key in ('AX', 'AY', 'AZ'):
+                    imu_sample[key.lower()] = num
+            if imu_sample:
+                self._imu_buffer.append(imu_sample)
     
     def read_pulse_data(self) -> Optional[Dict[str, Any]]:
         """
@@ -424,17 +384,8 @@ class STMDataProcessor:
         生成模拟脉搏数据，用于测试
         """
         # 生成模拟的传感器数据
-        def generate_sensor_data():
-            base_value = 1000
-            data = []
-            for i in range(100):
-                # 生成带有正弦波的模拟数据
-                value = base_value + 300 * abs(np.sin(i * 0.1)) + random.uniform(-50, 50)
-                data.append(int(value))
-            return data
-        
-        sensor1_data = generate_sensor_data()
-        sensor2_data = generate_sensor_data()
+        sensor1_data = self.max30102_processor._generate_simulation_raw()
+        sensor2_data = self.max30102_processor._generate_simulation_raw()
         
         # 使用MAX30102Processor处理模拟数据
         return self.max30102_processor.process_dual_sensor_data(sensor1_data, sensor2_data)

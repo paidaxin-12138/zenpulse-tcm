@@ -1,1 +1,74 @@
 /* metrics — ZenPulse */
+
+.zp-pulse-card {
+  margin-top: 24rpx;
+  padding: 24rpx;
+  background: rgba(255, 255, 255, 0.72);
+  border-radius: 24rpx;
+  border: 1rpx solid rgba(108, 47, 0, 0.08);
+}
+
+.zp-pulse-progress {
+  margin-bottom: 20rpx;
+}
+
+.zp-pulse-bar {
+  height: 12rpx;
+  background: rgba(108, 47, 0, 0.1);
+  border-radius: 999rpx;
+  overflow: hidden;
+}
+
+.zp-pulse-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #b86a2e, #6c2f00);
+  border-radius: 999rpx;
+  transition: width 0.12s linear;
+}
+
+.zp-pulse-preview {
+  display: flex;
+  align-items: flex-end;
+  gap: 4rpx;
+  height: 120rpx;
+  margin: 16rpx 0;
+  padding: 12rpx 8rpx;
+  background: rgba(108, 47, 0, 0.04);
+  border-radius: 16rpx;
+}
+
+.zp-pulse-bar-col {
+  flex: 1;
+  min-width: 4rpx;
+  background: #b86a2e;
+  border-radius: 4rpx 4rpx 0 0;
+  opacity: 0.85;
+}
+
+.zp-pulse-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+  margin-bottom: 16rpx;
+}
+
+.zp-pulse-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.zp-btn-plain-inline {
+  margin-top: 0 !important;
+}
+
+.zp-privacy-hint {
+  display: block;
+  margin-bottom: 16rpx;
+  line-height: 1.5;
+}
+
+.zp-privacy-link {
+  color: #6c2f00;
+  text-decoration: underline;
+}

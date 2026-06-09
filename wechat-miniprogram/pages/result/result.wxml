@@ -41,30 +41,30 @@
     <text class="zp-body-sm" style="font-size:32rpx;line-height:1.6;color:#54433a;white-space:pre-wrap">{{diagnosisResult.diagnosis}}</text>
   </view>
 
-  <view class="zp-card zp-glass zp-report-card" wx:if="{{diagnosisResult.pulse_characteristics}}">
+  <view class="zp-card zp-glass zp-report-card" wx:if="{{diagnosisResult.vitals_assessment}}">
     <view class="zp-report-header">
-      <text class="zp-report-icon">脉</text>
-      <text class="zp-headline" style="font-size:36rpx">脉象分析</text>
+      <text class="zp-report-icon">参</text>
+      <text class="zp-headline" style="font-size:36rpx">生理参数（MAX30102）</text>
     </view>
     <view class="zp-link-row">
-      <text class="zp-label" style="margin:0">脉象类型</text>
-      <text class="zp-body-sm">{{diagnosisResult.pulse_characteristics.pulse_type}}</text>
+      <text class="zp-label" style="margin:0">心率</text>
+      <text class="zp-body-sm">{{diagnosisResult.vitals_assessment.heart_rate}} bpm（{{diagnosisResult.vitals_assessment.hr_status}}）</text>
+    </view>
+    <view class="zp-link-row" wx:if="{{diagnosisResult.vitals_assessment.spo2}}">
+      <text class="zp-label" style="margin:0">血氧</text>
+      <text class="zp-body-sm">{{diagnosisResult.vitals_assessment.spo2}}%（{{diagnosisResult.vitals_assessment.spo2_status}}）</text>
     </view>
     <view class="zp-link-row">
-      <text class="zp-label" style="margin:0">脉象描述</text>
-      <text class="zp-body-sm">{{diagnosisResult.pulse_characteristics.description}}</text>
+      <text class="zp-label" style="margin:0">综合评估</text>
+      <text class="zp-body-sm">{{diagnosisResult.vitals_assessment.overall_status}}</text>
     </view>
-    <view class="zp-link-row" wx:if="{{diagnosisResult.pulse_characteristics.characteristics}}">
-      <text class="zp-label" style="margin:0">脉象特征</text>
-      <text class="zp-body-sm">{{diagnosisResult.pulse_characteristics.characteristics.rate}}、{{diagnosisResult.pulse_characteristics.characteristics.rhythm}}、{{diagnosisResult.pulse_characteristics.characteristics.strength}}、{{diagnosisResult.pulse_characteristics.characteristics.depth}}</text>
+    <view class="zp-link-row" wx:if="{{diagnosisResult.vitals_assessment.alerts && diagnosisResult.vitals_assessment.alerts.length}}">
+      <text class="zp-label" style="margin:0">提示</text>
+      <text class="zp-body-sm">{{diagnosisResult.vitals_assessment.alerts.join('；')}}</text>
     </view>
-    <view class="zp-link-row" wx:if="{{diagnosisResult.pulse_characteristics.possible_conditions}}">
-      <text class="zp-label" style="margin:0">可能证候</text>
-      <text class="zp-body-sm">{{diagnosisResult.pulse_characteristics.possible_conditions.join('、')}}</text>
-    </view>
-    <view class="zp-link-row" wx:if="{{diagnosisResult.pulse_characteristics.treatment_recommendations}}">
-      <text class="zp-label" style="margin:0">治疗建议</text>
-      <text class="zp-body-sm">{{diagnosisResult.pulse_characteristics.treatment_recommendations.join('、')}}</text>
+    <view class="zp-link-row" wx:if="{{diagnosisResult.vitals_assessment.suggestions && diagnosisResult.vitals_assessment.suggestions.length}}">
+      <text class="zp-label" style="margin:0">建议</text>
+      <text class="zp-body-sm">{{diagnosisResult.vitals_assessment.suggestions.join('；')}}</text>
     </view>
   </view>
 

@@ -1,6 +1,7 @@
 {
   "version": "1.0",
-  "total_cases": 5,
+  "total_cases": 5000,
+  "_index_note": "完整案例数据见 cases/clinical_cases_001.json–005.json（各 1000 条）；下列 cases 为早期抽样索引条目",
   "last_updated": "2025-12-23T10:00:00",
   "cases": [
     {

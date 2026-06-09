@@ -28,7 +28,10 @@ def get_optional_wx_user_id(
     token = _extract_bearer(authorization, x_wx_token)
     if not token:
         return None
-    return verify_token(token)
+    user_id = verify_token(token)
+    if not user_id or not _user_service.get_by_id(user_id):
+        return None
+    return user_id
 
 
 def require_wx_user_id(
@@ -38,6 +41,4 @@ def require_wx_user_id(
     user_id = get_optional_wx_user_id(authorization, x_wx_token)
     if not user_id:
         raise HTTPException(status_code=401, detail="请先登录微信小程序")
-    if not _user_service.get_by_id(user_id):
-        raise HTTPException(status_code=401, detail="登录已失效，请重新登录")
     return user_id

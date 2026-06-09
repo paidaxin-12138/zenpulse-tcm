@@ -5,6 +5,19 @@ import { getAppSafe } from './appContext';
 
 const BASE_URL_STORAGE_KEY = 'zp_api_base_url';
 
+function getWxAuthHeaders() {
+  try {
+    const token = wx.getStorageSync('wx_token');
+    if (!token) return {};
+    return {
+      Authorization: `Bearer ${token}`,
+      'X-WX-Token': token
+    };
+  } catch (_) {
+    return {};
+  }
+}
+
 function getBaseUrl() {
   const app = getAppSafe();
   if (app && app.globalData && app.globalData.baseUrl) {
@@ -111,6 +124,11 @@ function request(url, data = {}, method = 'GET', header = {}, options = {}) {
           return;
         }
         const detail = res.data && (res.data.detail || res.data.message);
+        if (typeof detail === 'object' && detail !== null) {
+          const msg = detail.message || detail.error || JSON.stringify(detail);
+          reject(new Error(msg));
+          return;
+        }
         reject(new Error(typeof detail === 'string' ? detail : `请求失败: ${res.statusCode}`));
       },
       fail(err) {
@@ -180,6 +198,41 @@ export async function getImageBase64(filePath) {
 }
 
 /**
+ * MAX30102 生理参数分析（BLE 采集后上传后端）
+ */
+export function analyzeVitals(samples, options = {}) {
+  const fs = options.fs || 100;
+  const payload = {
+    samples,
+    fs,
+    source: options.source || 'max30102_ble'
+  };
+  if (options.samples_ch2 && options.samples_ch2.length) {
+    payload.samples_ch2 = options.samples_ch2;
+  }
+  return request('/vitals/analyze', payload, 'POST', getWxAuthHeaders(), {
+    timeout: API_ENV.pulseTimeoutMs || 30000
+  });
+}
+
+/**
+ * @deprecated 已弃用脉象分析，请使用 analyzeVitals
+ */
+export function analyzePulse(samples, options = {}) {
+  const fs = options.fs || 100;
+  const payload = {
+    samples,
+    fs,
+    source: options.source || 'ppg',
+    capability_level: options.capability_level || 'L1'
+  };
+  if (options.imu) payload.imu = options.imu;
+  return request('/pulse/analyze', payload, 'POST', getWxAuthHeaders(), {
+    timeout: API_ENV.pulseTimeoutMs || 30000
+  });
+}
+
+/**
  * 微信小程序诊断（JSON + base64 多图）
  */
 export async function wxDiagnose(formData, files, authHeader = {}) {
@@ -192,6 +245,21 @@ export async function wxDiagnose(formData, files, authHeader = {}) {
     gender: formData.gender || null,
     images: {}
   };
+
+  if (formData.pulse_waveform && formData.pulse_waveform.length) {
+    payload.pulse_waveform = formData.pulse_waveform;
+    payload.pulse_fs = formData.pulse_fs || 100;
+    payload.pulse_source = formData.pulse_source || 'max30102_ble';
+    if (formData.max30102_samples_ch2 && formData.max30102_samples_ch2.length) {
+      payload.max30102_samples_ch2 = formData.max30102_samples_ch2;
+    }
+  }
+  if (formData.vitals_assessment) {
+    payload.vitals_assessment = formData.vitals_assessment;
+  }
+  if (formData.spo2) {
+    payload.spo2 = parseFloat(formData.spo2);
+  }
 
   const mapping = [
     ['tongueImage', 'tongue'],

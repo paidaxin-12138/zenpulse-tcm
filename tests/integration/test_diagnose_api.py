@@ -4,8 +4,9 @@ from fastapi.testclient import TestClient
 
 from tcm_ai.api.deps import get_diagnosis_service, get_vision_service
 from tcm_ai.api.routes.diagnose import router as diagnose_router
-from tcm_ai.domain.constants import DEFAULT_PULSE_CHARACTERISTICS, DISCLAIMER
+from tcm_ai.domain.constants import DISCLAIMER
 from tcm_ai.domain.rules import RuleEngine
+from tcm_ai.domain.vitals.constants import VITALS_MAX_SAMPLES
 
 
 class FakeDiagnosisService:
@@ -13,7 +14,14 @@ class FakeDiagnosisService:
         return {
             "diagnosis": "1. 中医辨证：气血不足\n3. 证候分析：测试分析内容",
             "source": "测试来源",
-            "pulse_characteristics": DEFAULT_PULSE_CHARACTERISTICS,
+            "vitals_assessment": {
+                "heart_rate": 75,
+                "spo2": 98.0,
+                "hr_status": "正常",
+                "spo2_status": "正常",
+                "overall_status": "正常",
+            },
+            "pulse_characteristics": {},
             "disclaimer": DISCLAIMER,
             "syndrome": "气血不足",
             "analysis": "测试分析内容",
@@ -64,6 +72,7 @@ def test_diagnose_json_structured_response(client):
     assert body["analysis"] == "测试分析内容"
     assert len(body["suggestions"]) == 2
     assert body["disclaimer"] == DISCLAIMER
+    assert body["vitals_assessment"]["heart_rate"] == 75
 
 
 def test_diagnose_multipart_without_optional_age(client):
@@ -78,6 +87,32 @@ def test_diagnose_multipart_without_optional_age(client):
     )
     assert resp.status_code == 200
     assert resp.json()["syndrome"] == "气血不足"
+
+
+def test_diagnose_json_rejects_oversized_waveform(client):
+    payload = {
+        "heart_rate": 75,
+        "pulse": 75,
+        "systolic": 120,
+        "diastolic": 80,
+        "pulse_waveform": [1.0] * (VITALS_MAX_SAMPLES + 1),
+    }
+    resp = client.post("/api/diagnose/json", json=payload)
+    assert resp.status_code == 422
+
+
+def test_diagnose_json_rejects_oversized_base64_image(client):
+    from tcm_ai.core.request_limits import MAX_DIAGNOSE_IMAGE_B64_CHARS
+
+    payload = {
+        "heart_rate": 75,
+        "pulse": 75,
+        "systolic": 120,
+        "diastolic": 80,
+        "images": {"tongue": "A" * (MAX_DIAGNOSE_IMAGE_B64_CHARS + 1)},
+    }
+    resp = client.post("/api/diagnose/json", json=payload)
+    assert resp.status_code == 422
 
 
 def test_rule_engine_returns_structured():

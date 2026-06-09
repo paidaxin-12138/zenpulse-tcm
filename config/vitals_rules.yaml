@@ -1,0 +1,18 @@
+meta:
+  version: "2026Q2-max30102"
+  device: "MAX30102"
+
+heart_rate:
+  bradycardia_max: 60
+  normal_max: 100
+  tachycardia_min: 100
+
+spo2:
+  normal_min: 95
+  mild_hypoxia_min: 90
+
+quality:
+  min_samples_sec: 5
+  min_sample_count: 500
+  channel_length_tolerance: 0
+  channel_mismatch_quality_penalty: 0.85

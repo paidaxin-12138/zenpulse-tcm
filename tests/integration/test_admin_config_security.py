@@ -10,13 +10,13 @@ from tcm_ai.api.routes.admin import router as admin_router
 def test_admin_config_update_rejects_insecure_production(monkeypatch):
     monkeypatch.setenv("TCM_ENV", "production")
     base_cfg = {
-        "admin_api_key": "admin-secret",
+        "admin_api_key": "admin-secret-key-thirty-two-chars",
         "server": {
             "cors_origins": ["https://example.com"],
             "allow_public_diagnose": False,
             "allow_public_knowledge_search": False,
         },
-        "wechat_miniprogram": {"dev_mode": False, "token_secret": "wx-secret"},
+        "wechat_miniprogram": {"dev_mode": False, "token_secret": "wx-prod-token-" + "a" * 18},
         "embedding": {"provider": "local", "model": "m", "base_url": "", "api_key": ""},
         "llm": {"provider": "ollama", "model": "m", "base_url": "http://127.0.0.1:11434", "api_key": ""},
         "rerank": {"provider": "none", "model": "", "base_url": "", "api_key": ""},
@@ -36,7 +36,7 @@ def test_admin_config_update_rejects_insecure_production(monkeypatch):
     app = FastAPI()
     app.include_router(admin_router)
     client = TestClient(app)
-    headers = {"X-Admin-API-Key": "admin-secret"}
+    headers = {"X-Admin-API-Key": "admin-secret-key-thirty-two-chars"}
 
     res = client.put(
         "/api/admin/config",

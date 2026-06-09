@@ -146,6 +146,19 @@ def _sanitize_question(question: str) -> str:
     return text[:500]
 
 
+def _sanitize_providers(providers: Optional[Dict[str, str]]) -> Dict[str, str]:
+    raw = providers or {}
+    if not is_production():
+        return dict(raw)
+    return {key: "[redacted]" for key in raw}
+
+
+def _sanitize_answer_preview(answer_preview: str) -> str:
+    if is_production():
+        return ""
+    return (answer_preview or "")[:200]
+
+
 def log_rag_event(
     kind: str,
     question: str,
@@ -164,10 +177,10 @@ def log_rag_event(
             "question": _sanitize_question(question),
             "retrieved_count": retrieved_count,
             "final_top_k": final_top_k,
-            "providers": providers or {},
+            "providers": _sanitize_providers(providers),
             "duration_ms": round(duration_ms, 2),
             "has_answer": has_answer,
-            "answer_preview": (answer_preview[:200] if not is_production() else ""),
+            "answer_preview": _sanitize_answer_preview(answer_preview),
             "source": source,
         }
     )

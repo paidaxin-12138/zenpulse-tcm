@@ -13,11 +13,18 @@
 
 ## 首次部署 checklist
 
-1. 复制配置：`cp data/admin_config.example.json data/admin_config.json`
-2. 编辑 `data/admin_config.json`：设置 `server.cors_origins`、模型 provider
-3. 构建向量索引：`python scripts/build_index.py --force`
-4. 记录 Admin Key：首次启动后查看 `data/admin_config.json` 中的 `admin_api_key`
-5. 启动服务并访问 `/admin` 测试模型连通性
+1. 复制配置：`cp data/admin_config.production.example.json data/admin_config.json`
+2. 编辑 `data/admin_config.json`：
+   - 生成并填入 `admin_api_key`、`wechat_miniprogram.token_secret`（各 ≥32 字符随机值）
+   - 设置 `server.cors_origins` 为实际域名
+   - 确认 `allow_public_diagnose` / `allow_public_knowledge_search` / **`allow_public_vitals`** / **`allow_public_pulse`** 为 **false**
+   - 确认 `wechat_miniprogram.dev_mode` 为 **false**
+3. 设置环境：`export TCM_ENV=production`
+4. 构建向量索引：`python scripts/build_index.py --force`
+5. 启动服务并访问 `/admin` 登录（HttpOnly Cookie 会话）
+6. 测试模型连通性与 `/api/ready`
+
+> 本地开发仍可用 `data/admin_config.example.json`；**切勿**将 example 中的占位符直接用于生产。
 
 ---
 
@@ -245,11 +252,12 @@ curl -H "Authorization: Bearer $TCM_METRICS_TOKEN" https://your-domain/metrics
 1. 设置 **`TCM_ENV=production`**（Docker：`environment: TCM_ENV: production`）
 2. 配置 **`wechat_miniprogram.token_secret`**（随机 32+ 字节）；**禁止** `dev_mode: true`
 3. **`server.cors_origins`** 填写实际前端域名，勿用 `["*"]`
-4. 生产建议关闭 **`allow_public_diagnose`** / **`allow_public_knowledge_search`**
-5. Admin Key 生产环境重新生成，仅 HTTPS + 内网使用；管理端通过 `/api/admin/session/login` 建立 HttpOnly Cookie 会话
-6. Prometheus：`GET /metrics`（可选 `TCM_METRICS_TOKEN`）；Nginx 建议内网限制 `/metrics`
-7. 8000 不对公网裸奔，走 Nginx/内网
-8. 展示 API 返回的 `disclaimer`
+4. 生产建议关闭 **`allow_public_diagnose`** / **`allow_public_knowledge_search`** / **`allow_public_vitals`** / **`allow_public_pulse`**（实验性脉象 API）
+5. 小程序生产环境需配置 **`wechat_miniprogram.token_secret`** 且 **`dev_mode: false`**；体征与诊断接口走 Bearer Token，勿依赖公开接口
+6. Admin Key 生产环境重新生成，仅 HTTPS + 内网使用；管理端通过 `/api/admin/session/login` 建立 HttpOnly Cookie 会话
+7. Prometheus：`GET /metrics`（可选 `TCM_METRICS_TOKEN`）；Nginx 建议内网限制 `/metrics`
+8. 8000 不对公网裸奔，走 Nginx/内网
+9. 展示 API 返回的 `disclaimer`
 
 `data/admin_config.json` 生产示例片段：
 
@@ -259,6 +267,8 @@ curl -H "Authorization: Bearer $TCM_METRICS_TOKEN" https://your-domain/metrics
     "cors_origins": ["https://your-domain.com"],
     "allow_public_diagnose": false,
     "allow_public_knowledge_search": false,
+    "allow_public_vitals": false,
+    "allow_public_pulse": false,
     "rate_limit_per_minute": 60
   },
   "wechat_miniprogram": {

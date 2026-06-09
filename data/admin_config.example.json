@@ -33,6 +33,8 @@
     ],
     "allow_public_diagnose": true,
     "allow_public_knowledge_search": true,
+    "allow_public_vitals": true,
+    "allow_public_pulse": false,
     "rate_limit_per_minute": 60,
     "admin_session_ttl_hours": 8,
     "admin_session_secret": ""

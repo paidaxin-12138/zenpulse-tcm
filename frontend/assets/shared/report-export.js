@@ -75,6 +75,12 @@
     const name = context.patientName || (gender !== '—' ? '问诊用户' : '问诊用户');
     const avatar = name.slice(0, 1);
 
+    const vitals = result.vitals_assessment || {};
+    const vitalsStatus =
+      context.vitalsStatus ||
+      vitals.overall_status ||
+      '稳定';
+
     return {
       brandName: context.brandName || 'ZenPulse AI',
       reportId: context.reportId || reportIdFromDate(when),
@@ -82,15 +88,20 @@
       avatar,
       gender,
       age,
-      vitalsStatus: context.vitalsStatus || '稳定',
+      vitalsStatus,
       date: formatReportDate(when),
       physician: context.physician || 'AI 智能辨证',
       syndrome,
       confidence: context.confidence || (result.diagnosis_mode === 'llm' ? 88 : result.diagnosis_mode === 'rule' ? 72 : 80),
       constitution: deriveConstitution(syndrome, result.analysis),
       constitutionNote: result.analysis || '综合望闻问切与体征数据，AI 已完成多模态融合分析。',
-      pulseType: (result.pulse_characteristics && result.pulse_characteristics.pulse_type) || '—',
-      pulseDesc: (result.pulse_characteristics && result.pulse_characteristics.description) || '—',
+      vitalsHr:
+        vitals.heart_rate != null
+          ? `${vitals.heart_rate} bpm（${vitals.hr_status || ''}）`
+          : '—',
+      vitalsSpo2:
+        vitals.spo2 != null ? `${vitals.spo2}%（${vitals.spo2_status || ''}）` : '—',
+      vitalsOverall: vitals.overall_status || '—',
       tongueItems: result.tongue_analysis || [],
       faceItems: result.face_analysis || [],
       eyeItems: result.eye_analysis || [],
@@ -186,8 +197,10 @@
             <div class="zp-re-card-head">多模态 AI 辨证融合</div>
             <div class="zp-re-split">
               <div class="zp-re-split-col">
-                <strong style="font-size:12px;color:#725a39">脉象特征：${escapeHtml(p.pulseType)}</strong>
-                <p class="zp-re-text">${escapeHtml(p.pulseDesc)}</p>
+                <strong style="font-size:12px;color:#725a39">生理参数</strong>
+                <p class="zp-re-text">心率：${escapeHtml(p.vitalsHr)}</p>
+                <p class="zp-re-text">血氧：${escapeHtml(p.vitalsSpo2)}</p>
+                <p class="zp-re-text">综合：${escapeHtml(p.vitalsOverall)}</p>
               </div>
               <div class="zp-re-split-col">
                 <strong style="font-size:12px;color:#274a10;display:block;margin-bottom:8px">望诊影像分析</strong>

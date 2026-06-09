@@ -1112,14 +1112,15 @@
         </div>`;
       };
 
-      let pulseHtml = '';
-      if (result.pulse_characteristics) {
-        const p = result.pulse_characteristics;
-        pulseHtml = `<div class="p-6 bg-white/60 rounded-xl border border-outline-variant/20">
-          <h3 class="font-headline-md text-primary mb-3">脉象分析</h3>
+      let vitalsHtml = '';
+      const v = result.vitals_assessment;
+      if (v && (v.heart_rate || v.spo2 || v.overall_status)) {
+        vitalsHtml = `<div class="p-6 bg-white/60 rounded-xl border border-outline-variant/20">
+          <h3 class="font-headline-md text-primary mb-3">生理参数评估</h3>
           <ul class="space-y-1 text-on-surface-variant">
-            <li><strong>脉象类型：</strong>${escapeHtml(p.pulse_type || '未检测')}</li>
-            <li><strong>描述：</strong>${escapeHtml(p.description || '未检测')}</li>
+            <li><strong>心率：</strong>${escapeHtml(String(v.heart_rate || '—'))} bpm（${escapeHtml(v.hr_status || '—')}）</li>
+            <li><strong>血氧：</strong>${escapeHtml(String(v.spo2 || '—'))}%（${escapeHtml(v.spo2_status || '—')}）</li>
+            <li><strong>综合：</strong>${escapeHtml(v.overall_status || '—')}</li>
           </ul>
         </div>`;
       }
@@ -1142,7 +1143,7 @@
         listHtml(result.suggestions, '调理建议'),
         listHtml(result.prescriptions, '方剂建议'),
         result.diagnosis ? `<div class="p-6 bg-surface-container-low/40 rounded-xl"><h3 class="font-headline-md text-primary mb-3">完整报告</h3><div class="whitespace-pre-wrap text-on-surface-variant">${escapeHtml(result.diagnosis)}</div></div>` : '',
-        pulseHtml,
+        vitalsHtml,
         `<div class="p-6 bg-white/40 rounded-xl border border-outline-variant/20 text-sm text-on-surface-variant">
           <p>参考来源：${escapeHtml(result.source)}</p>
           <p class="mt-2 italic">${escapeHtml(result.disclaimer || '此诊断结果仅供参考，请咨询专业中医医师。')}</p>

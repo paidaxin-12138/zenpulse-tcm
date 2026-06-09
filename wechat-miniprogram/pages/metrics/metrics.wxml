@@ -64,6 +64,53 @@
     </view>
   </view>
 
+  <view class="zp-field zp-pulse-card">
+    <text class="zp-label">MAX30102 蓝牙采集</text>
+    <text class="zp-body-sm" style="display:block;margin-bottom:16rpx;color:#877369">连接 ZenPulse 腕带，静止佩戴约 10 秒后自动分析心率与血氧。</text>
+    <text wx:if="{{privacyNeedAuth}}" class="zp-caption zp-privacy-hint">首次使用需同意<text class="zp-privacy-link" bindtap="onOpenPrivacyContract">《{{privacyContractName}}》</text>中的蓝牙权限说明。</text>
+    <view class="zp-pulse-progress" wx:if="{{vitalsCapture.active || vitalsCapture.done}}">
+      <view class="zp-pulse-bar">
+        <view class="zp-pulse-bar-fill" style="width:{{vitalsCapture.progress}}%"></view>
+      </view>
+      <text class="zp-caption">{{vitalsCapture.statusText}}</text>
+    </view>
+    <view class="zp-pulse-preview" wx:if="{{vitalsCapture.previewPoints.length}}">
+      <view
+        wx:for="{{vitalsCapture.previewPoints}}"
+        wx:key="index"
+        class="zp-pulse-bar-col"
+        style="height:{{item * 80 + 8}}rpx"
+      ></view>
+    </view>
+    <view wx:if="{{vitalsCapture.done}}" class="zp-pulse-summary">
+      <text class="zp-body-sm">心率 {{vitalsCapture.heartRate}} bpm（{{vitalsCapture.hrStatus}}）</text>
+      <text class="zp-caption">血氧 {{vitalsCapture.spo2}}%（{{vitalsCapture.spo2Status}}）· {{vitalsCapture.overallStatus}}</text>
+      <text class="zp-caption">采样 {{vitalsCapture.sampleCount}} 点</text>
+      <view wx:if="{{vitalsCapture.alerts.length}}" class="zp-pulse-limitations">
+        <text wx:for="{{vitalsCapture.alerts}}" wx:key="index" class="zp-caption zp-limitation-line">{{item}}</text>
+      </view>
+      <view wx:if="{{vitalsCapture.limitations.length}}" class="zp-pulse-limitations">
+        <text wx:for="{{vitalsCapture.limitations}}" wx:key="index" class="zp-caption zp-limitation-line">{{item}}</text>
+      </view>
+    </view>
+    <view class="zp-pulse-actions">
+      <button
+        wx:if="{{privacyNeedAuth}}"
+        class="zp-btn-secondary"
+        open-type="agreePrivacyAuthorization"
+        bindagreeprivacyauthorization="onAgreePrivacyAndCapture"
+        disabled="{{vitalsCapture.active}}"
+      >同意隐私指引并采集</button>
+      <button
+        wx:else
+        class="zp-btn-secondary"
+        bindtap="onBleCaptureTap"
+        disabled="{{vitalsCapture.active}}"
+      >蓝牙采集</button>
+      <button wx:if="{{vitalsCapture.done}}" class="zp-btn-plain zp-btn-plain-inline" bindtap="clearVitalsCapture">清除数据</button>
+    </view>
+  </view>
+
   <button class="zp-btn-secondary" bindtap="getRandomMetrics" style="margin-top:16rpx">随机生成</button>
   <button class="zp-btn-plain" bindtap="backToHome">返回首页</button>
 </view>

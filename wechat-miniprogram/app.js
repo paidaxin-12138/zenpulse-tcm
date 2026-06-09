@@ -6,9 +6,33 @@ import { saveFullRecord } from './utils/historyStore';
 import { API_ENV } from './config/env';
 import { bootstrapServer } from './utils/api';
 
+function initPrivacyAuthorizationHandler() {
+  if (!wx.onNeedPrivacyAuthorization) return;
+
+  wx.onNeedPrivacyAuthorization((resolve) => {
+    wx.showModal({
+      title: '隐私授权',
+      content: '连接 ZenPulse 腕带采集心率与血氧需使用蓝牙，请先同意《用户隐私保护指引》。',
+      confirmText: '同意',
+      cancelText: '拒绝',
+      success(res) {
+        if (res.confirm) {
+          resolve({ event: 'agree', buttonId: 'privacy-agree' });
+        } else {
+          resolve({ event: 'disagree' });
+        }
+      },
+      fail() {
+        resolve({ event: 'disagree' });
+      }
+    });
+  });
+}
+
 App({
   onLaunch() {
     console.log('中医智能诊断系统启动');
+    initPrivacyAuthorizationHandler();
 
     this.globalData = {
       userInfo: getStoredUser(),

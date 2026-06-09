@@ -1134,11 +1134,18 @@ bind('rebuild-index-sync-btn', 'click', async () => {
 bind('regen-key-btn', 'click', async () => {
   if (!confirm('重新生成 Key？旧 Key 立即失效')) return;
   const result = await adminFetch('/config/regenerate-key', { method: 'POST' });
-  setStoredApiKey(result.admin_api_key);
-  syncHiddenApiKeyInput(result.admin_api_key);
+  const newKey = result.admin_api_key;
+  syncHiddenApiKeyInput('');
+  const apiKeyInput = document.getElementById('api-key-input');
+  if (apiKeyInput) apiKeyInput.value = '';
   const loginKey = document.getElementById('login-api-key');
-  if (loginKey) loginKey.value = result.admin_api_key;
-  setStatus('system-status', '新 Key 已保存', true);
+  if (loginKey) loginKey.value = '';
+  await fetch('/api/admin/session/logout', { method: 'POST', credentials: 'include' }).catch(() => {});
+  await attemptLogin({ key: newKey });
+  alert(
+    '新 Admin Key 已生效。\n\n请立即复制保存（关闭此对话框后页面不再显示完整 Key）：\n\n' + newKey
+  );
+  setStatus('system-status', 'Admin Key 已轮换，请妥善保管', true);
 });
 
 bind('import-files-btn', 'click', async () => {

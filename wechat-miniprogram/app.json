@@ -41,6 +41,9 @@
   "permission": {
     "scope.writePhotosAlbum": {
       "desc": "保存 ZenPulse 诊断报告图片到相册"
+    },
+    "scope.bluetooth": {
+      "desc": "连接 ZenPulse MAX30102 腕带采集心率与血氧"
     }
   },
   "sitemapLocation": "sitemap.json"

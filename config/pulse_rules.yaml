@@ -1,0 +1,34 @@
+meta:
+  calibration_version: "2026Q2-rate-rhythm-only"
+  device_profile: "max30102-v1"
+
+rate:
+  calibration_status: validated
+  validated_on: "synthetic-v1"
+  chi_max_hr: 60
+  shu_min_hr: 90
+
+rhythm:
+  calibration_status: validated
+  validated_on: "synthetic-v1"
+  rr_std_max: 0.12
+  rr_cv_max: 0.15
+  min_valid_beats_for_rhythm: 15
+
+strength:
+  calibration_status: placeholder
+  xu_amplitude_percentile: null
+  shi_amplitude_percentile: null
+
+shape:
+  calibration_status: placeholder
+  hua_spectral_entropy_max: null
+  se_spectral_entropy_min: null
+
+quality:
+  min_valid_beats: 15
+  min_still_duration_sec: 15
+  min_beat_snr_db: 3
+  motion_acc_rms_max: 0.15
+  window_sec: 5
+  window_hop_sec: 2

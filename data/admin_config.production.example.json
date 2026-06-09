@@ -33,6 +33,8 @@
     ],
     "allow_public_diagnose": false,
     "allow_public_knowledge_search": false,
+    "allow_public_vitals": false,
+    "allow_public_pulse": false,
     "rate_limit_per_minute": 60,
     "admin_session_ttl_hours": 8,
     "admin_session_secret": "可与 token_secret 相同或单独生成"

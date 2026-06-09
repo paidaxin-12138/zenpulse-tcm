@@ -10,13 +10,13 @@ from tcm_ai.api.app import create_app
 
 def _prod_config():
     return {
-        "admin_api_key": "test-admin",
+        "admin_api_key": "test-admin-key-thirty-two-chars-min",
         "server": {
             "cors_origins": ["https://example.com"],
             "allow_public_diagnose": False,
             "allow_public_knowledge_search": False,
         },
-        "wechat_miniprogram": {"dev_mode": False, "token_secret": "wx-secret-token-32bytes-min"},
+        "wechat_miniprogram": {"dev_mode": False, "token_secret": "wx-prod-token-" + "a" * 18},
         "embedding": {"provider": "local", "model": "m", "base_url": "", "api_key": ""},
         "llm": {"provider": "ollama", "model": "m", "base_url": "http://127.0.0.1:11434", "api_key": ""},
         "rerank": {"provider": "none", "model": "", "base_url": "", "api_key": ""},
@@ -57,9 +57,17 @@ def test_rag_log_redacts_question_in_production(monkeypatch, tmp_path):
 
     from tcm_ai.services.rag_log_service import log_rag_event
 
-    log_rag_event("query", "患者隐私问题内容", source="admin")
+    log_rag_event(
+        "query",
+        "患者隐私问题内容",
+        source="admin",
+        providers={"embedding": "http://127.0.0.1:11434", "llm": "deepseek"},
+        answer_preview="含隐私的回答摘要",
+    )
     line = Path(log_path).read_text(encoding="utf-8").strip()
     record = json.loads(line)
     assert record["question"].startswith("[redacted:")
     assert "患者" not in record["question"]
     assert record["answer_preview"] == ""
+    assert record["providers"]["embedding"] == "[redacted]"
+    assert record["providers"]["llm"] == "[redacted]"

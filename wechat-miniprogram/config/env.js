@@ -4,6 +4,8 @@
  * 开发者工具：127.0.0.1 通常比 localhost 更稳定
  * 真机预览：我的 → 服务器设置，或在此填写 customBaseUrl
  * 勾选：开发者工具 → 详情 → 本地设置 → 不校验合法域名
+ *
+ * 毕设局域网部署：无需 HTTPS 与正式上架；生产环境需 HTTPS + Token 鉴权
  */
 export const API_ENV = {
   /** 真机预览默认地址（与 /api/public/dev-hints 一致；模拟器也会优先使用） */
@@ -17,6 +19,8 @@ export const API_ENV = {
   defaultTimeoutMs: 12000,
   /** 诊断（含图片；需与 app.json networkTimeout.request 一致） */
   diagnoseTimeoutMs: 60000,
+  /** 脉象波形分析 */
+  pulseTimeoutMs: 30000,
   /** 启动探测超时 */
   probeTimeoutMs: 4000
 };

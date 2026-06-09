@@ -82,6 +82,7 @@ export function normalizeResult(item) {
     fusion_summary: src.fusion_summary || '',
     diagnosis_mode: src.diagnosis_mode || '',
     llm_fallback_reason: src.llm_fallback_reason || '',
+    vitals_assessment: src.vitals_assessment || null,
     pulse_characteristics: src.pulse_characteristics || null,
     source: src.source || '历史记录',
     disclaimer: src.disclaimer || '本诊断结果仅供参考，不能替代专业医生的诊断',
@@ -96,6 +97,7 @@ export function emptyResult() {
     diagnosis: '',
     analysis: '',
     suggestions: [],
+    vitals_assessment: null,
     source: '',
     pulse_characteristics: null,
     disclaimer: '本诊断结果仅供参考，不能替代专业医生的诊断'

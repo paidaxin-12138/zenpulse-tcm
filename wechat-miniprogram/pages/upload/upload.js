@@ -216,6 +216,19 @@ Page({
       age: parseInt(metrics.age),
       gender: metrics.gender
     };
+
+    if (metrics.vitals_assessment) {
+      formData.vitals_assessment = metrics.vitals_assessment;
+      if (metrics.spo2) formData.spo2 = metrics.spo2;
+    } else if (metrics.pulse_waveform && metrics.pulse_waveform.length) {
+      formData.pulse_waveform = metrics.pulse_waveform;
+      formData.pulse_fs = metrics.pulse_fs || 100;
+      formData.pulse_source = metrics.pulse_source || 'max30102_ble';
+      if (metrics.max30102_samples_ch2 && metrics.max30102_samples_ch2.length) {
+        formData.max30102_samples_ch2 = metrics.max30102_samples_ch2;
+      }
+      if (metrics.spo2) formData.spo2 = metrics.spo2;
+    }
     
     const files = {
       tongueImage: images.tongue,

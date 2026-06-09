@@ -52,6 +52,8 @@ class PulseDiagnosisTool:
             
             # 2. 处理脉搏波形数据，提取统计特征
             waveform_stats = self._extract_waveform_stats(pulse_data.get("pulse_waveform", []))
+            if pulse_data.get("waveform_stats"):
+                waveform_stats = {**waveform_stats, **pulse_data.get("waveform_stats", {})}
             
             # 3. 生成知识库查询
             query = f"{tcm_interpretation} 证型 方剂"
@@ -120,11 +122,18 @@ class PulseDiagnosisTool:
         # 脉象信息和调理建议
         pulse_info = {
             "平和脉": {
-                "description": "脉象平和，节律均匀，力度适中，一息四至，不浮不沉，不快不慢。",
+                "description": "脉率正常，节律均匀（基于容积脉搏波，不含浮沉）。",
                 "interpretation": "气血调和，阴阳平衡，健康状态良好。",
                 "suggestion": "保持良好的生活习惯，均衡饮食，适量运动，保持心情舒畅。",
                 "food": "宜食多样化食物，保持营养均衡。",
                 "formula": "无需特殊方剂"
+            },
+            "不齐脉": {
+                "description": "脉律不齐，至数间隔变异增大。",
+                "interpretation": "可能提示心律不齐或气血运行不畅，建议进一步检查。",
+                "suggestion": "避免过度劳累，保持情绪稳定，必要时就医检查心电图。",
+                "food": "宜清淡易消化，避免浓茶、咖啡、酒精。",
+                "formula": "请咨询专业中医师辨证施治"
             },
             "迟脉": {
                 "description": "脉象迟缓，一息不足四至（每分钟少于60次）。",

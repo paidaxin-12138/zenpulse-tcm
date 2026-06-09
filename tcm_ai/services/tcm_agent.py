@@ -1,3 +1,4 @@
+import logging
 import os
 from typing import Any, Dict, List, Optional
 
@@ -8,6 +9,8 @@ from tcm_ai.domain.rules import RuleEngine
 from tcm_ai.knowledge.loader import TCMAgentKnowledgeManager
 from tcm_ai.rag.pipeline import RAGPipeline
 from tcm_ai.rag.providers import invoke_llm
+
+logger = logging.getLogger(__name__)
 
 
 class TCMAgent:
@@ -35,7 +38,7 @@ class TCMAgent:
             if results:
                 return results
         except Exception as exc:
-            print(f"向量搜索失败: {exc}，回退到关键词搜索")
+            logger.warning("向量搜索失败: %s，回退到关键词搜索", exc)
 
         self._ensure_knowledge_manager()
         if self.knowledge_manager:
@@ -80,8 +83,7 @@ class TCMAgent:
                 "diagnosis_mode": "llm",
             }
         except Exception as exc:
-            print(f"无法使用LLM进行诊断: {exc}")
-            print("使用基于规则的简单诊断作为备选方案...")
+            logger.warning("无法使用 LLM 进行诊断: %s，降级为规则引擎", exc)
             processed_vision = FusionEngine.process_vision_data(vision_data)
             processed_stm = FusionEngine.process_stm_data(stm_data)
             fusion_data = FusionEngine.fuse(processed_vision, processed_stm)

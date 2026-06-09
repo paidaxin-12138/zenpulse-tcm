@@ -34,8 +34,16 @@ def client_ip(request: Request) -> str:
     return "unknown"
 
 
-def _redis_url() -> str:
-    return redis_url()
+_redis_fallback_logged = False
+
+
+def redis_configured() -> bool:
+    return bool(redis_url())
+
+
+def redis_degraded() -> bool:
+    """TCM_REDIS_URL 已设置但当前无法使用 Redis。"""
+    return redis_configured() and get_redis() is None
 
 
 def _check_rate_limit_redis(key: str, limit: int, window_seconds: float) -> None:
@@ -48,6 +56,21 @@ def _check_rate_limit_redis(key: str, limit: int, window_seconds: float) -> None
     count, _ = pipe.execute()
     if int(count) > limit:
         raise HTTPException(status_code=429, detail="请求过于频繁，请稍后再试")
+
+
+def _log_redis_rate_limit_fallback(scope: str) -> None:
+    global _redis_fallback_logged
+    if _redis_fallback_logged:
+        return
+    _redis_fallback_logged = True
+    msg = (
+        f"TCM_REDIS_URL 已配置但 Redis 不可用，限流 scope={scope} 回退进程内内存"
+        "（多 worker 下各进程独立计数）"
+    )
+    if is_production():
+        logger.error(msg)
+    else:
+        logger.warning(msg)
 
 
 def check_rate_limit(
@@ -67,10 +90,14 @@ def check_rate_limit(
             if client:
                 _check_rate_limit_redis(key, limit, window_seconds)
                 return
+            _log_redis_rate_limit_fallback(scope)
         except HTTPException:
             raise
         except Exception as exc:
-            logger.warning("Redis 限流失败，回退内存: %s", exc)
+            if is_production():
+                logger.error("Redis 限流失败，回退内存: %s", exc)
+            else:
+                logger.warning("Redis 限流失败，回退内存: %s", exc)
     now = time.time()
     mem_key = key
     with _lock:
@@ -95,6 +122,13 @@ def check_public_rate_limit(
 def check_admin_auth_rate_limit(request: Request) -> None:
     """管理端鉴权失败 brute-force 防护（默认 20 次/分钟/IP）。"""
     check_rate_limit(request, scope="admin_auth_fail", limit=20)
+
+
+def reset_redis_rate_limit_state_for_tests() -> None:
+    global _redis_fallback_logged
+    _redis_fallback_logged = False
+    with _lock:
+        _buckets.clear()
 
 
 def clear_admin_auth_rate_limit(request: Request) -> None:

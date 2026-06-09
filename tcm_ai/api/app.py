@@ -14,6 +14,8 @@ from tcm_ai.api.routes.knowledge import router as knowledge_router
 from tcm_ai.api.routes.admin_session import router as admin_session_router
 from tcm_ai.api.routes.metrics import router as metrics_router
 from tcm_ai.api.routes.pages import router as pages_router
+from tcm_ai.api.routes.pulse import router as pulse_router
+from tcm_ai.api.routes.vitals import router as vitals_router
 from tcm_ai.api.routes.prometheus_metrics import router as prometheus_router
 from tcm_ai.api.routes.system_public import router as system_public_router
 from tcm_ai.api.routes.wx_auth import router as wx_auth_router
@@ -79,6 +81,8 @@ def create_app() -> FastAPI:
     app.include_router(health_router)
     app.include_router(system_public_router)
     app.include_router(diagnose_router)
+    app.include_router(pulse_router)
+    app.include_router(vitals_router)
     app.include_router(history_router)
     app.include_router(knowledge_router)
     app.include_router(admin_router)

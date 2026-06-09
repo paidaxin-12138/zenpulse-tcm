@@ -25,7 +25,7 @@ jobs:
           pytest tests/unit tests/integration -q \
             --cov=tcm_ai \
             --cov-report=term-missing \
-            --cov-fail-under=48
+            --cov-fail-under=55
 
       - name: Syntax check
         run: python -m py_compile $(find tcm_ai -name '*.py') web_server.py scripts/build_index.py

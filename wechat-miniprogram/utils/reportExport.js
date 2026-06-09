@@ -65,15 +65,25 @@ export function buildReportPayload(result, context) {
     avatar: (context.patientName || '问').slice(0, 1),
     gender: context.gender || '—',
     age: context.age != null && context.age !== '' ? `${context.age} 岁` : '—',
-    vitalsStatus: context.vitalsStatus || '稳定',
+    vitalsStatus:
+      context.vitalsStatus ||
+      (result.vitals_assessment && result.vitals_assessment.overall_status) ||
+      '稳定',
     date: `${y}年${parseInt(m, 10)}月${parseInt(d, 10)}日`,
     physician: 'AI 智能辨证',
     syndrome,
     confidence: result.diagnosis_mode === 'llm' ? 88 : result.diagnosis_mode === 'rule' ? 72 : 80,
     constitution: deriveConstitution(syndrome, result.analysis),
     constitutionNote: (result.analysis || '综合体征与望诊数据完成 AI 辨证。').slice(0, 100),
-    pulseType: (result.pulse_characteristics && result.pulse_characteristics.pulse_type) || '—',
-    pulseDesc: (result.pulse_characteristics && result.pulse_characteristics.description) || '—',
+    vitalsHr:
+      result.vitals_assessment && result.vitals_assessment.heart_rate != null
+        ? `${result.vitals_assessment.heart_rate} bpm（${result.vitals_assessment.hr_status || ''}）`
+        : '—',
+    vitalsSpo2:
+      result.vitals_assessment && result.vitals_assessment.spo2 != null
+        ? `${result.vitals_assessment.spo2}%（${result.vitals_assessment.spo2_status || ''}）`
+        : '—',
+    vitalsOverall: (result.vitals_assessment && result.vitals_assessment.overall_status) || '—',
     tongueItems: result.tongue_analysis || [],
     faceItems: result.face_analysis || [],
     suggestions: result.suggestions || [],
@@ -209,9 +219,10 @@ export function drawReport(ctx, payload, width) {
   ctx.fillText('多模态 AI 辨证融合', rx + 16, y + 36);
   ctx.fillStyle = '#725a39';
   ctx.font = '12px sans-serif';
-  ctx.fillText(`脉象: ${payload.pulseType}`, rx + 16, y + 64);
+  ctx.fillText(`心率: ${payload.vitalsHr}`, rx + 16, y + 64);
+  ctx.fillText(`血氧: ${payload.vitalsSpo2}`, rx + 16, y + 86);
   ctx.fillStyle = '#54433a';
-  wrapText(ctx, payload.pulseDesc, rx + 16, y + 88, rw - 32, 18, 4);
+  wrapText(ctx, `综合: ${payload.vitalsOverall}`, rx + 16, y + 108, rw - 32, 18, 2);
   ctx.fillStyle = '#274a10';
   ctx.fillText('望诊摘要', rx + 16, y + 160);
   const obs = [...payload.tongueItems, ...payload.faceItems].slice(0, 2);
@@ -239,7 +250,7 @@ export function drawReport(ctx, payload, width) {
     });
   } else {
     ctx.fillStyle = '#54433a';
-    ctx.fillText('请参考上方核心诊断结论与脉象分析。', pad + 16, py + 16);
+    ctx.fillText('请参考上方核心诊断结论与生理参数。', pad + 16, py + 16);
     py += 32;
   }
 

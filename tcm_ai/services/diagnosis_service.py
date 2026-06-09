@@ -1,15 +1,50 @@
+import logging
 from typing import TYPE_CHECKING, Any, Dict, Optional
 
-from tcm_ai.domain.constants import DEFAULT_PULSE_CHARACTERISTICS, DISCLAIMER
+from tcm_ai.domain.constants import DEFAULT_PULSE_CHARACTERISTICS, DEFAULT_VITALS_ASSESSMENT, DISCLAIMER
+from tcm_ai.domain.vitals.rules import failed_assessment
 from tcm_ai.domain.diagnosis_parser import parse_diagnosis_markdown
+from tcm_ai.domain.pulse.models import PulseResult
+from tcm_ai.services.pulse_engine import PulseEngine
+from tcm_ai.services.vitals_service import VitalsService
 
 if TYPE_CHECKING:
     from tcm_ai.services.tcm_agent import TCMAgent
+
+logger = logging.getLogger(__name__)
+
+_CLINICAL_EXCLUDE = frozenset(
+    {
+        "success",
+        "research_features",
+        "research_features_note",
+        "calibration_version",
+        "error",
+    }
+)
+
+
+def _clinical_from_dict(data: Dict[str, Any]) -> Dict[str, Any]:
+    return {key: value for key, value in data.items() if key not in _CLINICAL_EXCLUDE}
+
+
+def _is_valid_passthrough_assessment(data: Any) -> bool:
+    if not isinstance(data, dict):
+        return False
+    if not data.get("success"):
+        return False
+    heart_rate = data.get("heart_rate")
+    try:
+        return heart_rate is not None and float(heart_rate) > 0
+    except (TypeError, ValueError):
+        return False
 
 
 class DiagnosisService:
     def __init__(self, tcm_agent: Optional["TCMAgent"] = None) -> None:
         self._tcm_agent = tcm_agent
+        self._pulse_engine = PulseEngine()
+        self._vitals_service = VitalsService()
 
     @property
     def tcm_agent(self) -> "TCMAgent":
@@ -19,54 +54,112 @@ class DiagnosisService:
             self._tcm_agent = TCMAgent()
         return self._tcm_agent
 
+    def analyze_pulse_request(self, payload: Dict[str, Any]) -> PulseResult:
+        imu_payload = payload.get("imu")
+        result = self._pulse_engine.analyze_from_waveform(
+            payload["samples"],
+            fs=float(payload.get("fs") or 100.0),
+            imu=imu_payload,
+            capability_level=str(payload.get("capability_level") or "L1"),
+            source=str(payload.get("source") or "ppg"),
+        )
+        if result.success:
+            result = self._pulse_engine.enrich_with_knowledge(result, self.tcm_agent)
+        return result
+
+    def resolve_vitals_assessment(self, stm_data: Dict[str, Any]) -> Dict[str, Any]:
+        precomputed = stm_data.get("vitals_assessment")
+        if _is_valid_passthrough_assessment(precomputed):
+            return dict(precomputed)
+
+        samples = stm_data.get("max30102_samples") or stm_data.get("pulse_waveform") or []
+        samples_ch2 = stm_data.get("max30102_samples_ch2")
+        fs = float(stm_data.get("pulse_fs") or stm_data.get("sample_fs") or 100.0)
+        source = str(stm_data.get("pulse_source") or stm_data.get("vitals_source") or "manual")
+
+        if samples and source.startswith("max30102"):
+            try:
+                result = self._vitals_service.analyze_samples(
+                    samples,
+                    fs=fs,
+                    samples_ch2=samples_ch2,
+                    source=source,
+                )
+                return result.to_dict()
+            except Exception as exc:
+                logger.warning("生理参数分析错误: %s", exc)
+                return failed_assessment(
+                    str(exc) or "生理参数分析失败",
+                    source=source,
+                ).to_dict()
+
+        heart_rate = stm_data.get("heart_rate")
+        pulse = stm_data.get("pulse", heart_rate)
+        if heart_rate is not None and pulse is not None:
+            result = self._vitals_service.analyze_manual(
+                int(heart_rate),
+                int(pulse),
+                spo2=stm_data.get("spo2"),
+                source=source,
+            )
+            return result.to_dict()
+
+        return dict(DEFAULT_VITALS_ASSESSMENT)
+
+    def resolve_pulse(self, stm_data: Dict[str, Any]) -> Dict[str, Any]:
+        waveform = stm_data.get("pulse_waveform") or []
+        fs = float(stm_data.get("pulse_fs") or 100.0)
+        heart_rate = stm_data.get("heart_rate")
+        pulse = stm_data.get("pulse", heart_rate)
+        min_samples = fs * 15
+
+        if waveform and len(waveform) >= min_samples:
+            result = self._pulse_engine.analyze_from_waveform(
+                waveform,
+                fs=fs,
+                imu=stm_data.get("imu"),
+                capability_level="L1",
+                source=str(stm_data.get("pulse_source") or "ppg"),
+            )
+        elif stm_data.get("pulse_analysis"):
+            return _clinical_from_dict(dict(stm_data["pulse_analysis"]))
+        elif heart_rate is not None and pulse is not None:
+            result = self._pulse_engine.analyze_manual(
+                int(heart_rate),
+                int(pulse),
+                source=str(stm_data.get("pulse_source") or "manual"),
+                capability_level="L0",
+            )
+        else:
+            return dict(DEFAULT_PULSE_CHARACTERISTICS)
+
+        if result.success:
+            result = self._pulse_engine.enrich_with_knowledge(result, self.tcm_agent)
+        return result.to_clinical_dict()
+
     def build_pulse_characteristics(
         self,
         heart_rate: int,
         pulse: int,
         age: Optional[int] = None,
         gender: Optional[str] = None,
+        pulse_waveform: Optional[list] = None,
+        pulse_fs: float = 100.0,
+        pulse_source: str = "manual",
     ) -> Dict[str, Any]:
+        stm_data = {
+            "heart_rate": heart_rate,
+            "pulse": pulse,
+            "age": age,
+            "gender": gender,
+            "pulse_waveform": pulse_waveform or [],
+            "pulse_fs": pulse_fs,
+            "pulse_source": pulse_source,
+        }
         try:
-            from tcm_ai.services.pulse_service import PulseDiagnosisTool
-
-            pulse_tool = PulseDiagnosisTool(self.tcm_agent)
-            prepared_pulse_data = {
-                "heart_rate": heart_rate,
-                "spo2": 98.0,
-                "pulse_characteristics": {
-                    "pulse_shape": "正常",
-                    "pulse_strength": "中等",
-                    "pulse_rate": "正常" if 60 <= pulse <= 100 else ("慢" if pulse < 60 else "快"),
-                    "tcm_interpretation": "迟脉" if pulse < 60 else ("数脉" if pulse > 100 else "平和脉"),
-                },
-                "pulse_waveform": [],
-            }
-            pulse_result = pulse_tool.run(prepared_pulse_data)
-            return {
-                "pulse_type": pulse_result.get("pulse_type", "平和脉"),
-                "description": pulse_result.get("pulse_info", {}).get(
-                    "description",
-                    "脉象平和，节律均匀，力度适中，一息四至，不浮不沉，不快不慢。",
-                ),
-                "characteristics": {
-                    "rate": prepared_pulse_data["pulse_characteristics"]["pulse_rate"],
-                    "rhythm": "整齐",
-                    "strength": prepared_pulse_data["pulse_characteristics"]["pulse_strength"],
-                    "depth": "适中",
-                },
-                "possible_conditions": [
-                    pulse_result.get("pulse_info", {}).get(
-                        "interpretation", "气血调和，阴阳平衡，健康状态良好。"
-                    )
-                ],
-                "treatment_recommendations": [
-                    pulse_result.get("pulse_info", {}).get(
-                        "suggestion", "保持良好的生活习惯，均衡饮食，适量运动，保持心情舒畅。"
-                    )
-                ],
-            }
+            return self.resolve_pulse(stm_data)
         except Exception as exc:
-            print(f"脉搏诊断错误: {exc}")
+            logger.warning("脉搏诊断错误: %s", exc)
             return dict(DEFAULT_PULSE_CHARACTERISTICS)
 
     @staticmethod
@@ -94,13 +187,14 @@ class DiagnosisService:
         self,
         diagnosis: Dict[str, Any],
         diagnosis_text: str,
-        pulse_chars: Dict[str, Any],
+        vitals: Dict[str, Any],
     ) -> Dict[str, Any]:
         structured = self._structured_from_diagnosis({**diagnosis, "diagnosis": diagnosis_text})
         return {
             "diagnosis": diagnosis_text,
             "source": diagnosis.get("source", ""),
-            "pulse_characteristics": pulse_chars,
+            "vitals_assessment": vitals,
+            "pulse_characteristics": {},
             "disclaimer": DISCLAIMER,
             "syndrome": structured.get("syndrome", ""),
             "analysis": structured.get("analysis", ""),
@@ -117,35 +211,36 @@ class DiagnosisService:
 
     def run(self, vision_data: Dict[str, Any], stm_data: Dict[str, Any]) -> Dict[str, Any]:
         stm_data = dict(stm_data)
-        heart_rate = stm_data.get("heart_rate")
-        pulse = stm_data.get("pulse", heart_rate)
+        vitals = self.resolve_vitals_assessment(stm_data)
+        stm_data["vitals_assessment"] = vitals
+        if vitals.get("heart_rate"):
+            stm_data["heart_rate"] = int(vitals["heart_rate"])
+            stm_data["pulse"] = int(vitals.get("pulse") or vitals["heart_rate"])
+        if vitals.get("spo2"):
+            stm_data["spo2"] = vitals["spo2"]
 
-        if heart_rate is not None and pulse is not None:
-            stm_data["pulse_characteristics"] = self.build_pulse_characteristics(
-                int(heart_rate), int(pulse), stm_data.get("age"), stm_data.get("gender")
-            )
-
-        pulse_chars = stm_data.get("pulse_characteristics", DEFAULT_PULSE_CHARACTERISTICS)
+        vitals_block = (
+            f"\n### 生理参数（MAX30102）\n"
+            f"- **心率**：{vitals.get('heart_rate', '--')} bpm（{vitals.get('hr_status', '')}）\n"
+            f"- **血氧**：{vitals.get('spo2', '--')}%（{vitals.get('spo2_status', '')}）\n"
+            f"- **综合**：{vitals.get('overall_status', '')}\n"
+        )
 
         if vision_data:
             diagnosis = self.tcm_agent.get_tcm_diagnosis(vision_data, stm_data)
             diagnosis_result = diagnosis["diagnosis"]
 
-            if "脉象" not in diagnosis_result and "脉搏" not in diagnosis_result:
-                diagnosis_result += (
-                    f"\n### 脉象分析\n- **脉象类型**：{pulse_chars['pulse_type']}\n"
-                    f"- **脉象描述**：{pulse_chars['description']}\n"
-                )
+            if "生理参数" not in diagnosis_result and "心率" not in diagnosis_result:
+                diagnosis_result += vitals_block
 
-            return self._format_response(diagnosis, diagnosis_result, pulse_chars)
+            return self._format_response(diagnosis, diagnosis_result, vitals)
 
         simple_diagnosis = (
             "1. 中医辨证：气血不足\n"
             "2. 证候分析：根据健康指标分析，您的身体状况基本正常。建议保持良好的生活习惯。\n"
             "3. 建议：1. 饮食均衡，多食用新鲜蔬菜水果；2. 保持充足睡眠，避免熬夜；"
-            "3. 适当运动，增强体质；4. 定期体检。\n\n"
-            f"### 脉象分析\n- **脉象类型**：{pulse_chars['pulse_type']}\n"
-            f"- **脉象描述**：{pulse_chars['description']}\n"
+            "3. 适当运动，增强体质；4. 定期体检。\n"
+            f"{vitals_block}"
         )
         fallback = {
             "diagnosis": simple_diagnosis,
@@ -166,4 +261,4 @@ class DiagnosisService:
                 "eye_analysis": [],
             },
         }
-        return self._format_response(fallback, simple_diagnosis, pulse_chars)
+        return self._format_response(fallback, simple_diagnosis, vitals)

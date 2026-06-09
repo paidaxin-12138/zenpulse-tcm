@@ -9,6 +9,7 @@ from typing import Any, Dict
 from fastapi import APIRouter, Depends
 
 from tcm_ai.api.admin_auth import require_admin_role
+from tcm_ai.core.rate_limit import redis_degraded
 from tcm_ai.core.redis_client import redis_url
 from tcm_ai.core.runtime import get_tcm_env, is_production
 from tcm_ai.core.startup import check_python_packages, index_ready
@@ -32,5 +33,6 @@ def admin_metrics(_: str = Depends(require_admin_key)) -> Dict[str, Any]:
         "missing_packages": missing,
         "history_backend": os.environ.get("TCM_HISTORY_BACKEND", "json"),
         "redis_rate_limit": bool(redis_url()),
+        "redis_rate_limit_degraded": redis_degraded(),
         "workers_hint": "多 worker 部署请设置 TCM_REDIS_URL",
     }
