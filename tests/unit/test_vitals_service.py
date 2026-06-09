@@ -36,6 +36,21 @@ def test_rejects_short_sample():
     assert result.success is False
 
 
+def test_rejects_when_merged_channel_length_below_minimum():
+    """CH1 够长但 CH2 截断导致有效点数不足时应失败。"""
+    service = VitalsService()
+    samples = synthetic_pulse_waveform(duration_sec=10.0, fs=100.0, bpm=72.0)
+    ch2 = samples[:400]
+    result = service.analyze_samples(
+        samples,
+        fs=100.0,
+        samples_ch2=ch2,
+        source="max30102_ble",
+    )
+    assert result.success is False
+    assert "采样不足" in (result.error or "")
+
+
 def test_analyze_samples_warns_on_channel_length_mismatch():
     service = VitalsService()
     samples = synthetic_pulse_waveform(duration_sec=10.0, fs=100.0, bpm=72.0)

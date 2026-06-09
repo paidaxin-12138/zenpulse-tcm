@@ -46,6 +46,64 @@ static uint32_t lastDisplayMs = 0;
 static const uint32_t sampleIntervalMs = 1000 / SAMPLE_HZ;
 static bool streamEnabled = true;
 static uint32_t captureUntilMs = 0;
+static bool wifiReady = false;
+static bool tcpServerStarted = false;
+static uint32_t lastWifiAttemptMs = 0;
+static const uint32_t WIFI_RETRY_MS = 30000;
+
+static bool isWifiConfigured() {
+  return String(WIFI_SSID) != "your-wifi-ssid" && String(WIFI_SSID).length() > 0;
+}
+
+static bool connectWiFi(bool blocking) {
+  if (!isWifiConfigured()) {
+    Serial.println("[WARN] WiFi 未配置，跳过（BLE/PPG 继续）");
+    wifiReady = false;
+    return false;
+  }
+  if (WiFi.status() == WL_CONNECTED) {
+    if (!wifiReady) {
+      Serial.print("[OK] IP: ");
+      Serial.println(WiFi.localIP());
+    }
+    wifiReady = true;
+    return true;
+  }
+
+  uint32_t now = millis();
+  if (!blocking && now - lastWifiAttemptMs < WIFI_RETRY_MS) {
+    return false;
+  }
+  lastWifiAttemptMs = now;
+
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  Serial.printf("WiFi -> %s", WIFI_SSID);
+  uint8_t attempts = blocking ? 60 : 20;
+  for (uint8_t i = 0; i < attempts && WiFi.status() != WL_CONNECTED; i++) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println();
+
+  if (WiFi.status() != WL_CONNECTED) {
+    Serial.println("[WARN] WiFi 未连接，BLE/PPG 继续；TCP 调试暂不可用");
+    wifiReady = false;
+    return false;
+  }
+
+  Serial.print("[OK] IP: ");
+  Serial.println(WiFi.localIP());
+  wifiReady = true;
+  return true;
+}
+
+static void ensureTcpServer() {
+  if (tcpServerStarted || !wifiReady) return;
+  server.begin();
+  tcpServerStarted = true;
+  Serial.printf("[OK] TCP:%d\n", TCP_PORT);
+}
 
 #if ENABLE_IMU
 static bool imuOk = false;
@@ -91,24 +149,6 @@ static bool beginSensor(MAX30105 &sensor, byte address, const char *label) {
   return true;
 }
 
-static void connectWiFi() {
-  WiFi.mode(WIFI_STA);
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  Serial.printf("WiFi -> %s", WIFI_SSID);
-  for (uint8_t i = 0; i < 60 && WiFi.status() != WL_CONNECTED; i++) {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println();
-  if (WiFi.status() != WL_CONNECTED) {
-    Serial.println("[ERR] WiFi 失败，重启");
-    delay(3000);
-    ESP.restart();
-  }
-  Serial.print("[OK] IP: ");
-  Serial.println(WiFi.localIP());
-}
-
 static void handleCommand(const String &line) {
   String cmd = line;
   cmd.trim();
@@ -144,6 +184,7 @@ static void pollCommands() {
 }
 
 static void acceptClient() {
+  if (!tcpServerStarted) return;
   if (client && client.connected()) return;
   if (client) client.stop();
   client = server.available();
@@ -207,13 +248,21 @@ void setup() {
 #if ENABLE_OLED
   displayBegin();
 #endif
-  connectWiFi();
-  server.begin();
-  Serial.printf("[OK] TCP:%d BLE:%d OLED:%d IMU:%d\n", TCP_PORT, ENABLE_BLE, ENABLE_OLED, ENABLE_IMU);
+  connectWiFi(true);
+  ensureTcpServer();
+  Serial.printf("[OK] BLE:%d OLED:%d IMU:%d WiFi:%d TCP:%d\n",
+                ENABLE_BLE, ENABLE_OLED, ENABLE_IMU, wifiReady, tcpServerStarted);
 }
 
 void loop() {
-  if (WiFi.status() != WL_CONNECTED) connectWiFi();
+  if (!wifiReady) {
+    if (connectWiFi(false)) {
+      ensureTcpServer();
+    }
+  } else if (WiFi.status() != WL_CONNECTED) {
+    wifiReady = false;
+    tcpServerStarted = false;
+  }
   acceptClient();
   pollCommands();
 

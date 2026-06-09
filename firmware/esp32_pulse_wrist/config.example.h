@@ -6,6 +6,7 @@
 
 // 复制本文件为 config.h 并填写实际值（config.h 勿提交仓库）
 
+// WiFi 仅用于 TCP 调试；保持占位 SSID 时固件跳过 WiFi，BLE/PPG 照常运行
 #define WIFI_SSID "your-wifi-ssid"
 #define WIFI_PASSWORD "your-wifi-password"
 

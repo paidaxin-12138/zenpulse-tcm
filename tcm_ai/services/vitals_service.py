@@ -33,9 +33,12 @@ class VitalsService:
         qcfg = self._rules.get("quality", {})
         min_sec = float(qcfg.get("min_samples_sec", 5))
         min_count = int(qcfg.get("min_sample_count", 500))
-        duration = len(samples) / fs if fs else 0.0
+        effective_count = (
+            min(len(samples), len(samples_ch2)) if samples_ch2 else len(samples)
+        )
+        duration = effective_count / fs if fs else 0.0
 
-        if len(samples) < min_count or duration < min_sec:
+        if effective_count < min_count or duration < min_sec:
             return failed_assessment(
                 f"采样不足（需至少 {min_sec}s / {min_count} 点）",
                 source=source,
@@ -62,7 +65,7 @@ class VitalsService:
             spo2,
             source=source,
             quality_score=quality,
-            sample_count=len(samples),
+            sample_count=effective_count,
             duration_sec=duration,
             rules=self._rules,
         )

@@ -127,6 +127,21 @@ def test_production_rejects_short_admin_key(monkeypatch):
     assert any("admin_api_key" in m and m.startswith("ERROR:") for m in msgs)
 
 
+def test_production_blocks_public_vitals(monkeypatch):
+    monkeypatch.setenv("TCM_ENV", "production")
+    msgs = validate_security_config(
+        {
+            "admin_api_key": _GOOD_ADMIN,
+            "server": {
+                "cors_origins": ["https://example.com"],
+                "allow_public_vitals": True,
+            },
+            "wechat_miniprogram": {"dev_mode": False, "token_secret": _GOOD_SECRET},
+        }
+    )
+    assert any("allow_public_vitals" in m and m.startswith("ERROR:") for m in msgs)
+
+
 def test_production_blocks_public_pulse(monkeypatch):
     monkeypatch.setenv("TCM_ENV", "production")
     msgs = validate_security_config(
