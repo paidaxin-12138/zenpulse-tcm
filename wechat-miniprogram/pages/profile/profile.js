@@ -8,7 +8,7 @@ import {
   syncHistoryFromCloud
 } from '../../utils/cloudHistory';
 import { mergeHistoryEntries } from '../../utils/historyStore';
-import { fetchBranding, getAdminUrl, getBranding, getWebUrl } from '../../utils/branding';
+import { fetchBranding, getBranding, getWebUrl } from '../../utils/branding';
 
 Page({
   data: {
@@ -20,7 +20,7 @@ Page({
     isLoggedIn: false,
     loginLoading: false,
     diagnosisHistory: [],
-    platformHint: 'ZenPulse AI · Web / 管理端 / 御心调理 小程序'
+    platformHint: 'ZenPulse AI · Web 与御心调理小程序共用同一后端'
   },
 
   onLoad() {
@@ -47,19 +47,6 @@ Page({
     wx.setClipboardData({
       data: url,
       success: () => wx.showToast({ title: 'Web 地址已复制', icon: 'none' })
-    });
-  },
-
-  showAdminHint() {
-    wx.showModal({
-      title: '管理后台',
-      content: `在电脑浏览器打开：\n${getAdminUrl()}\n\n用于知识库维护、RAG 调试与模型配置。`,
-      confirmText: '复制地址',
-      success: (res) => {
-        if (res.confirm) {
-          wx.setClipboardData({ data: getAdminUrl() });
-        }
-      }
     });
   },
 
@@ -185,7 +172,7 @@ Page({
     const b = getBranding();
     wx.showModal({
       title: '关于我们',
-      content: `${b.brandName || '御心调理'} v1.1.0\n${b.productName || 'ZenPulse AI'} 中医智能诊断\n\nWeb：${getWebUrl()}\n管理端：${getAdminUrl()}`,
+      content: `${b.brandName || '御心调理'} v1.1.0\n${b.productName || 'ZenPulse AI'} 中医智能诊断\n\nWeb：${getWebUrl()}`,
       showCancel: false
     });
   },
