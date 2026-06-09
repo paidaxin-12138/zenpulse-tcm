@@ -1,3 +1,7 @@
+# Copyright (c) 2026 paidaxin-12138
+# Licensed under CC BY-NC 4.0 — see LICENSE in repository root.
+# https://creativecommons.org/licenses/by-nc/4.0/
+
 """管理端 HttpOnly Cookie 会话（HMAC 签名；登出可 Redis 黑名单撤销）。"""
 
 from __future__ import annotations

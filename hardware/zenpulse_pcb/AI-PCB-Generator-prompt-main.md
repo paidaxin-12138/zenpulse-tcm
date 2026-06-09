@@ -1,3 +1,5 @@
+<!-- Copyright (c) 2026 paidaxin-12138 — CC BY-NC 4.0 — see LICENSE -->
+
 # AI-PCB-Generator — Main Board Prompt
 
 > **用法**：在 AI-PCB-Generator 左栏粘贴下方 **English Prompt** 全文 → 点 Design → 人工 Review → Export KiCad → 再改天线区  

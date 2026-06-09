@@ -1,3 +1,7 @@
+# Copyright (c) 2026 paidaxin-12138
+# Licensed under CC BY-NC 4.0 — see LICENSE in repository root.
+# https://creativecommons.org/licenses/by-nc/4.0/
+
 """对外 HTTP 错误消息（避免泄露内部异常细节）。"""
 
 from __future__ import annotations

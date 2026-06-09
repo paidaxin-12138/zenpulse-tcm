@@ -1,3 +1,7 @@
+// Copyright (c) 2026 paidaxin-12138
+// Licensed under CC BY-NC 4.0 — see LICENSE in repository root.
+// https://creativecommons.org/licenses/by-nc/4.0/
+
 /**
  * 小程序真机联调：自定义后端地址与探测
  */

@@ -1,3 +1,7 @@
+// Copyright (c) 2026 paidaxin-12138
+// Licensed under CC BY-NC 4.0 — see LICENSE in repository root.
+// https://creativecommons.org/licenses/by-nc/4.0/
+
 const STORAGE_KEY = 'tcm_admin_api_key'; // 遗留：不再持久化 API Key
 const DISPLAY_NAME_KEY = 'tcm_admin_display_name';
 

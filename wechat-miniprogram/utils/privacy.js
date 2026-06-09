@@ -1,3 +1,7 @@
+// Copyright (c) 2026 paidaxin-12138
+// Licensed under CC BY-NC 4.0 — see LICENSE in repository root.
+// https://creativecommons.org/licenses/by-nc/4.0/
+
 /**
  * 微信小程序用户隐私保护指引（蓝牙等敏感 API 调用前需授权）
  * 后台配置：mp.weixin.qq.com → 设置 → 用户隐私保护指引

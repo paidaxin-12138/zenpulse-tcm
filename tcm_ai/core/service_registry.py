@@ -1,3 +1,7 @@
+# Copyright (c) 2026 paidaxin-12138
+# Licensed under CC BY-NC 4.0 — see LICENSE in repository root.
+# https://creativecommons.org/licenses/by-nc/4.0/
+
 """进程内 AI / RAG 服务单例（API 与服务层共用，避免 services → api 反向依赖）。"""
 
 from __future__ import annotations

@@ -1,3 +1,7 @@
+# Copyright (c) 2026 paidaxin-12138
+# Licensed under CC BY-NC 4.0 — see LICENSE in repository root.
+# https://creativecommons.org/licenses/by-nc/4.0/
+
 #!/usr/bin/env python3
 """
 从 ESP32 腕带 TCP 流采集 PPG，保存 CSV，可选调用 /api/pulse/analyze。

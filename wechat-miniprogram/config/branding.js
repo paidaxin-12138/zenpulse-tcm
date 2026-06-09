@@ -1,3 +1,7 @@
+// Copyright (c) 2026 paidaxin-12138
+// Licensed under CC BY-NC 4.0 — see LICENSE in repository root.
+// https://creativecommons.org/licenses/by-nc/4.0/
+
 /** 全平台品牌配置（与 data/branding.json 同步） */
 export const defaultBranding = {
   brandName: '御心调理',

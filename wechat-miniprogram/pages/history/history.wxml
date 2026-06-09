@@ -1,3 +1,5 @@
+<!-- Copyright (c) 2026 paidaxin-12138 — CC BY-NC 4.0 — see LICENSE -->
+
 <view class="zp-page">
   <text class="zp-display" style="margin-bottom:8rpx">诊断历史</text>
   <text class="zp-body-sm" style="margin-bottom:32rpx">查看所有历史诊断记录</text>

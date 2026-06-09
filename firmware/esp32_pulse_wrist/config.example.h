@@ -1,3 +1,7 @@
+// Copyright (c) 2026 paidaxin-12138
+// Licensed under CC BY-NC 4.0 — see LICENSE in repository root.
+// https://creativecommons.org/licenses/by-nc/4.0/
+
 #pragma once
 
 // 复制本文件为 config.h 并填写实际值（config.h 勿提交仓库）

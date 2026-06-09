@@ -1,3 +1,5 @@
+<!-- Copyright (c) 2026 paidaxin-12138 — CC BY-NC 4.0 — see LICENSE -->
+
 <view class="zp-page">
   <view class="zp-hero">
     <image class="zp-hero-img" src="/images/zenpulse/hero-home.jpg" mode="aspectFill"></image>

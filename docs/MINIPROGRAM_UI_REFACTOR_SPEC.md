@@ -1,3 +1,5 @@
+<!-- Copyright (c) 2026 paidaxin-12138 — CC BY-NC 4.0 — see LICENSE -->
+
 # 中医 AI 诊断系统 · 微信小程序 UI 模块重构说明书（Stitch 用）
 
 > 供 **Stitch** / Figma / 设计转代码工具使用。  

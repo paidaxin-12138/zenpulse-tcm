@@ -1,3 +1,7 @@
+// Copyright (c) 2026 paidaxin-12138
+// Licensed under CC BY-NC 4.0 — see LICENSE in repository root.
+// https://creativecommons.org/licenses/by-nc/4.0/
+
 import { request } from './api';
 import { defaultBranding } from '../config/branding';
 import { API_ENV } from '../config/env';

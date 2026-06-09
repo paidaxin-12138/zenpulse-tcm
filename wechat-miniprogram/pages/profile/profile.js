@@ -1,3 +1,7 @@
+// Copyright (c) 2026 paidaxin-12138
+// Licensed under CC BY-NC 4.0 — see LICENSE in repository root.
+// https://creativecommons.org/licenses/by-nc/4.0/
+
 // profile.js
 import { getStoredUser, logout, updateProfile, wxLogin } from '../../utils/auth';
 import { fetchDiagnosisHistory, fetchDiagnosisHistoryDetail } from '../../utils/api';

@@ -1,3 +1,5 @@
+<!-- Copyright (c) 2026 paidaxin-12138 — CC BY-NC 4.0 — see LICENSE -->
+
 # 生产部署指南
 
 本文档介绍如何使用 **Docker** 或 **systemd** 部署中医 AI 诊断系统。

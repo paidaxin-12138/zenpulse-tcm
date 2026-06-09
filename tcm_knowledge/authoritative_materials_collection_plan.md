@@ -1,3 +1,5 @@
+<!-- Copyright (c) 2026 paidaxin-12138 — CC BY-NC 4.0 — see LICENSE -->
+
 # 权威中医书籍与文档收集方案
 
 ## 1. 收集目标

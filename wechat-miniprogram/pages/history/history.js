@@ -1,3 +1,7 @@
+// Copyright (c) 2026 paidaxin-12138
+// Licensed under CC BY-NC 4.0 — see LICENSE in repository root.
+// https://creativecommons.org/licenses/by-nc/4.0/
+
 // history.js
 import { clearDiagnosisHistory, fetchDiagnosisHistory, fetchDiagnosisHistoryDetail } from '../../utils/api';
 import { getAuthHeaders } from '../../utils/auth';

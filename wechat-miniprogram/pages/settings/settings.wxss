@@ -1,3 +1,5 @@
+/* Copyright (c) 2026 paidaxin-12138 — CC BY-NC 4.0 — see LICENSE */
+
 .page { padding: 32rpx; background: #f9f9f7; min-height: 100vh; }
 .card { background: #fff; border-radius: 24rpx; padding: 32rpx; margin-bottom: 24rpx; box-shadow: 0 4rpx 24rpx rgba(108,47,0,.06); }
 .title { display: block; font-size: 32rpx; font-weight: 600; color: #6c2f00; margin-bottom: 12rpx; }

@@ -1,3 +1,8 @@
+Copyright (c) 2026 paidaxin-12138
+Licensed under CC BY-NC 4.0 — see LICENSE in repository root.
+https://creativecommons.org/licenses/by-nc/4.0/
+
+
 # CI / 测试环境依赖（与 requirements.txt 对齐，省略重型 ML 包以加快流水线）
 # 完整生产依赖请使用: pip install -r requirements.txt
 

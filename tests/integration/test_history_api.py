@@ -1,3 +1,7 @@
+# Copyright (c) 2026 paidaxin-12138
+# Licensed under CC BY-NC 4.0 — see LICENSE in repository root.
+# https://creativecommons.org/licenses/by-nc/4.0/
+
 import tcm_ai.api.routes.history as history_module
 import tcm_ai.api.routes.wx_auth as wx_auth_module
 import tcm_ai.api.wx_user_auth as wx_user_auth_module

@@ -1,3 +1,7 @@
+-- Copyright (c) 2026 paidaxin-12138
+-- Licensed under CC BY-NC 4.0 — see LICENSE in repository root.
+-- https://creativecommons.org/licenses/by-nc/4.0/
+
 -- 诊断历史（预留 — 生产环境建议使用微信小程序云开发存储桶）
 --
 -- 小程序端：config/cloud.js 开启后，历史写入云存储

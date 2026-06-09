@@ -1,3 +1,5 @@
+<!-- Copyright (c) 2026 paidaxin-12138 — CC BY-NC 4.0 — see LICENSE -->
+
 # 腕带托板机械规格（3D 打印）
 
 > 适用于双 MAX30102 桡动脉腕带原型 · 单位 mm

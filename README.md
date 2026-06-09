@@ -1,3 +1,5 @@
+<!-- Copyright (c) 2026 paidaxin-12138 — CC BY-NC 4.0 — see LICENSE -->
+
 # 中医 AI 诊断系统
 
 ## 项目结构
@@ -166,3 +168,11 @@ pytest tests/unit tests/integration -q
 ## 重构文档
 
 见 [重构文档.md](重构文档.md)。
+
+## 许可证
+
+Copyright (c) 2026 [paidaxin-12138](https://github.com/paidaxin-12138)
+
+本仓库采用 [知识共享 署名-非商业性使用 4.0 国际许可协议](https://creativecommons.org/licenses/by-nc/4.0/)（CC BY-NC 4.0）进行许可。您可以自由地共享、复制、传播本作品的**非商业**用途，但须署名原作者。
+
+完整许可文本见仓库根目录 [LICENSE](LICENSE)。

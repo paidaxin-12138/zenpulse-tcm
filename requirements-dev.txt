@@ -1,3 +1,8 @@
+Copyright (c) 2026 paidaxin-12138
+Licensed under CC BY-NC 4.0 — see LICENSE in repository root.
+https://creativecommons.org/licenses/by-nc/4.0/
+
+
 # 开发与测试（生产镜像无需安装）
 pytest>=7.4.0
 pytest-cov>=4.1.0

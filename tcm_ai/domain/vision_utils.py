@@ -1,3 +1,7 @@
+# Copyright (c) 2026 paidaxin-12138
+# Licensed under CC BY-NC 4.0 — see LICENSE in repository root.
+# https://creativecommons.org/licenses/by-nc/4.0/
+
 """OpenCV HSV 归一化：Hue 保持 0–180，Saturation/Value 归一化到 0–1。"""
 
 from typing import Dict, List, Tuple, Union

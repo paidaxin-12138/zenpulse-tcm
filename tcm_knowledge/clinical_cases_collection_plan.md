@@ -1,3 +1,5 @@
+<!-- Copyright (c) 2026 paidaxin-12138 — CC BY-NC 4.0 — see LICENSE -->
+
 # 5000例真实临床案例获取与存储方案
 
 ## 1. 方案目标

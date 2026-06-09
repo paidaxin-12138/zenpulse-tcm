@@ -1,3 +1,5 @@
+<!-- Copyright (c) 2026 paidaxin-12138 — CC BY-NC 4.0 — see LICENSE -->
+
 # 中医AI诊断系统技术实现文档
 
 ## 1. 项目概述

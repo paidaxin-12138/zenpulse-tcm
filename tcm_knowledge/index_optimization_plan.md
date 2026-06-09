@@ -1,3 +1,5 @@
+<!-- Copyright (c) 2026 paidaxin-12138 — CC BY-NC 4.0 — see LICENSE -->
+
 # 知识库索引结构优化方案
 
 ## 1. 当前索引结构分析

@@ -1,3 +1,7 @@
+# Copyright (c) 2026 paidaxin-12138
+# Licensed under CC BY-NC 4.0 — see LICENSE in repository root.
+# https://creativecommons.org/licenses/by-nc/4.0/
+
 #!/usr/bin/env bash
 # macOS / Linux：安装并启动 Ollama，拉取 admin_config 中配置的 LLM 模型
 set -euo pipefail

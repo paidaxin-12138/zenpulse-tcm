@@ -1,3 +1,7 @@
+// Copyright (c) 2026 paidaxin-12138
+// Licensed under CC BY-NC 4.0 — see LICENSE in repository root.
+// https://creativecommons.org/licenses/by-nc/4.0/
+
 /**
  * I2C 扫描 — ESP32-S3 默认 GPIO8/9，经典 ESP32 改为 21/22
  */

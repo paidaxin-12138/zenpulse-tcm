@@ -1,3 +1,5 @@
+<!-- Copyright (c) 2026 paidaxin-12138 — CC BY-NC 4.0 — see LICENSE -->
+
 # 中医真实案例收集与存储策略
 
 ## 1. 案例收集目标

@@ -1,3 +1,5 @@
+<!-- Copyright (c) 2026 paidaxin-12138 — CC BY-NC 4.0 — see LICENSE -->
+
 # 使用 AI-PCB-Generator 设计 ZenPulse 手环 PCB
 
 > 工具：[AI-PCB-Generator](https://github.com/22507260/AI-PCB-Generator)（开源，自然语言 → 原理图 → 布局 → Gerber）  

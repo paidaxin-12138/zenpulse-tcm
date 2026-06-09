@@ -1,3 +1,7 @@
+# Copyright (c) 2026 paidaxin-12138
+# Licensed under CC BY-NC 4.0 — see LICENSE in repository root.
+# https://creativecommons.org/licenses/by-nc/4.0/
+
 import tcm_ai.api.admin_auth as admin_auth_module
 import tcm_ai.api.routes.admin as admin_routes_module
 import tcm_ai.core.config_store as config_store_module

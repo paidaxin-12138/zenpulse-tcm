@@ -1,3 +1,5 @@
+<!-- Copyright (c) 2026 paidaxin-12138 — CC BY-NC 4.0 — see LICENSE -->
+
 # 中医 AI 诊断 · 微信小程序 Apple 风格 UI 重构说明书
 
 > 供 **Stitch / Figma / 设计转代码** 使用。  

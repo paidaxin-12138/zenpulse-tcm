@@ -1,3 +1,5 @@
+<!-- Copyright (c) 2026 paidaxin-12138 — CC BY-NC 4.0 — see LICENSE -->
+
 # ZenPulse 手环 PCB 设计指南
 
 > 目标：双 MAX30102 内侧传感 + ESP32-S3 外侧主控 + OLED + 锂电 + BLE  

@@ -1,3 +1,5 @@
+<!-- Copyright (c) 2026 paidaxin-12138 — CC BY-NC 4.0 — see LICENSE -->
+
 # ESP32-S3 腕带固件
 
 推荐 **ESP32-S3-DevKitC-1** + 双 MAX30102。

@@ -1,3 +1,5 @@
+<!-- Copyright (c) 2026 paidaxin-12138 — CC BY-NC 4.0 — see LICENSE -->
+
 # AI-PCB-Generator — Sensor Board Prompt
 
 > **单独第二个工程**：Main 板完成后，新建项目粘贴下方 Prompt  

@@ -1,3 +1,7 @@
+// Copyright (c) 2026 paidaxin-12138
+// Licensed under CC BY-NC 4.0 — see LICENSE in repository root.
+// https://creativecommons.org/licenses/by-nc/4.0/
+
 /**
  * ESP32 ZenPulse 腕带 BLE 采集（与固件协议一致：CH1/CH2 行）
  */

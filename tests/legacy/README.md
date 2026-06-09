@@ -1,3 +1,5 @@
+<!-- Copyright (c) 2026 paidaxin-12138 — CC BY-NC 4.0 — see LICENSE -->
+
 # 遗留手动测试脚本
 
 本目录下的脚本为重构前的**手动调试脚本**，需要完整依赖（LangChain、向量模型、OpenCV 等）且会调用真实 LLM。

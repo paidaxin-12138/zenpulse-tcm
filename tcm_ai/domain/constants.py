@@ -1,3 +1,7 @@
+# Copyright (c) 2026 paidaxin-12138
+# Licensed under CC BY-NC 4.0 — see LICENSE in repository root.
+# https://creativecommons.org/licenses/by-nc/4.0/
+
 DISCLAIMER = "本结果仅供参考，不能替代专业医疗诊断，如有不适请及时就医。"
 
 DEFAULT_VITALS_ASSESSMENT = {

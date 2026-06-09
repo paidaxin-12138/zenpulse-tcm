@@ -1,3 +1,7 @@
+# Copyright (c) 2026 paidaxin-12138
+# Licensed under CC BY-NC 4.0 — see LICENSE in repository root.
+# https://creativecommons.org/licenses/by-nc/4.0/
+
 """出站 URL 校验，降低 Editor 测模型接口的 SSRF 风险。"""
 
 from __future__ import annotations

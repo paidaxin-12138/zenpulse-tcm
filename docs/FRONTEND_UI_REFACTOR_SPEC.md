@@ -1,3 +1,5 @@
+<!-- Copyright (c) 2026 paidaxin-12138 — CC BY-NC 4.0 — see LICENSE -->
+
 # 中医 AI 诊断系统 · Web 前端 UI 模块重构说明书
 
 > 供 **Stitch** 等前端重构工具使用。  

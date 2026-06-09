@@ -1,3 +1,5 @@
+<!-- Copyright (c) 2026 paidaxin-12138 — CC BY-NC 4.0 — see LICENSE -->
+
 # 开发板与引脚（ESP32-S3 / ESP32）
 
 ## 推荐：ESP32-S3-DevKitC-1

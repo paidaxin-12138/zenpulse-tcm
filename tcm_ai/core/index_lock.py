@@ -1,3 +1,7 @@
+# Copyright (c) 2026 paidaxin-12138
+# Licensed under CC BY-NC 4.0 — see LICENSE in repository root.
+# https://creativecommons.org/licenses/by-nc/4.0/
+
 """向量索引路径的全局互斥锁（线程 + 跨进程文件锁）。"""
 
 from __future__ import annotations
